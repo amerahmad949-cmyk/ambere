@@ -3,731 +3,325 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="robots" content="noindex, nofollow">
-<title>Ambere — الحجوزات</title>
+<title>Ambere — Perfume Station | احجز بوث العطور لعرسك</title>
+<meta name="description" content="Ambere — بوث تعطير وتبخير للأعراس وتوزيعات عطور بأحجام صغيرة. ابعت طلب حجز وبنتواصل معك.">
+<meta property="og:title" content="Ambere — Perfume Station">
+<meta property="og:description" content="بوث تعطير وتبخير للأعراس وتوزيعات عطور. احجز لعرسك.">
+<meta property="og:image" content="icons/icon-512.png">
 <link rel="icon" type="image/png" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#F7EBDD">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Ambere">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Readex+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
 <style>
   :root{
-    --ink:#2B1F33; --muted:#7A6B84; --line:#E4DAEA; --bg:#F8F5FA; --card:#FFFFFF;
-    --plum:#5B2C6F; --plum-soft:#EFE6F4; --amber:#C8862A; --amber-soft:#FBF0DF;
-    --s5:#1F618D; --s10:#117A65; --s30:#B9770E;
-    --gain:#2F7A5C; --loss:#B23A48;
-    --r-lg:18px; --r-md:12px; --r-sm:8px;
+    --cream:#F7EBDD; --paper:#FBF5EE; --ink:#1E1A17; --ink-2:#4A423B; --muted:#8A7E72;
+    --line:#E3D5C4; --gold:#A8834A; --err:#A33A3A;
+    --r:16px;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Readex Pro",Tahoma,Arial,sans-serif;font-size:15px;line-height:1.5;-webkit-text-size-adjust:100%}
-  input,select,textarea,button{font-family:inherit;font-size:16px;color:inherit}
-  .wrap{max-width:560px;margin:0 auto;padding:calc(16px + env(safe-area-inset-top)) 16px 140px}
+  html{scroll-behavior:smooth}
+  body{margin:0;overflow-x:hidden;background:var(--cream);color:var(--ink);font-family:"Readex Pro",Tahoma,Arial,sans-serif;font-size:16px;line-height:1.7;-webkit-text-size-adjust:100%}
+  input,textarea,button{font-family:inherit;font-size:16px;color:inherit}
+  a{color:inherit}
+  .wrap{max-width:620px;margin:0 auto;padding:0 20px}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 
-  header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 16px}
-  .brand{display:flex;align-items:center;gap:10px;min-width:0}
-  .logo{width:40px;height:40px;border-radius:11px;flex:none}
-  .brand h1{font-size:20px;font-weight:700;margin:0;color:var(--plum);line-height:1.1}
-  .brand small{display:block;font-size:12px;color:var(--muted);font-weight:400}
-  .tabs{display:flex;background:var(--plum-soft);border-radius:999px;padding:4px;flex:none}
-  .tabs button{border:0;background:transparent;padding:8px 12px;border-radius:999px;cursor:pointer;font-weight:500;color:var(--plum);font-size:14px}
-  .tabs button[aria-selected="true"]{background:var(--plum);color:#fff}
+  /* ---------- الهيرو ---------- */
+  .hero{text-align:center;padding:calc(56px + env(safe-area-inset-top)) 20px 48px}
+  .mark{width:150px;height:auto;display:block;margin:0 auto 8px}
+  .word{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:64px;line-height:1;margin:0;letter-spacing:.5px;direction:ltr}
+  .sub{display:flex;align-items:center;justify-content:center;gap:14px;margin:10px 0 0;direction:ltr;font-size:12px;letter-spacing:.42em;color:var(--ink-2);font-weight:400}
+  .sub::before,.sub::after{content:"";width:34px;height:1px;background:var(--ink-2)}
+  .tag{font-size:22px;font-weight:500;margin:34px 0 8px;line-height:1.6}
+  .lead{color:var(--ink-2);margin:0 auto 28px;max-width:440px;font-weight:300}
+  .cta{display:inline-block;background:var(--ink);color:var(--cream);text-decoration:none;padding:14px 34px;border-radius:999px;font-weight:500}
 
-  section.block{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px;margin-bottom:14px}
-  section.block h2{font-size:15px;font-weight:600;margin:0 0 12px;color:var(--muted)}
-  .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
-  .grid > *{min-width:0}
-  .full{grid-column:1/-1}
-  label{display:block;font-size:13px;color:var(--muted);margin-bottom:5px}
-  input,select,textarea{display:block;width:100%;min-width:0;max-width:100%;height:48px;padding:0 12px;border:1px solid var(--line);border-radius:var(--r-md);background:#fff;outline:none;-webkit-appearance:none;appearance:none;text-align:right}
-  textarea{height:auto;min-height:76px;padding:10px 12px;resize:vertical}
-  input[type="date"]{line-height:46px}
+  /* ---------- الخدمات ---------- */
+  .rule{display:flex;align-items:center;gap:14px;color:var(--gold);margin:8px 0 22px;font-size:14px;letter-spacing:.06em}
+  .rule::before,.rule::after{content:"";flex:1;height:1px;background:var(--line)}
+  .services{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:44px}
+  .svc{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:flex;gap:16px;align-items:flex-start}
+  .svc svg{width:44px;height:44px;flex:none;color:var(--gold)}
+  .svc h3{margin:0 0 4px;font-size:18px;font-weight:600}
+  .svc p{margin:0;color:var(--ink-2);font-weight:300;font-size:15px}
+  .sizes{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+  .sizes span{border:1px solid var(--line);border-radius:999px;padding:2px 12px;font-size:13px;background:#fff}
+
+  .steps{list-style:none;margin:0 0 48px;padding:0;display:grid;gap:12px;counter-reset:s}
+  .steps li{display:flex;gap:14px;align-items:center;counter-increment:s}
+  .steps li::before{content:counter(s);width:34px;height:34px;flex:none;border:1px solid var(--gold);color:var(--gold);border-radius:50%;display:grid;place-items:center;font-family:"Cormorant Garamond",serif;font-size:20px}
+
+  /* ---------- الفورم ---------- */
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:24px 20px;margin-bottom:40px}
+  .card h2{margin:0 0 4px;font-size:22px;font-weight:600}
+  .card .hint{margin:0 0 20px;color:var(--muted);font-size:14px}
+  .field{margin-bottom:16px}
+  label,.lbl{display:block;font-size:14px;color:var(--ink-2);margin-bottom:6px;font-weight:500}
+  .opt{color:var(--muted);font-weight:300}
+  input,textarea{display:block;width:100%;min-width:0;height:50px;padding:0 14px;border:1px solid var(--line);border-radius:12px;background:#fff;outline:none;-webkit-appearance:none;appearance:none;text-align:right}
+  textarea{height:auto;min-height:90px;padding:12px 14px;resize:vertical}
+  input[type="date"]{line-height:48px}
   input[type="date"]::-webkit-date-and-time-value{text-align:right}
-  input:focus,select:focus,textarea:focus{border-color:var(--plum);box-shadow:0 0 0 3px var(--plum-soft)}
-  input[readonly]{background:var(--amber-soft);border-color:#EED9B8;font-weight:600}
-  :focus-visible{outline:2px solid var(--plum);outline-offset:2px}
-  .unit{font-size:12px;color:var(--muted);margin-top:4px;min-height:18px}
-  .unit.warn{color:var(--loss);font-weight:500}
+  input:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(168,131,74,.15)}
+  .bad{border-color:var(--err)!important}
+  .two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+  .two > *{min-width:0}
 
-  .seg{display:flex;gap:8px}
-  .seg button{flex:1;min-width:0;border:1px solid var(--line);background:#fff;border-radius:var(--r-md);padding:11px 6px;cursor:pointer;font-weight:500;font-size:15px}
-  .seg button[aria-pressed="true"]{background:var(--plum);border-color:var(--plum);color:#fff}
-  .seg.amber button[aria-pressed="true"]{background:var(--amber);border-color:var(--amber)}
-  .gap{margin-bottom:14px}
-  .help{font-size:13px;color:var(--muted);margin:8px 0 0}
+  .choices{display:grid;gap:10px}
+  .choice{display:flex;align-items:center;gap:12px;width:100%;text-align:right;border:1px solid var(--line);background:#fff;border-radius:12px;padding:14px;cursor:pointer}
+  .choice .box{width:22px;height:22px;border:1.5px solid var(--ink-2);border-radius:6px;flex:none;display:grid;place-items:center}
+  .choice[aria-pressed="true"]{border-color:var(--ink);background:#fff}
+  .choice[aria-pressed="true"] .box{background:var(--ink);border-color:var(--ink)}
+  .choice[aria-pressed="true"] .box::after{content:"";width:6px;height:11px;border:solid var(--cream);border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+  .choice b{font-weight:500;display:block}
+  .choice small{color:var(--muted);font-size:13px}
 
-  .editing{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--amber-soft);border:1px solid #EED9B8;border-radius:var(--r-md);padding:10px 14px;margin-bottom:14px;font-weight:500}
-  .editing button{border:1px solid #E2C597;background:#fff;border-radius:var(--r-sm);padding:6px 12px;cursor:pointer;font-size:14px}
-  .danger{width:100%;border:1px solid #F0C4CA;background:#fff;color:var(--loss);border-radius:var(--r-md);height:46px;cursor:pointer;font-weight:500;margin-bottom:14px}
+  .qty{display:none;margin-top:12px;border:1px dashed var(--line);border-radius:12px;padding:14px;background:#fff}
+  .qty.on{display:block}
+  .qrow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 0}
+  .qrow + .qrow{border-top:1px solid #F1E8DC}
+  .qrow span{font-weight:500}
+  .qrow input{width:120px;height:44px;text-align:center;direction:ltr}
+  .qnote{font-size:13px;color:var(--muted);margin:8px 0 0}
 
-  .size{border:1px solid var(--line);border-radius:var(--r-md);margin-bottom:10px;overflow:hidden}
-  .size:last-child{margin-bottom:0}
-  .size-head{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;border:0;background:#fff;padding:13px 14px;cursor:pointer;text-align:right}
-  .size-name{display:flex;align-items:center;gap:10px;font-weight:600;font-size:16px}
-  .dot{width:12px;height:12px;border-radius:50%;flex:none}
-  .size-sum{font-size:13px;color:var(--muted);text-align:left}
-  .size-body{display:none;padding:2px 14px 14px;border-top:1px solid var(--line);background:#FCFAFD}
-  .size.open .size-body{display:block}
-  .size.open .size-head{background:#FCFAFD}
-  .size-body .grid{margin-top:12px}
-  .calc{display:flex;justify-content:space-between;gap:10px;margin-top:12px;padding:10px 12px;border-radius:var(--r-sm);background:var(--plum-soft);font-size:14px}
-  .calc b{font-weight:600;white-space:nowrap}
-  .piece-only{display:none}
-  body.mode-piece .piece-only{display:block}
+  .hp{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;opacity:0;pointer-events:none}
+  .send{width:100%;height:54px;border:0;border-radius:999px;background:var(--ink);color:var(--cream);font-weight:600;font-size:17px;cursor:pointer;margin-top:6px}
+  .send:disabled{opacity:.6;cursor:wait}
+  .msg{min-height:24px;margin-top:12px;text-align:center;color:var(--err);font-size:14px}
+  .privacy{font-size:12px;color:var(--muted);text-align:center;margin:10px 0 0}
 
-  .bar{position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:#fff;padding:12px 16px calc(12px + env(safe-area-inset-bottom));z-index:10;transition:transform .2s}
-  .bar.away{transform:translateY(110%)}
-  .bar-in{max-width:560px;margin:0 auto;display:flex;align-items:center;gap:12px}
-  .nums{flex:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;min-width:0}
-  .nums div{display:flex;flex-direction:column;min-width:0}
-  .nums span{font-size:11px;opacity:.7}
-  .nums strong{font-size:17px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;direction:ltr;text-align:right}
-  #pProfit.pos{color:#7FE0B5} #pProfit.neg{color:#FF9AA6}
-  .save{border:0;background:var(--amber);color:#fff;font-weight:700;padding:13px 16px;border-radius:var(--r-md);cursor:pointer;white-space:nowrap;flex:none}
-  .save:disabled{opacity:.5;cursor:wait}
+  .done{text-align:center;padding:10px 0}
+  .done .ok{width:64px;height:64px;border-radius:50%;background:var(--ink);color:var(--cream);display:grid;place-items:center;margin:0 auto 14px;font-size:30px}
+  .summary{text-align:right;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;margin:18px 0;font-size:15px}
+  .summary div{display:flex;justify-content:space-between;gap:10px;padding:4px 0}
+  .summary div span:first-child{color:var(--muted)}
+  .wa{display:inline-flex;align-items:center;gap:8px;background:#1F7A4D;color:#fff;text-decoration:none;padding:13px 24px;border-radius:999px;font-weight:500}
+  .again{display:block;margin:14px auto 0;background:none;border:0;color:var(--ink-2);text-decoration:underline;cursor:pointer}
 
-  /* ملخص */
-  .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
-  .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:12px 14px}
-  .stat span{display:block;font-size:12px;color:var(--muted)}
-  .stat b{display:block;font-size:20px;font-weight:600;font-variant-numeric:tabular-nums}
-  .stat.hero{grid-column:1/-1;background:var(--plum);border-color:var(--plum);color:#fff}
-  .stat.hero span{color:#E6D6EE}
-  .stat.hero b{font-size:28px}
-
-  .tools{display:flex;gap:8px;margin-bottom:12px}
-  .tools button{flex:none;border:1px solid var(--line);background:#fff;border-radius:var(--r-md);padding:0 12px;cursor:pointer;font-size:14px;height:48px}
-  .chips{display:flex;gap:6px;overflow-x:auto;margin-bottom:12px;padding-bottom:2px}
-  .chips button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;cursor:pointer;white-space:nowrap;font-size:14px}
-  .chips button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
-  .item{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px;margin-bottom:10px}
-  .item.cancel{opacity:.55}
-  .row1{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-  .who{font-weight:600;font-size:16px}
-  .meta{font-size:13px;color:var(--muted)}
-  .meta a{color:var(--plum)}
-  .pill{font-size:12px;padding:3px 10px;border-radius:999px;white-space:nowrap;font-weight:500}
-  .pill.confirmed{background:#DDEBF7;color:#1F4E78} .pill.done{background:#D8F0E4;color:#1E6B4A} .pill.cancelled{background:#EEE;color:#777}
-  .pill.late{background:#FBE3C8;color:#8A4B0B}
-  .money{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0;font-size:13px;color:var(--muted)}
-  .money b{display:block;font-size:15px;font-variant-numeric:tabular-nums;color:var(--ink)}
-  .due b{color:var(--loss)}
-  .acts{display:flex;gap:8px;flex-wrap:wrap}
-  .acts select{flex:1;min-width:110px;height:40px;font-size:14px}
-  .acts button{border:1px solid var(--line);background:#fff;border-radius:var(--r-md);padding:0 12px;height:40px;cursor:pointer;font-size:14px}
-  .soon{color:var(--loss);font-weight:600}
-  .empty{text-align:center;color:var(--muted);padding:40px 10px}
-  .loading{text-align:center;padding:40px;color:var(--muted)}
-  .foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:18px;font-size:13px;color:var(--muted)}
-  .foot button{border:0;background:none;color:var(--plum);cursor:pointer;font-size:13px;padding:6px 0}
-
-  /* دخول */
-  .login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-  .login-card{width:100%;max-width:380px;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:28px 22px}
-  .login-card .logo{width:72px;height:72px;border-radius:18px;display:block;margin:0 auto 12px}
-  .login-card h1{text-align:center;color:var(--plum);margin:0;font-size:26px}
-  .login-card p{text-align:center;color:var(--muted);margin:4px 0 22px}
-  .login-card .field{margin-bottom:12px}
-  .primary{width:100%;height:50px;border:0;border-radius:var(--r-md);background:var(--plum);color:#fff;font-weight:600;cursor:pointer}
-  .primary:disabled{opacity:.6}
-  .err{color:var(--loss);font-size:14px;text-align:center;min-height:22px;margin-top:10px}
-
-  .toast{position:fixed;top:calc(16px + env(safe-area-inset-top));left:50%;transform:translateX(-50%) translateY(-200%);visibility:hidden;opacity:0;background:var(--ink);color:#fff;padding:12px 18px;border-radius:var(--r-md);z-index:20;transition:transform .25s;max-width:90vw;text-align:center}
-  .toast.show{transform:translateX(-50%) translateY(0);visibility:visible;opacity:1}
-  .toast.err{background:var(--loss)}
-  @media (prefers-reduced-motion:reduce){.toast,.bar{transition:none}}
+  footer{text-align:center;padding:10px 0 calc(40px + env(safe-area-inset-bottom));color:var(--muted);font-size:14px}
+  footer .links{display:flex;justify-content:center;gap:18px;margin-bottom:8px}
+  footer a{text-decoration:none;border-bottom:1px solid var(--line)}
   [hidden]{display:none!important}
+  @media (min-width:640px){ .services{grid-template-columns:1fr 1fr} .word{font-size:76px} }
+  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
 </style>
 </head>
-<body class="mode-total">
+<body>
 
-<!-- ===== شاشة الدخول ===== -->
-<div class="login" id="screenLogin" hidden>
-  <form class="login-card" id="loginForm" novalidate>
-    <img class="logo" src="icons/icon-192.png" alt="" width="40" height="40">
+<header class="hero wrap">
+  <img class="mark" src="icons/mark.png" alt="" width="150" height="117">
+  <h1 class="word">Ambere</h1>
+  <p class="sub">PERFUME STATION</p>
+  <p class="tag">خلّي ريحة فرحتك تضل بذاكرة المعازيم</p>
+  <p class="lead">بوث تعطير وتبخير للأعراس، وتوزيعات عطور بأحجام صغيرة كتذكار من ليلتك.</p>
+  <a class="cta" href="#book">اطلب حجز</a>
+</header>
 
-    <h1>Ambere</h1>
-    <p>حجوزات البوث</p>
-    <div class="field"><label for="lEmail">الإيميل</label><input id="lEmail" type="email" dir="ltr" autocomplete="username" required></div>
-    <div class="field"><label for="lPass">كلمة السر</label><input id="lPass" type="password" dir="ltr" autocomplete="current-password" required></div>
-    <button class="primary" id="btnLogin" type="submit">دخول</button>
-    <div class="err" id="loginErr"></div>
-  </form>
-</div>
-
-<!-- ===== التطبيق ===== -->
-<div id="screenApp" hidden>
-<div class="wrap">
-  <header>
-    <div class="brand">
-      <img class="logo" src="icons/icon-192.png" alt="" width="40" height="40">
-
-      <div><h1>Ambere</h1><small>حجوزات البوث</small></div>
+<main class="wrap">
+  <div class="rule">خدماتنا</div>
+  <div class="services">
+    <div class="svc">
+      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+        <path d="M24 6c-4 4 4 7 0 11s4 7 0 11"/><path d="M16 12c-3 3 3 5 0 8"/><path d="M32 12c-3 3 3 5 0 8"/>
+        <path d="M12 32h24l-3 10H15z"/><path d="M10 32h28"/>
+      </svg>
+      <div>
+        <h3>بوث التعطير والتبخير</h3>
+        <p>بوث مزيّن على مدخل القاعة، بنعطّر ونبخّر المعازيم أول ما يوصلوا.</p>
+      </div>
     </div>
-    <nav class="tabs" role="tablist">
-      <button role="tab" aria-selected="true" data-view="new" id="tabNew">حجز جديد</button>
-      <button role="tab" aria-selected="false" data-view="list" id="tabList">الحجوزات</button>
-    </nav>
-  </header>
-
-  <form id="viewNew" autocomplete="off" novalidate>
-    <div class="editing" id="editBanner" hidden>
-      <span id="editTitle">تعديل حجز</span>
-      <button type="button" id="btnCancelEdit">إلغاء التعديل</button>
-    </div>
-
-    <section class="block">
-      <h2>العرس</h2>
-      <div class="grid">
-        <div class="full"><label for="fDate">تاريخ العرس *</label><input id="fDate" type="date" required></div>
-        <div class="full"><label for="fClient">اسم العميل *</label><input id="fClient" placeholder="مثلاً: ليندا سلمان"></div>
-        <div><label for="fPhone">رقم الهاتف</label><input id="fPhone" type="tel" inputmode="tel" dir="ltr" placeholder="07..."></div>
-        <div><label for="fVenue">القاعة / المكان</label><input id="fVenue" placeholder="Sky Hall"></div>
+    <div class="svc">
+      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true">
+        <rect x="20" y="6" width="8" height="6" rx="1.5"/><path d="M21 12v4h6v-4"/>
+        <path d="M16 20q0-4 4-4h8q4 0 4 4v18q0 4-4 4h-8q-4 0-4-4z"/><path d="M20 27h8M20 31h8"/>
+      </svg>
+      <div>
+        <h3>توزيعات عطور</h3>
+        <p>عطور صغيرة مع كرت لكل حبة، تذكار للمعازيم.</p>
+        <div class="sizes"><span>5 مل</span><span>10 مل</span><span>30 مل</span></div>
       </div>
-    </section>
-
-    <section class="block">
-      <h2>الحالة والخدمة</h2>
-      <label>الحالة</label>
-      <div class="seg gap" id="segStatus">
-        <button type="button" data-v="confirmed" aria-pressed="true">مؤكد</button>
-        <button type="button" data-v="done" aria-pressed="false">منفّذ</button>
-        <button type="button" data-v="cancelled" aria-pressed="false">ملغي</button>
-      </div>
-      <label>بوث تعطير وتبخير؟</label>
-      <div class="seg" id="segBooth">
-        <button type="button" data-v="yes" aria-pressed="true">نعم</button>
-        <button type="button" data-v="no" aria-pressed="false">لا</button>
-      </div>
-    </section>
-
-    <section class="block">
-      <h2>طريقة التسعير</h2>
-      <div class="seg amber" id="segMode">
-        <button type="button" data-v="total" aria-pressed="true">مبلغ إجمالي للحجز</button>
-        <button type="button" data-v="piece" aria-pressed="false">حسب سعر الحبة</button>
-      </div>
-      <p class="help" id="modeHelp"></p>
-    </section>
-
-    <section class="block">
-      <h2>التوزيعات</h2>
-      <div id="sizes"></div>
-    </section>
-
-    <section class="block">
-      <h2>الفلوس</h2>
-      <div class="grid">
-        <div class="full piece-only" id="boothPriceWrap">
-          <label for="fBoothPrice">سعر البوث (د.أ)</label>
-          <input id="fBoothPrice" inputmode="decimal" dir="ltr" placeholder="0">
-        </div>
-        <div class="full">
-          <label for="fCharged" id="lblCharged">المبلغ الإجمالي اللي أخذته على الحجز (د.أ) *</label>
-          <input id="fCharged" inputmode="decimal" dir="ltr" placeholder="مثلاً 300">
-        </div>
-        <div class="full"><label for="fPaid">المدفوع لهلأ (عربون)</label><input id="fPaid" inputmode="decimal" dir="ltr" placeholder="0"></div>
-        <div class="full"><label for="fNotes">ملاحظات</label><textarea id="fNotes"></textarea></div>
-      </div>
-    </section>
-
-    <button type="button" class="danger" id="btnDelete" hidden>حذف هالحجز نهائياً</button>
-  </form>
-
-  <div id="viewList" hidden>
-    <div class="stats" id="stats"></div>
-    <div class="tools">
-      <input id="q" placeholder="ابحث باسم العميل، القاعة، أو الهاتف">
-      <button type="button" id="btnRefresh" aria-label="تحديث">↻</button>
-    </div>
-    <div class="chips" id="chips">
-      <button type="button" data-f="upcoming" aria-pressed="true">الجاية</button>
-      <button type="button" data-f="late" aria-pressed="false">لازم تتسكّر</button>
-      <button type="button" data-f="due" aria-pressed="false">عليهم فلوس</button>
-      <button type="button" data-f="done" aria-pressed="false">منفّذة</button>
-      <button type="button" data-f="all" aria-pressed="false">الكل</button>
-    </div>
-    <div id="list"><div class="loading">جاري تحميل الحجوزات…</div></div>
-    <div class="foot">
-      <span id="whoami"></span>
-      <span><button type="button" id="btnExport">تنزيل نسخة CSV</button> · <button type="button" id="btnLogout">خروج</button></span>
     </div>
   </div>
-</div>
 
-<div class="bar" id="bar">
-  <div class="bar-in">
-    <div class="nums">
-      <div><span>التكلفة</span><strong id="pCost">0</strong></div>
-      <div><span>الربح</span><strong id="pProfit">—</strong></div>
-      <div><span>المتبقي</span><strong id="pDue">—</strong></div>
+  <div class="rule">كيف بنشتغل</div>
+  <ol class="steps">
+    <li>بتبعتلنا طلب الحجز من هون.</li>
+    <li>بنتواصل معك واتساب ونتفق على التفاصيل والسعر.</li>
+    <li>بنيجي يوم العرس ونعطّر فرحتك.</li>
+  </ol>
+
+  <section class="card" id="book">
+    <form id="form" novalidate>
+      <h2>طلب حجز</h2>
+      <p class="hint">عبّي المعلومات وبنرجعلك بأقرب وقت.</p>
+
+      <div class="field"><label for="name">الاسم</label><input id="name" autocomplete="name" maxlength="80" required></div>
+      <div class="two">
+        <div class="field"><label for="phone">رقم الهاتف (واتساب)</label><input id="phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="07XXXXXXXX" maxlength="20" required></div>
+        <div class="field"><label for="date">تاريخ العرس</label><input id="date" type="date" required></div>
+      </div>
+      <div class="field"><label for="venue">القاعة / المدينة <span class="opt">(اختياري)</span></label><input id="venue" maxlength="120" placeholder="مثلاً: قاعة ... — إربد"></div>
+
+      <div class="field">
+        <span class="lbl">شو الخدمات اللي بدك ياها؟</span>
+        <div class="choices">
+          <button type="button" class="choice" id="cBooth" aria-pressed="true">
+            <span class="box"></span><span><b>بوث تعطير وتبخير</b><small>على مدخل القاعة</small></span>
+          </button>
+          <button type="button" class="choice" id="cGifts" aria-pressed="false">
+            <span class="box"></span><span><b>توزيعات عطور</b><small>اختار الحجم والعدد التقريبي</small></span>
+          </button>
+        </div>
+        <div class="qty" id="qty">
+          <div class="qrow"><span>5 مل</span><input data-size="5" inputmode="numeric" placeholder="0" aria-label="عدد 5 مل"></div>
+          <div class="qrow"><span>10 مل</span><input data-size="10" inputmode="numeric" placeholder="0" aria-label="عدد 10 مل"></div>
+          <div class="qrow"><span>30 مل</span><input data-size="30" inputmode="numeric" placeholder="0" aria-label="عدد 30 مل"></div>
+          <p class="qnote">العدد تقريبي، منقدر نعدّله لما نحكي.</p>
+        </div>
+      </div>
+
+      <div class="field"><label for="notes">ملاحظات <span class="opt">(اختياري)</span></label><textarea id="notes" maxlength="1000" placeholder="أي تفاصيل بتحب نعرفها"></textarea></div>
+
+      <div class="hp" aria-hidden="true"><label for="website">لا تعبّي هالخانة</label><input id="website" tabindex="-1" autocomplete="off"></div>
+
+      <button class="send" id="send" type="submit">ابعت الطلب</button>
+      <div class="msg" id="msg" role="alert"></div>
+      <p class="privacy">معلوماتك بتوصل لـ Ambere بس، وما بنشاركها مع حدا.</p>
+    </form>
+
+    <div class="done" id="done" hidden>
+      <div class="ok">✓</div>
+      <h2>وصلنا طلبك</h2>
+      <p class="hint">شكراً إلك! رح نتواصل معك على واتساب بأقرب وقت.</p>
+      <div class="summary" id="summary"></div>
+      <a class="wa" id="wa" href="#" target="_blank" rel="noopener" hidden>تابع معنا على واتساب</a>
+      <button class="again" id="again" type="button">بعت طلب ثاني</button>
     </div>
-    <button class="save" id="btnSave" type="button">حفظ الحجز</button>
-  </div>
-</div>
-</div>
+  </section>
+</main>
 
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<footer class="wrap">
+  <div class="links" id="links"></div>
+  <div>© <span id="yr"></span> Ambere — Perfume Station</div>
+</footer>
 
 <script>
-  /* =====================================================
-     ⚙️ الإعدادات — من Supabase ← Project Settings ← API
-     ===================================================== */
-  const SUPABASE_URL = 'https://fbmfjnvbqyqemzhpwgeu.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_tzOVk-ebbmIe5ppgEic6rw_IZ1v513z';
-
-  const STATUS = { confirmed:'مؤكد', done:'منفّذ', cancelled:'ملغي' };
-  const SIZES = [
-    { key:'5',  name:'5 مل',  color:'var(--s5)'  },
-    { key:'10', name:'10 مل', color:'var(--s10)' },
-    { key:'30', name:'30 مل', color:'var(--s30)' }
-  ];
+  const cfg = window.AMBERE_CONFIG || {};
   const $ = id => document.getElementById(id);
-  let sb = null, bookings = [], filter = 'upcoming', editingId = null;
+  const SIZE_NAME = { '5':'5 مل', '10':'10 مل', '30':'30 مل' };
 
-  /* ---------- تخزين محلي آمن ---------- */
-  const store = {
-    get(k, d){ try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch(e){ return d; } },
-    set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
-  };
-  let defaults = store.get('ambereDefaults', {});
-
-  /* ---------- أرقام ---------- */
   function clean(v){
     return String(v ?? '').trim()
       .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))
-      .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
-      .replace(/[٫,،]/g, '.').replace(/[^\d.]/g, '');
+      .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
   }
-  const n = v => { const x = parseFloat(clean(v)); return isNaN(x) ? 0 : x; };
-  const filled = v => clean(v) !== '';
-  const numOrNull = v => filled(v) ? n(v) : null;
-  const fmt = x => (Math.round(x * 100) / 100).toLocaleString('en-US', { maximumFractionDigits: 2 });
-  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-
-  /* ---------- حسابات الحجز ---------- */
-  function calc(b){
-    const items = Array.isArray(b.items) ? b.items : [];
-    const cost = items.reduce((s, i) => s + n(i.qty) * (n(i.cost) + n(i.card)), 0);
-    const pieces = items.reduce((s, i) => s + n(i.qty), 0);
-    const off = b.status === 'cancelled';
-    const charged = n(b.charged), paid = n(b.paid);
-    let service = '—';
-    if (off) service = 'ملغي';
-    else if (b.booth && pieces) service = 'بوث + توزيعات';
-    else if (b.booth) service = 'بوث فقط';
-    else if (pieces) service = 'توزيعات فقط';
-    return { cost: off ? 0 : cost, pieces, profit: off ? 0 : charged - cost,
-             remaining: off ? 0 : Math.max(0, charged - paid), service, charged, paid };
-  }
-
-  /* ---------- الأحجام ---------- */
-  function buildSizes(){
-    $('sizes').innerHTML = SIZES.map(s => `
-      <div class="size" id="sz${s.key}">
-        <button type="button" class="size-head" data-k="${s.key}" aria-expanded="false">
-          <span class="size-name"><span class="dot" style="background:${s.color}"></span>${s.name}</span>
-          <span class="size-sum" id="sum${s.key}">اكبس لإضافة</span>
-        </button>
-        <div class="size-body">
-          <div class="grid">
-            <div><label>العدد</label><input inputmode="numeric" dir="ltr" data-k="${s.key}" data-f="qty" placeholder="0"></div>
-            <div class="piece-only"><label>سعر بيع الحبة (د.أ)</label><input inputmode="decimal" dir="ltr" data-k="${s.key}" data-f="price" placeholder="1.00"></div>
-            <div><label>تكلفة الحبة (د.أ)</label><input inputmode="decimal" dir="ltr" data-k="${s.key}" data-f="cost" placeholder="0.33"><div class="unit"></div></div>
-            <div><label>تكلفة الكرت (د.أ)</label><input inputmode="decimal" dir="ltr" data-k="${s.key}" data-f="card" placeholder="0.08"><div class="unit"></div></div>
-          </div>
-          <div class="calc"><span>التكلفة الكلية (شامل الكرت)</span><b id="tot${s.key}">0 د.أ</b></div>
-        </div>
-      </div>`).join('');
-    document.querySelectorAll('.size-head').forEach(btn => btn.addEventListener('click', () => {
-      const open = toggleSize(btn.dataset.k);
-      if (open) { fillDefaults(btn.dataset.k); recalc(); field(btn.dataset.k, 'qty').focus(); }
-    }));
-    document.querySelectorAll('#sizes input').forEach(i => i.addEventListener('input', recalc));
-  }
-  function toggleSize(k, force){
-    const box = $('sz' + k);
-    const open = box.classList.toggle('open', force);
-    box.querySelector('.size-head').setAttribute('aria-expanded', open);
-    return open;
-  }
-  const field = (k, f) => document.querySelector(`#sizes input[data-k="${k}"][data-f="${f}"]`);
-  function fillDefaults(k){
-    const d = defaults[k]; if (!d) return;
-    ['price','cost','card'].forEach(f => {
-      const el = field(k, f);
-      if (el.value === '' && d[f] !== undefined && d[f] !== null && d[f] !== '') el.value = d[f];
-    });
-  }
-  function unitHint(k, f){
-    const el = field(k, f), box = el.parentElement.querySelector('.unit');
-    if (!filled(el.value)) { box.textContent = ''; box.className = 'unit'; return; }
-    const v = n(el.value), big = (f === 'card' && v >= 0.5) || (f === 'cost' && v >= 5);
-    box.textContent = `= ${fmt(Math.round(v * 1000) / 10)} قرش` + (big ? ' — متأكد؟' : '');
-    box.className = 'unit' + (big ? ' warn' : '');
-  }
-
-  /* ---------- أزرار الاختيار ---------- */
-  const getSeg = id => $(id).querySelector('[aria-pressed="true"]').dataset.v;
-  const setSeg = (id, v) => $(id).querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x.dataset.v === v));
-  function wireSeg(id, after){
-    $(id).addEventListener('click', e => {
-      const b = e.target.closest('button'); if (!b) return;
-      setSeg(id, b.dataset.v); (after || recalc)();
-    });
-  }
-
-  /* ---------- وضع التسعير ---------- */
-  const isPiece = () => getSeg('segMode') === 'piece';
-  function applyMode(){
-    const piece = isPiece();
-    document.body.className = piece ? 'mode-piece' : 'mode-total';
-    $('modeHelp').textContent = piece
-      ? 'بتكتب سعر الحبة لكل حجم وسعر البوث، والمبلغ الإجمالي بينحسب لحاله.'
-      : 'بتكتب كم أخذت على الحجز كامل، وعدد الحبات وتكلفتها، والربح بينحسب لحاله.';
-    $('fCharged').readOnly = piece;
-    $('lblCharged').textContent = piece ? 'المبلغ الإجمالي (محسوب)' : 'المبلغ الإجمالي اللي أخذته على الحجز (د.أ) *';
-    $('boothPriceWrap').hidden = !(piece && getSeg('segBooth') === 'yes');
-    if (piece && !filled($('fBoothPrice').value) && defaults.boothPrice) $('fBoothPrice').value = defaults.boothPrice;
-    if (!editingId) store.set('ambereMode', piece ? 'piece' : 'total');
-    recalc();
-  }
-
-  /* ---------- الحساب المباشر ---------- */
-  function recalc(){
-    let cost = 0, value = 0;
-    SIZES.forEach(s => {
-      const q = n(field(s.key,'qty').value);
-      const t = q * (n(field(s.key,'cost').value) + n(field(s.key,'card').value));
-      cost += t; value += q * n(field(s.key,'price').value);
-      $('tot' + s.key).textContent = fmt(t) + ' د.أ';
-      $('sum' + s.key).textContent = q ? `${fmt(q)} حبة · تكلفة ${fmt(t)}` : 'اكبس لإضافة';
-      ['cost','card'].forEach(f => unitHint(s.key, f));
-    });
-    if (isPiece()) {
-      const total = value + (getSeg('segBooth') === 'yes' ? n($('fBoothPrice').value) : 0);
-      $('fCharged').value = total ? String(Math.round(total * 100) / 100) : '';
-    }
-    const cancelled = getSeg('segStatus') === 'cancelled';
-    $('pCost').textContent = fmt(cost);
-    if (!filled($('fCharged').value) || cancelled) {
-      $('pProfit').textContent = '—'; $('pProfit').className = ''; $('pDue').textContent = '—';
-    } else {
-      const charged = n($('fCharged').value), profit = charged - cost;
-      $('pProfit').textContent = fmt(profit);
-      $('pProfit').className = profit > 0 ? 'pos' : (profit < 0 ? 'neg' : '');
-      $('pDue').textContent = fmt(Math.max(0, charged - n($('fPaid').value)));
-    }
-  }
-
-  /* ---------- جمع الفورم ---------- */
-  function collect(){
-    const piece = isPiece(), booth = getSeg('segBooth') === 'yes';
-    const items = SIZES.map(s => ({
-      size: s.key,
-      qty: n(field(s.key,'qty').value),
-      price: piece ? numOrNull(field(s.key,'price').value) : null,
-      cost: numOrNull(field(s.key,'cost').value),
-      card: numOrNull(field(s.key,'card').value)
-    })).filter(i => i.qty > 0);
-    return {
-      wedding_date: $('fDate').value,
-      client: $('fClient').value.trim(),
-      phone: clean($('fPhone').value) || null,
-      venue: $('fVenue').value.trim() || null,
-      status: getSeg('segStatus'),
-      booth,
-      pricing_mode: piece ? 'piece' : 'total',
-      booth_price: piece && booth ? numOrNull($('fBoothPrice').value) : null,
-      items,
-      charged: n($('fCharged').value),
-      paid: n($('fPaid').value),
-      notes: $('fNotes').value.trim() || null
-    };
-  }
-  function validate(b){
-    if (!b.wedding_date) return ['fDate','اختار تاريخ العرس.'];
-    if (!b.client) return ['fClient','اكتب اسم العميل (أو "مجهول").'];
-    if (!b.booth && !b.items.length) return [null,'الحجز لازم يكون فيه بوث أو توزيعات.'];
-    for (const i of b.items) {
-      const nm = SIZES.find(s => s.key === i.size).name;
-      if (i.cost === null) return [null, `اكتب تكلفة الحبة لحجم ${nm}.`];
-      if (b.pricing_mode === 'piece' && i.price === null) return [null, `اكتب سعر بيع الحبة لحجم ${nm}.`];
-    }
-    if (!filled($('fCharged').value)) return ['fCharged', b.pricing_mode === 'piece' ? 'اكتب سعر البوث أو أسعار الحبات.' : 'اكتب المبلغ الإجمالي اللي أخذته.'];
-    return null;
-  }
-
-  /* ---------- حفظ / تعديل / حذف ---------- */
-  async function save(){
-    const b = collect(), bad = validate(b);
-    if (bad) { toast(bad[1], true); if (bad[0]) $(bad[0]).focus(); return; }
-    const btn = $('btnSave'); btn.disabled = true; btn.textContent = 'جاري الحفظ…';
-    const q = editingId
-      ? sb.from('bookings').update(b).eq('id', editingId).select().single()
-      : sb.from('bookings').insert(b).select().single();
-    const { data, error } = await q;
-    btn.disabled = false; btn.textContent = editingId ? 'حفظ التعديل' : 'حفظ الحجز';
-    if (error) { toast(dbError(error), true); return; }
-    b.items.forEach(i => { defaults[i.size] = { price: i.price ?? defaults[i.size]?.price ?? '', cost: i.cost, card: i.card }; });
-    if (b.booth_price) defaults.boothPrice = b.booth_price;
-    store.set('ambereDefaults', defaults);
-    const i = bookings.findIndex(x => x.id === data.id);
-    if (i >= 0) bookings[i] = data; else bookings.push(data);
-    toast(editingId ? 'انحفظ التعديل ✓' : 'انحفظ الحجز ✓');
-    const wasEditing = !!editingId;
-    resetForm();
-    if (wasEditing) showView('list'); else renderList();
-  }
-
-  async function removeBooking(){
-    if (!editingId) return;
-    const b = bookings.find(x => x.id === editingId);
-    if (!confirm(`متأكد بدك تحذف حجز «${b ? b.client : ''}» نهائياً؟`)) return;
-    const { error } = await sb.from('bookings').delete().eq('id', editingId);
-    if (error) { toast(dbError(error), true); return; }
-    bookings = bookings.filter(x => x.id !== editingId);
-    toast('انحذف الحجز');
-    resetForm(); showView('list');
-  }
-
-  function startEdit(id){
-    const b = bookings.find(x => x.id === id); if (!b) return;
-    resetForm(true);
-    editingId = id;
-    $('fDate').value = b.wedding_date; $('fClient').value = b.client || '';
-    $('fPhone').value = b.phone || ''; $('fVenue').value = b.venue || '';
-    setSeg('segStatus', b.status); setSeg('segBooth', b.booth ? 'yes' : 'no');
-    setSeg('segMode', b.pricing_mode || 'total');
-    $('fBoothPrice').value = b.booth_price ?? '';
-    (b.items || []).forEach(i => {
-      if (!field(i.size, 'qty')) return;
-      field(i.size,'qty').value = i.qty ?? ''; field(i.size,'price').value = i.price ?? '';
-      field(i.size,'cost').value = i.cost ?? ''; field(i.size,'card').value = i.card ?? '';
-      toggleSize(i.size, true);
-    });
-    $('fPaid').value = n(b.paid) || ''; $('fNotes').value = b.notes || '';
-    applyMode();
-    if (b.pricing_mode !== 'piece') $('fCharged').value = n(b.charged);
-    recalc();
-    $('editBanner').hidden = false; $('editTitle').textContent = `تعديل حجز: ${b.client}`;
-    $('btnDelete').hidden = false; $('btnSave').textContent = 'حفظ التعديل';
-    showView('new'); window.scrollTo({ top: 0 });
-  }
-
-  function resetForm(keepView){
-    editingId = null;
-    $('viewNew').reset();
-    setSeg('segStatus','confirmed'); setSeg('segBooth','yes'); setSeg('segMode', store.get('ambereMode','total'));
-    SIZES.forEach(s => toggleSize(s.key, false));
-    $('editBanner').hidden = true; $('btnDelete').hidden = true; $('btnSave').textContent = 'حفظ الحجز';
-    applyMode();
-    if (!keepView) window.scrollTo({ top: 0 });
-  }
-
-  /* ---------- القائمة ---------- */
+  const digits = v => clean(v).replace(/[^\d+]/g, '');
   const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
-  const daysUntil = s => { const [y,m,d] = s.split('-').map(Number); const t = new Date(); t.setHours(0,0,0,0); return Math.round((new Date(y, m-1, d) - t) / 86400000); };
   const showDate = s => { const p = s.split('-'); return `${p[2]}/${p[1]}/${p[0]}`; };
 
-  function renderStats(){
-    const month = todayStr().slice(0, 7), year = todayStr().slice(0, 4), today = todayStr();
-    let mProfit = 0, mCount = 0, yProfit = 0, owed = 0, upcoming = 0;
-    bookings.forEach(b => {
-      const c = calc(b);
-      if (b.status !== 'cancelled') {
-        if (b.wedding_date.startsWith(month)) { mProfit += c.profit; mCount++; }
-        if (b.wedding_date.startsWith(year)) yProfit += c.profit;
-      }
-      owed += c.remaining;
-      if (b.status === 'confirmed' && b.wedding_date >= today) upcoming++;
-    });
-    $('stats').innerHTML = `
-      <div class="stat hero"><span>ربح هالشهر (${mCount} حجز)</span><b>${fmt(mProfit)} د.أ</b></div>
-      <div class="stat"><span>ربح السنة</span><b>${fmt(yProfit)}</b></div>
-      <div class="stat"><span>أعراس جاية</span><b>${upcoming}</b></div>
-      <div class="stat full" style="grid-column:1/-1"><span>متبقي على العملاء</span><b style="color:${owed > 0 ? 'var(--loss)' : 'inherit'}">${fmt(owed)} د.أ</b></div>`;
-  }
+  /* ---------- روابط الفوتر ---------- */
+  $('yr').textContent = new Date().getFullYear();
+  const links = [];
+  if (cfg.INSTAGRAM) links.push(`<a href="${cfg.INSTAGRAM}" target="_blank" rel="noopener">إنستغرام</a>`);
+  if (cfg.WHATSAPP) links.push(`<a href="https://wa.me/${cfg.WHATSAPP}" target="_blank" rel="noopener">واتساب</a>`);
+  $('links').innerHTML = links.join('');
 
-  function renderList(){
-    renderStats();
-    const q = $('q').value.trim().toLowerCase(), today = todayStr();
-    let rows = bookings.filter(b => {
-      if (q && !(`${b.client} ${b.venue || ''} ${b.phone || ''}`.toLowerCase().includes(q))) return false;
-      const c = calc(b);
-      if (filter === 'upcoming') return b.status === 'confirmed' && b.wedding_date >= today;
-      if (filter === 'late') return b.status === 'confirmed' && b.wedding_date < today;
-      if (filter === 'due') return c.remaining > 0;
-      if (filter === 'done') return b.status === 'done';
-      return true;
-    });
-    rows.sort((a, b) => filter === 'upcoming' ? a.wedding_date.localeCompare(b.wedding_date) : b.wedding_date.localeCompare(a.wedding_date));
-    const lateCount = bookings.filter(b => b.status === 'confirmed' && b.wedding_date < today).length;
-    $('chips').querySelector('[data-f="late"]').textContent = lateCount ? `لازم تتسكّر (${lateCount})` : 'لازم تتسكّر';
+  /* ---------- الخيارات ---------- */
+  $('date').min = todayStr();
+  function toggle(btn){ btn.setAttribute('aria-pressed', btn.getAttribute('aria-pressed') !== 'true'); syncQty(); }
+  function syncQty(){ $('qty').classList.toggle('on', $('cGifts').getAttribute('aria-pressed') === 'true'); }
+  $('cBooth').addEventListener('click', () => toggle($('cBooth')));
+  $('cGifts').addEventListener('click', () => { toggle($('cGifts')); if ($('qty').classList.contains('on')) document.querySelector('#qty input').focus(); });
 
-    if (!rows.length) {
-      const msg = { upcoming:'ما في أعراس جاية. سجّل حجز من «حجز جديد».', late:'كل الأعراس اللي صارت متسكّرة ✓', due:'ما في حدا عليه فلوس.', done:'ما في حجوزات منفّذة لسا.', all:'ما في حجوزات لسا.' }[filter];
-      $('list').innerHTML = `<div class="empty">${q ? 'ما في نتائج لهالبحث.' : msg}</div>`; return;
+  /* ---------- الإرسال ---------- */
+  let sb = null;
+  try {
+    if (window.supabase && cfg.SUPABASE_URL && cfg.SUPABASE_KEY && !cfg.SUPABASE_KEY.includes('PASTE')) {
+      sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_KEY, {
+        auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, storageKey: 'ambere-public' }
+      });
     }
-    $('list').innerHTML = rows.map(b => {
-      const c = calc(b), days = daysUntil(b.wedding_date);
-      const late = b.status === 'confirmed' && days < 0;
-      const when = b.status === 'confirmed' && days >= 0
-        ? (days === 0 ? '<span class="soon">اليوم</span>' : days <= 7 ? `<span class="soon">بعد ${days} يوم</span>` : `بعد ${days} يوم`) : '';
-      return `
-      <article class="item ${b.status === 'cancelled' ? 'cancel' : ''}">
-        <div class="row1">
-          <div>
-            <div class="who">${esc(b.client)}</div>
-            <div class="meta">${showDate(b.wedding_date)}${when ? ' · ' + when : ''}</div>
-            <div class="meta">${esc(b.venue || '')}${b.phone ? (b.venue ? ' · ' : '') + '<a href="tel:' + esc(b.phone) + '">' + esc(b.phone) + '</a>' : ''}</div>
-            <div class="meta">${esc(c.service)}${c.pieces ? ' · ' + fmt(c.pieces) + ' حبة' : ''}</div>
-          </div>
-          <span class="pill ${late ? 'late' : b.status}">${late ? 'خلص؟ سكّره' : STATUS[b.status]}</span>
-        </div>
-        <div class="money">
-          <div>المبلغ<b>${fmt(c.charged)}</b></div>
-          <div>الربح<b style="color:${c.profit < 0 ? 'var(--loss)' : 'var(--gain)'}">${fmt(c.profit)}</b></div>
-          <div class="${c.remaining > 0 ? 'due' : ''}">المتبقي<b>${fmt(c.remaining)}</b></div>
-        </div>
-        <div class="acts">
-          <select data-id="${b.id}" class="st" aria-label="تغيير الحالة">
-            ${Object.entries(STATUS).map(([k, v]) => `<option value="${k}" ${k === b.status ? 'selected' : ''}>${v}</option>`).join('')}
-          </select>
-          ${c.remaining > 0 ? `<button type="button" data-id="${b.id}" class="pf">دفع الكل ✓</button>` : ''}
-          <button type="button" data-id="${b.id}" class="ed">تعديل</button>
-        </div>
-      </article>`;
-    }).join('');
+  } catch(e) {}
+
+  function fail(msg, el){
+    $('msg').textContent = msg;
+    document.querySelectorAll('.bad').forEach(x => x.classList.remove('bad'));
+    if (el) { el.classList.add('bad'); el.focus(); }
   }
 
-  async function quickUpdate(id, patch, okMsg){
-    const { data, error } = await sb.from('bookings').update(patch).eq('id', id).select().single();
-    if (error) { toast(dbError(error), true); renderList(); return; }
-    const i = bookings.findIndex(x => x.id === id); if (i >= 0) bookings[i] = data;
-    renderList(); toast(okMsg);
+  function collect(){
+    const booth = $('cBooth').getAttribute('aria-pressed') === 'true';
+    const gifts = $('cGifts').getAttribute('aria-pressed') === 'true';
+    const items = gifts ? [...document.querySelectorAll('#qty input')]
+      .map(i => ({ size: i.dataset.size, qty: parseInt(digits(i.value), 10) || 0 }))
+      .filter(i => i.qty > 0) : [];
+    return {
+      name: $('name').value.trim(),
+      phone: digits($('phone').value),
+      wedding_date: $('date').value,
+      venue: $('venue').value.trim() || null,
+      booth, items, gifts,
+      notes: $('notes').value.trim() || null
+    };
   }
 
-  async function loadBookings(){
-    const { data, error } = await sb.from('bookings').select('*').order('wedding_date', { ascending: false });
-    if (error) { $('list').innerHTML = `<div class="empty">ما قدرت أحمّل الحجوزات: ${esc(dbError(error))}</div>`; return; }
-    bookings = data || []; renderList();
-  }
+  $('form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const r = collect();
+    if (r.name.length < 2) return fail('اكتب اسمك لو سمحت.', $('name'));
+    if (!/^\+?\d{9,15}$/.test(r.phone)) return fail('اكتب رقم هاتف صحيح، مثلاً 0791234567.', $('phone'));
+    if (!r.wedding_date) return fail('اختار تاريخ العرس.', $('date'));
+    if (r.wedding_date < todayStr()) return fail('التاريخ لازم يكون اليوم أو بعده.', $('date'));
+    if (!r.booth && !r.gifts) return fail('اختار خدمة وحدة على الأقل.');
+    if (r.gifts && !r.items.length) return fail('اكتب العدد التقريبي للتوزيعات.', document.querySelector('#qty input'));
+    if (r.items.some(i => i.qty > 10000)) return fail('العدد كبير كثير، تواصل معنا مباشرة.');
 
-  function exportCSV(){
-    const head = ['رقم','التاريخ','العميل','الهاتف','القاعة','الحالة','بوث','حبات 5مل','حبات 10مل','حبات 30مل','التكلفة','المبلغ','الربح','المدفوع','المتبقي','ملاحظات'];
-    const rows = [...bookings].sort((a, b) => a.wedding_date.localeCompare(b.wedding_date)).map(b => {
-      const c = calc(b), q = k => n((b.items || []).find(i => i.size === k)?.qty);
-      return [b.id, b.wedding_date, b.client, b.phone || '', b.venue || '', STATUS[b.status], b.booth ? 'نعم' : 'لا',
-              q('5'), q('10'), q('30'), c.cost.toFixed(2), c.charged.toFixed(2), c.profit.toFixed(2), c.paid.toFixed(2), c.remaining.toFixed(2), b.notes || ''];
+    // فخ للبوتات: إذا انعبّت الخانة المخفية منعمل كأنه انبعت
+    if ($('website').value) return showDone(r);
+
+    if (!sb) return fail('الحجز مش متاح هلأ، تواصل معنا على إنستغرام.');
+    const btn = $('send'); btn.disabled = true; btn.textContent = 'جاري الإرسال…'; fail('');
+    const { error } = await sb.from('booking_requests').insert({
+      name: r.name, phone: r.phone, wedding_date: r.wedding_date, venue: r.venue,
+      booth: r.booth, items: r.items, notes: r.notes
     });
-    const csv = [head, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\r\n');
-    const url = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' }));
-    const a = Object.assign(document.createElement('a'), { href: url, download: `ambere-bookings-${todayStr()}.csv` });
-    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-  }
-
-  function dbError(e){
-    const m = (e && e.message) || '';
-    if (/row-level security|permission denied/i.test(m)) return 'حسابك مش مسموح يعدّل على الحجوزات.';
-    if (/Failed to fetch|NetworkError|network/i.test(m)) return 'ما في اتصال بالإنترنت. جرّب كمان مرة.';
-    if (/JWT|expired/i.test(m)) return 'انتهت الجلسة. اطلع وادخل من جديد.';
-    return m || 'صار خطأ.';
-  }
-
-  /* ---------- التنقل ---------- */
-  function showView(v){
-    const isNew = v === 'new';
-    $('tabNew').setAttribute('aria-selected', isNew); $('tabList').setAttribute('aria-selected', !isNew);
-    $('viewNew').hidden = !isNew; $('viewList').hidden = isNew; $('bar').hidden = !isNew;
-    if (!isNew) renderList();
-  }
-
-  let tt;
-  function toast(msg, err){
-    const el = $('toast'); el.textContent = msg; el.className = 'toast show' + (err ? ' err' : '');
-    clearTimeout(tt); tt = setTimeout(() => el.className = 'toast', 3200);
-  }
-
-  /* ---------- الدخول ---------- */
-  async function enterApp(session){
-    const { data: ok, error } = await sb.rpc('is_allowed');
-    if (error || !ok) {
-      await sb.auth.signOut();
-      showLogin(error ? dbError(error) : 'هالحساب مش مسموح يدخل.');
-      return;
+    btn.disabled = false; btn.textContent = 'ابعت الطلب';
+    if (error) {
+      const m = error.message || '';
+      if (m.includes('AMB:')) return fail(m.split('AMB:')[1].trim());
+      if (/fetch|network/i.test(m)) return fail('في مشكلة بالإنترنت، جرّب كمان مرة.');
+      return fail('صار خطأ، جرّب كمان مرة أو تواصل معنا على إنستغرام.');
     }
-    $('screenLogin').hidden = true; $('screenApp').hidden = false;
-    $('whoami').textContent = session.user.email;
-    loadBookings();
-  }
-  function showLogin(msg){
-    $('screenApp').hidden = true; $('screenLogin').hidden = false;
-    $('loginErr').textContent = msg || '';
-  }
+    showDone(r);
+  });
 
-  /* ---------- تشغيل ---------- */
-  function boot(){
-    if (!window.supabase || SUPABASE_URL.includes('YOUR-PROJECT')) {
-      document.body.innerHTML = '<div class="empty" style="padding:60px 20px">لازم تحط SUPABASE_URL و SUPABASE_ANON_KEY بملف index.html.</div>';
-      return;
+  function showDone(r){
+    const services = [r.booth ? 'بوث تعطير وتبخير' : null, r.items.length ? 'توزيعات عطور' : null].filter(Boolean).join(' + ');
+    const gifts = r.items.map(i => `${SIZE_NAME[i.size]} × ${i.qty}`).join('، ');
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    $('summary').innerHTML = `
+      <div><span>الاسم</span><span>${esc(r.name)}</span></div>
+      <div><span>التاريخ</span><span>${showDate(r.wedding_date)}</span></div>
+      ${r.venue ? `<div><span>المكان</span><span>${esc(r.venue)}</span></div>` : ''}
+      <div><span>الخدمات</span><span>${services}</span></div>
+      ${gifts ? `<div><span>التوزيعات</span><span>${gifts}</span></div>` : ''}`;
+    if (cfg.WHATSAPP) {
+      const text = `مرحبا Ambere، بعثت طلب حجز:\nالاسم: ${r.name}\nالتاريخ: ${showDate(r.wedding_date)}${r.venue ? '\nالمكان: ' + r.venue : ''}\nالخدمات: ${services}${gifts ? '\nالتوزيعات: ' + gifts : ''}`;
+      $('wa').href = `https://wa.me/${cfg.WHATSAPP}?text=${encodeURIComponent(text)}`;
+      $('wa').hidden = false;
     }
-    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: true, autoRefreshToken: true } });
-
-    buildSizes();
-    wireSeg('segStatus'); wireSeg('segBooth', applyMode); wireSeg('segMode', applyMode);
-    ['fCharged','fPaid','fBoothPrice'].forEach(id => $(id).addEventListener('input', recalc));
-    $('btnSave').addEventListener('click', save);
-    $('btnDelete').addEventListener('click', removeBooking);
-    $('btnCancelEdit').addEventListener('click', () => { resetForm(); showView('list'); });
-    $('tabNew').addEventListener('click', () => showView('new'));
-    $('tabList').addEventListener('click', () => showView('list'));
-    $('q').addEventListener('input', renderList);
-    $('btnRefresh').addEventListener('click', async () => { await loadBookings(); toast('تحدّثت ✓'); });
-    $('btnExport').addEventListener('click', exportCSV);
-    $('btnLogout').addEventListener('click', async () => { await sb.auth.signOut(); bookings = []; showLogin(); });
-    $('chips').addEventListener('click', e => {
-      const b = e.target.closest('button'); if (!b) return;
-      filter = b.dataset.f;
-      $('chips').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b));
-      renderList();
-    });
-    $('list').addEventListener('change', e => {
-      if (e.target.classList.contains('st')) quickUpdate(Number(e.target.dataset.id), { status: e.target.value }, 'تغيّرت الحالة ✓');
-    });
-    $('list').addEventListener('click', e => {
-      const b = e.target.closest('button'); if (!b) return;
-      const id = Number(b.dataset.id);
-      if (b.classList.contains('pf')) { const bk = bookings.find(x => x.id === id); quickUpdate(id, { paid: n(bk.charged) }, 'انسجل الدفع كامل ✓'); }
-      if (b.classList.contains('ed')) startEdit(id);
-    });
-    document.addEventListener('focusin', e => { if (e.target.matches('#viewNew input, #viewNew textarea')) $('bar').classList.add('away'); });
-    document.addEventListener('focusout', () => setTimeout(() => {
-      if (!document.activeElement || !document.activeElement.matches('#viewNew input, #viewNew textarea')) $('bar').classList.remove('away');
-    }, 50));
-    document.addEventListener('visibilitychange', () => { if (!document.hidden && !$('screenApp').hidden) loadBookings(); });
-
-    $('loginForm').addEventListener('submit', async e => {
-      e.preventDefault();
-      const email = $('lEmail').value.trim(), password = $('lPass').value;
-      if (!email || !password) { $('loginErr').textContent = 'اكتب الإيميل وكلمة السر.'; return; }
-      const btn = $('btnLogin'); btn.disabled = true; btn.textContent = 'جاري الدخول…'; $('loginErr').textContent = '';
-      const { data, error } = await sb.auth.signInWithPassword({ email, password });
-      btn.disabled = false; btn.textContent = 'دخول';
-      if (error) { $('loginErr').textContent = /invalid/i.test(error.message) ? 'الإيميل أو كلمة السر غلط.' : dbError(error); return; }
-      $('lPass').value = '';
-      enterApp(data.session);
-    });
-
-    resetForm();
-    sb.auth.getSession().then(({ data }) => { data.session ? enterApp(data.session) : showLogin(); });
+    $('form').hidden = true; $('done').hidden = false;
+    $('book').scrollIntoView({ block: 'start' });
   }
-  boot();
+
+  $('again').addEventListener('click', () => {
+    $('form').reset(); $('cBooth').setAttribute('aria-pressed', true); $('cGifts').setAttribute('aria-pressed', false); syncQty();
+    $('done').hidden = true; $('form').hidden = false; fail('');
+  });
 </script>
 </body>
 </html>
