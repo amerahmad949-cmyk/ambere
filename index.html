@@ -3,324 +3,797 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Ambere — Perfume Station | احجز بوث العطور لعرسك</title>
-<meta name="description" content="Ambere — بوث تعطير وتبخير للأعراس وتوزيعات عطور بأحجام صغيرة. ابعت طلب حجز وبنتواصل معك.">
+<title>Ambere — Perfume Station | بوث تعطير وتوزيعات عطور للأعراس</title>
+<meta name="description" content="Ambere — Perfume Station: بوث تعطير وتبخير لاستقبال المعازيم، وتوزيعات عطور 5 و10 و30 مل بكروت مخصصة بالأسماء وتاريخ المناسبة. ابعث طلب حجزك.">
+<meta property="og:type" content="website">
 <meta property="og:title" content="Ambere — Perfume Station">
-<meta property="og:description" content="بوث تعطير وتبخير للأعراس وتوزيعات عطور. احجز لعرسك.">
-<meta property="og:image" content="icons/icon-512.png">
+<meta property="og:description" content="خلّي ريحة فرحتك تضل بذاكرة المعازيم. بوث تعطير وتبخير وتوزيعات عطور مخصصة.">
+<meta property="og:image" content="images/og-ambere.jpg">
+<meta property="og:locale" content="ar_JO">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<meta name="theme-color" content="#F7EBDD">
+<meta name="theme-color" content="#FAF6EF">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Readex+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Readex+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="images/work/station-ambere-counter-960.webp" imagesrcset="images/work/station-ambere-counter-480.webp 480w, images/work/station-ambere-counter-960.webp 960w" imagesizes="(min-width: 900px) 46vw, 100vw">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
+<script>document.documentElement.classList.add('js')</script>
 <style>
   :root{
-    --cream:#F7EBDD; --paper:#FBF5EE; --ink:#1E1A17; --ink-2:#4A423B; --muted:#8A7E72;
-    --line:#E3D5C4; --gold:#A8834A; --err:#A33A3A;
-    --r:16px;
+    --ivory:#FAF6EF; --cream:#F3EADC; --champagne:#E6D5BC; --gold:#A8834A; --gold-d:#86683A;
+    --espresso:#2A1F18; --ink:#2A1F18; --ink-2:#5A4C40; --muted:#857668; --line:#E4D6C3; --err:#9E3B33;
+    --display:"Amiri","Times New Roman",serif;
+    --latin:"Cormorant Garamond",Georgia,serif;
+    --sans:"Readex Pro",Tahoma,Arial,sans-serif;
+    --nav-h:68px;
+    --ease:cubic-bezier(.22,.61,.36,1);
+    --max:1180px;
   }
   *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{margin:0;overflow-x:hidden;background:var(--cream);color:var(--ink);font-family:"Readex Pro",Tahoma,Arial,sans-serif;font-size:16px;line-height:1.7;-webkit-text-size-adjust:100%}
-  input,textarea,button{font-family:inherit;font-size:16px;color:inherit}
+  html{scroll-behavior:smooth;scroll-padding-top:calc(var(--nav-h) + 12px);-webkit-text-size-adjust:100%}
+  body{margin:0;overflow-x:hidden;background:var(--ivory);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.8;font-weight:300}
+  img{display:block;max-width:100%;height:auto}
   a{color:inherit}
-  .wrap{max-width:620px;margin:0 auto;padding:0 20px}
-  :focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+  button,input,textarea{font-family:inherit;font-size:16px;color:inherit}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px}
+  .container{width:100%;max-width:var(--max);margin:0 auto;padding:0 22px}
+  .eyebrow{display:inline-flex;align-items:center;gap:12px;color:var(--gold-d);font-size:13px;font-weight:500;letter-spacing:.04em;margin:0 0 14px}
+  .eyebrow::before{content:"";width:28px;height:1px;background:var(--gold)}
+  h1,h2,h3{font-family:var(--display);font-weight:700;line-height:1.35;margin:0;color:var(--espresso)}
+  .h2{font-size:clamp(30px,4.6vw,46px)}
+  .lead{color:var(--ink-2);font-size:clamp(16px,1.6vw,18px);max-width:34em}
+  .latin{font-family:var(--latin);direction:ltr;unicode-bidi:isolate}
 
-  /* ---------- الهيرو ---------- */
-  .hero{text-align:center;padding:calc(56px + env(safe-area-inset-top)) 20px 48px}
-  .mark{width:150px;height:auto;display:block;margin:0 auto 8px}
-  .word{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:64px;line-height:1;margin:0;letter-spacing:.5px;direction:ltr}
-  .sub{display:flex;align-items:center;justify-content:center;gap:14px;margin:10px 0 0;direction:ltr;font-size:12px;letter-spacing:.42em;color:var(--ink-2);font-weight:400}
-  .sub::before,.sub::after{content:"";width:34px;height:1px;background:var(--ink-2)}
-  .tag{font-size:22px;font-weight:500;margin:34px 0 8px;line-height:1.6}
-  .lead{color:var(--ink-2);margin:0 auto 28px;max-width:440px;font-weight:300}
-  .cta{display:inline-block;background:var(--ink);color:var(--cream);text-decoration:none;padding:14px 34px;border-radius:999px;font-weight:500}
+  /* ---------- buttons ---------- */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 28px;border-radius:999px;text-decoration:none;font-weight:500;font-size:15.5px;border:1px solid transparent;cursor:pointer;transition:background .35s var(--ease),color .35s var(--ease),border-color .35s var(--ease),transform .35s var(--ease)}
+  .btn-dark{background:var(--espresso);color:var(--ivory)}
+  .btn-dark:hover{background:#3d2e24}
+  .btn-line{border-color:var(--espresso);color:var(--espresso);background:transparent}
+  .btn-line:hover{background:var(--espresso);color:var(--ivory)}
+  .btn-light{background:var(--ivory);color:var(--espresso)}
+  .btn-light:hover{background:#fff}
+  .btn .arr{transition:transform .35s var(--ease)}
+  .btn:hover .arr{transform:translateX(-4px)}
+  .link{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:500;padding:6px 0;border-bottom:1px solid var(--gold);color:var(--espresso)}
+  .link:hover{color:var(--gold-d)}
 
-  /* ---------- الخدمات ---------- */
-  .rule{display:flex;align-items:center;gap:14px;color:var(--gold);margin:8px 0 22px;font-size:14px;letter-spacing:.06em}
-  .rule::before,.rule::after{content:"";flex:1;height:1px;background:var(--line)}
-  .services{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:44px}
-  .svc{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:flex;gap:16px;align-items:flex-start}
-  .svc svg{width:44px;height:44px;flex:none;color:var(--gold)}
-  .svc h3{margin:0 0 4px;font-size:18px;font-weight:600}
-  .svc p{margin:0;color:var(--ink-2);font-weight:300;font-size:15px}
-  .sizes{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
-  .sizes span{border:1px solid var(--line);border-radius:999px;padding:2px 12px;font-size:13px;background:#fff}
+  /* ---------- nav ---------- */
+  .nav{position:fixed;inset:0 0 auto 0;z-index:50;height:calc(var(--nav-h) + env(safe-area-inset-top));padding-top:env(safe-area-inset-top);background:rgba(250,246,239,.97);border-bottom:1px solid transparent;transition:border-color .3s,box-shadow .3s}
+  .nav.scrolled{border-color:var(--line);box-shadow:0 6px 24px -18px rgba(42,31,24,.35)}
+  .nav-in{height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;gap:20px}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .brand img{width:34px;height:auto}
+  .brand span{font-family:var(--latin);font-size:27px;font-weight:500;letter-spacing:.02em;direction:ltr}
+  .nav-links{display:flex;align-items:center;gap:30px;list-style:none;margin:0;padding:0}
+  .nav-links a{text-decoration:none;font-size:15px;font-weight:400;color:var(--ink-2);position:relative;padding:6px 0}
+  .nav-links a::after{content:"";position:absolute;inset:auto 0 0 0;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:right;transition:transform .4s var(--ease)}
+  .nav-links a:hover{color:var(--espresso)}
+  .nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1)}
+  .nav .btn{min-height:42px;padding:0 20px;font-size:14.5px}
+  .menu-btn{display:none;width:44px;height:44px;border:0;background:none;cursor:pointer;position:relative}
+  .menu-btn span{position:absolute;left:11px;right:11px;height:1.5px;background:var(--espresso);transition:transform .35s var(--ease),opacity .2s}
+  .menu-btn span:nth-child(1){top:16px} .menu-btn span:nth-child(2){top:22px} .menu-btn span:nth-child(3){top:28px}
+  .menu-btn[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+  .menu-btn[aria-expanded="true"] span:nth-child(2){opacity:0}
+  .menu-btn[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+  .drawer{position:fixed;inset:calc(var(--nav-h) + env(safe-area-inset-top)) 0 0 0;z-index:49;background:var(--ivory);padding:28px 22px calc(28px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:6px;opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .35s var(--ease),transform .35s var(--ease),visibility .35s}
+  .drawer.open{opacity:1;visibility:visible;transform:none}
+  .drawer a{font-family:var(--display);font-size:28px;font-weight:700;text-decoration:none;padding:12px 0;border-bottom:1px solid var(--line)}
+  .drawer .btn{margin-top:24px;font-family:var(--sans);font-size:16px;border-bottom:0}
 
-  .steps{list-style:none;margin:0 0 48px;padding:0;display:grid;gap:12px;counter-reset:s}
-  .steps li{display:flex;gap:14px;align-items:center;counter-increment:s}
-  .steps li::before{content:counter(s);width:34px;height:34px;flex:none;border:1px solid var(--gold);color:var(--gold);border-radius:50%;display:grid;place-items:center;font-family:"Cormorant Garamond",serif;font-size:20px}
+  /* ---------- hero ---------- */
+  .hero{padding-top:calc(var(--nav-h) + env(safe-area-inset-top))}
+  .hero-grid{display:grid;grid-template-columns:1fr;gap:34px;padding-top:18px;padding-bottom:64px}
+  .hero-media{position:relative;margin:0}
+  .hero-media .main{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:50% 62%;border-radius:999px 999px 6px 6px}
+  .hero-media .inset{display:none}
+  .hero-text{text-align:center}
+  .hero h1{font-size:clamp(34px,8.6vw,60px);margin-bottom:16px}
+  .hero .lead{margin:0 auto 30px}
+  .hero-ctas{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:16px 26px}
+  .hero-note{margin:34px 0 0;display:flex;justify-content:center;gap:10px 22px;flex-wrap:wrap;color:var(--muted);font-size:14px}
+  .hero-note span{display:inline-flex;align-items:center;gap:8px}
+  .hero-note span::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--gold)}
 
-  /* ---------- الفورم ---------- */
-  .card{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:24px 20px;margin-bottom:40px}
-  .card h2{margin:0 0 4px;font-size:22px;font-weight:600}
-  .card .hint{margin:0 0 20px;color:var(--muted);font-size:14px}
-  .field{margin-bottom:16px}
-  label,.lbl{display:block;font-size:14px;color:var(--ink-2);margin-bottom:6px;font-weight:500}
+  /* ---------- sections ---------- */
+  section{position:relative}
+  .sec{padding:84px 0}
+  .sec-head{max-width:640px;margin-bottom:46px}
+  .sec-head.center{text-align:center;margin-inline:auto}
+  .sec-head.center .eyebrow{justify-content:center}
+  .sec-head .lead{margin:14px 0 0}
+  .sec-head.center .lead{margin-inline:auto}
+  .alt{background:var(--cream)}
+
+  /* services */
+  .svc{display:grid;grid-template-columns:1fr;gap:34px;align-items:center}
+  .svc + .svc{margin-top:84px}
+  .svc-media{position:relative;margin:0}
+  .svc-media .big{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:4px}
+  .svc-media .small{position:absolute;width:38%;aspect-ratio:3/4;object-fit:cover;border:6px solid var(--ivory);border-radius:4px;bottom:-26px;inset-inline-start:-6px;box-shadow:0 18px 40px -24px rgba(42,31,24,.45)}
+  .alt .svc-media .small{border-color:var(--cream)}
+  .svc.rev .svc-media .small{inset-inline-start:auto;inset-inline-end:-6px}
+  .num{font-family:var(--latin);font-size:22px;color:var(--gold);letter-spacing:.08em;margin:0 0 6px}
+  .svc h3{font-size:clamp(28px,4vw,38px);margin-bottom:12px}
+  .svc p{color:var(--ink-2);margin:0 0 18px;max-width:30em}
+  .ticks{list-style:none;padding:0;margin:0 0 26px;display:grid;gap:10px}
+  .ticks li{display:flex;gap:12px;align-items:baseline;color:var(--ink-2)}
+  .ticks li::before{content:"";flex:none;width:14px;height:1px;background:var(--gold);transform:translateY(-4px)}
+  .sizes{display:flex;gap:10px;margin:0 0 26px;flex-wrap:wrap}
+  .sizes span{display:inline-flex;align-items:baseline;gap:4px;border:1px solid var(--line);background:var(--ivory);border-radius:999px;padding:6px 18px}
+  .sizes b{font-family:var(--latin);font-size:22px;font-weight:500;line-height:1}
+  .sizes small{color:var(--muted);font-size:13px}
+
+  /* gallery */
+  .gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .g{position:relative;margin:0;overflow:hidden;border-radius:4px;background:var(--champagne);cursor:zoom-in;padding:0;border:0;text-align:right}
+  .g img{width:100%;height:100%;aspect-ratio:4/5;object-fit:cover;transition:transform 1.1s var(--ease)}
+  .g.tall{grid-row:span 2}
+  .g.tall{min-height:100%}
+  .g.tall img{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto}
+  .g figcaption{position:absolute;inset:auto 0 0 0;padding:28px 14px 12px;color:var(--ivory);font-size:13px;line-height:1.5;background:linear-gradient(to top,rgba(30,22,16,.72),rgba(30,22,16,0));opacity:1;transition:opacity .5s var(--ease)}
+  .g:hover img{transform:scale(1.04)}
+  .gallery-note{margin:22px 0 0;text-align:center;color:var(--muted);font-size:14px}
+
+  /* lightbox */
+  .lb{border:0;padding:0;background:transparent;max-width:100vw;max-height:100vh;width:100vw;height:100vh;margin:0}
+  .lb::backdrop{background:rgba(24,18,13,.92)}
+  .lb-in{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 16px 24px}
+  .lb img{max-width:min(92vw,720px);max-height:calc(100vh - 150px);width:auto;height:auto;object-fit:contain;border-radius:3px}
+  .lb p{color:var(--champagne);margin:14px 0 0;text-align:center;font-size:15px}
+  .lb button{position:absolute;border:1px solid rgba(250,246,239,.35);background:rgba(250,246,239,.06);color:var(--ivory);width:46px;height:46px;border-radius:50%;cursor:pointer;font-size:20px;line-height:1}
+  .lb .x{top:16px;inset-inline-start:16px}
+  .lb .prev{top:50%;inset-inline-start:12px;transform:translateY(-50%)}
+  .lb .next{top:50%;inset-inline-end:12px;transform:translateY(-50%)}
+
+  /* steps */
+  .steps{list-style:none;margin:0;padding:0;display:grid;gap:30px;position:relative}
+  .step{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start}
+  .step .n{width:56px;height:56px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;font-family:var(--latin);font-size:24px;color:var(--gold-d);background:var(--ivory)}
+  .step h3{font-size:24px;margin:8px 0 6px}
+  .step p{margin:0;color:var(--ink-2)}
+
+  /* booking */
+  .book-grid{display:grid;grid-template-columns:1fr;gap:36px}
+  .book-aside .lead{margin:14px 0 26px}
+  .book-aside img{display:none}
+  .card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:26px 20px;box-shadow:0 30px 60px -48px rgba(42,31,24,.5)}
+  .field{margin-bottom:20px}
+  .field label,.lbl{display:block;font-size:14.5px;font-weight:500;color:var(--espresso);margin-bottom:8px}
   .opt{color:var(--muted);font-weight:300}
-  input,textarea{display:block;width:100%;min-width:0;height:50px;padding:0 14px;border:1px solid var(--line);border-radius:12px;background:#fff;outline:none;-webkit-appearance:none;appearance:none;text-align:right}
-  textarea{height:auto;min-height:90px;padding:12px 14px;resize:vertical}
-  input[type="date"]{line-height:48px}
-  input[type="date"]::-webkit-date-and-time-value{text-align:right}
-  input:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(168,131,74,.15)}
-  .bad{border-color:var(--err)!important}
-  .two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
-  .two > *{min-width:0}
+  .inp{display:block;width:100%;min-width:0;height:52px;padding:0 16px;border:1px solid var(--line);border-radius:4px;background:var(--ivory);outline:none;-webkit-appearance:none;appearance:none;text-align:right;transition:border-color .25s,box-shadow .25s,background .25s}
+  textarea.inp{height:auto;min-height:104px;padding:14px 16px;resize:vertical;line-height:1.7}
+  .inp[type="date"]{line-height:50px}
+  .inp[type="date"]::-webkit-date-and-time-value{text-align:right}
+  .inp[dir="ltr"]{text-align:left}
+  .inp:focus{border-color:var(--gold);background:#fff;box-shadow:0 0 0 3px rgba(168,131,74,.16)}
+  .inp[aria-invalid="true"]{border-color:var(--err);background:#FFF8F6}
+  .ferr{color:var(--err);font-size:13.5px;margin:6px 0 0;min-height:0}
+  .ferr:empty{display:none}
+  .row2{display:grid;grid-template-columns:1fr;gap:0 14px}
 
-  .choices{display:grid;gap:10px}
-  .choice{display:flex;align-items:center;gap:12px;width:100%;text-align:right;border:1px solid var(--line);background:#fff;border-radius:12px;padding:14px;cursor:pointer}
-  .choice .box{width:22px;height:22px;border:1.5px solid var(--ink-2);border-radius:6px;flex:none;display:grid;place-items:center}
-  .choice[aria-pressed="true"]{border-color:var(--ink);background:#fff}
-  .choice[aria-pressed="true"] .box{background:var(--ink);border-color:var(--ink)}
-  .choice[aria-pressed="true"] .box::after{content:"";width:6px;height:11px;border:solid var(--cream);border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
-  .choice b{font-weight:500;display:block}
-  .choice small{color:var(--muted);font-size:13px}
+  .pick{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .pk{display:flex;flex-direction:column;align-items:stretch;gap:0;padding:0;border:1px solid var(--line);border-radius:6px;background:var(--ivory);cursor:pointer;text-align:right;overflow:hidden;transition:border-color .3s,box-shadow .3s}
+  .pk img{width:100%;aspect-ratio:16/11;object-fit:cover;filter:saturate(.85);transition:filter .4s}
+  .pk .t{display:flex;align-items:center;gap:10px;padding:12px}
+  .pk .box{width:20px;height:20px;flex:none;border:1.5px solid var(--ink-2);border-radius:50%;display:grid;place-items:center;transition:background .25s,border-color .25s}
+  .pk b{display:block;font-weight:500;font-size:14.5px;line-height:1.4}
+  .pk small{display:block;color:var(--muted);font-size:12.5px;line-height:1.4}
+  .pk[aria-pressed="true"]{border-color:var(--espresso);box-shadow:0 0 0 1px var(--espresso)}
+  .pk[aria-pressed="true"] img{filter:none}
+  .pk[aria-pressed="true"] .box{background:var(--espresso);border-color:var(--espresso)}
+  .pk[aria-pressed="true"] .box::after{content:"";width:5px;height:9px;border:solid var(--ivory);border-width:0 1.5px 1.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
 
-  .qty{display:none;margin-top:12px;border:1px dashed var(--line);border-radius:12px;padding:14px;background:#fff}
-  .qty.on{display:block}
-  .qrow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 0}
-  .qrow + .qrow{border-top:1px solid #F1E8DC}
-  .qrow span{font-weight:500}
-  .qrow input{width:120px;height:44px;text-align:center;direction:ltr}
-  .qnote{font-size:13px;color:var(--muted);margin:8px 0 0}
+  .qty{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease),margin .45s var(--ease);margin-top:0}
+  .qty > div{overflow:hidden}
+  .qty.on{grid-template-rows:1fr;margin-top:14px}
+  .qbox{border:1px solid var(--line);border-radius:6px;padding:8px 16px;background:var(--ivory)}
+  .qrow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0}
+  .qrow + .qrow{border-top:1px solid var(--line)}
+  .qrow .sz{display:flex;align-items:baseline;gap:5px}
+  .qrow .sz b{font-family:var(--latin);font-size:24px;font-weight:500;line-height:1}
+  .qrow .sz small{color:var(--muted)}
+  .stepper{display:flex;align-items:center;border:1px solid var(--line);border-radius:999px;background:#fff;direction:ltr}
+  .stepper button{width:40px;height:40px;border:0;background:none;cursor:pointer;font-size:20px;color:var(--ink-2);border-radius:50%}
+  .stepper button:hover{color:var(--espresso);background:var(--cream)}
+  .stepper input{width:64px;height:40px;border:0;text-align:center;background:none;outline:none;font-variant-numeric:tabular-nums}
+  .qnote{font-size:13px;color:var(--muted);margin:6px 0 4px}
 
+  .skip{position:absolute;top:-80px;inset-inline-start:12px;z-index:100;background:var(--espresso);color:var(--ivory);padding:10px 16px;border-radius:4px;text-decoration:none}
+  .skip:focus{top:12px}
   .hp{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;opacity:0;pointer-events:none}
-  .send{width:100%;height:54px;border:0;border-radius:999px;background:var(--ink);color:var(--cream);font-weight:600;font-size:17px;cursor:pointer;margin-top:6px}
-  .send:disabled{opacity:.6;cursor:wait}
-  .msg{min-height:24px;margin-top:12px;text-align:center;color:var(--err);font-size:14px}
-  .privacy{font-size:12px;color:var(--muted);text-align:center;margin:10px 0 0}
+  .submit{width:100%;min-height:56px;margin-top:6px;font-size:16.5px}
+  .submit[disabled]{opacity:.65;cursor:wait}
+  .spin{width:16px;height:16px;border:2px solid rgba(250,246,239,.35);border-top-color:var(--ivory);border-radius:50%;animation:spin .8s linear infinite;display:none}
+  .submit[disabled] .spin{display:inline-block}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .form-msg{margin:12px 0 0;text-align:center;color:var(--err);font-size:14px}
+  .form-msg:empty{display:none}
+  .privacy{margin:14px 0 0;text-align:center;font-size:12.5px;color:var(--muted)}
 
-  .done{text-align:center;padding:10px 0}
-  .done .ok{width:64px;height:64px;border-radius:50%;background:var(--ink);color:var(--cream);display:grid;place-items:center;margin:0 auto 14px;font-size:30px}
-  .summary{text-align:right;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;margin:18px 0;font-size:15px}
-  .summary div{display:flex;justify-content:space-between;gap:10px;padding:4px 0}
-  .summary div span:first-child{color:var(--muted)}
-  .wa{display:inline-flex;align-items:center;gap:8px;background:#1F7A4D;color:#fff;text-decoration:none;padding:13px 24px;border-radius:999px;font-weight:500}
-  .again{display:block;margin:14px auto 0;background:none;border:0;color:var(--ink-2);text-decoration:underline;cursor:pointer}
+  .done{text-align:center;padding:14px 4px}
+  .done .ok{width:68px;height:68px;margin:0 auto 18px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;color:var(--gold-d);font-size:28px}
+  .done h3{font-size:32px;margin-bottom:6px}
+  .done > p{color:var(--ink-2);margin:0 0 22px}
+  .summary{text-align:right;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px 0;margin:0 0 24px}
+  .summary div{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:15px}
+  .summary dt{color:var(--muted)} .summary dd{margin:0;font-weight:400;text-align:left}
+  .wa{background:#1F6E47;color:#fff}
+  .wa:hover{background:#185a3a}
+  .again{display:block;margin:16px auto 0;background:none;border:0;color:var(--ink-2);text-decoration:underline;text-underline-offset:4px;cursor:pointer;font-size:14.5px}
 
-  footer{text-align:center;padding:10px 0 calc(40px + env(safe-area-inset-bottom));color:var(--muted);font-size:14px}
-  footer .links{display:flex;justify-content:center;gap:18px;margin-bottom:8px}
-  footer a{text-decoration:none;border-bottom:1px solid var(--line)}
+  /* final cta */
+  .final{position:relative;overflow:hidden;color:var(--ivory);text-align:center;padding:110px 0}
+  .final img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 45%}
+  .final::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(30,22,16,.62),rgba(30,22,16,.78));z-index:1}
+  .final .container{position:relative;z-index:2}
+  .final h2{color:var(--ivory);font-size:clamp(32px,5vw,52px);margin-bottom:12px}
+  .final p{color:var(--champagne);margin:0 auto 30px;max-width:30em}
+
+  /* footer */
+  footer{background:var(--espresso);color:var(--champagne);padding:56px 0 calc(32px + env(safe-area-inset-bottom))}
+  .f-grid{display:grid;grid-template-columns:1fr;gap:30px}
+  .f-brand .w{font-family:var(--latin);font-size:40px;color:var(--ivory);line-height:1;direction:ltr;display:inline-block}
+  .f-brand .s{display:block;font-size:11px;letter-spacing:.38em;margin:8px 0 14px;direction:ltr;text-align:right;color:#B9A68D}
+  .f-brand p{margin:0;max-width:26em;font-size:14.5px;color:#CDBBA3}
+  footer h4{font-family:var(--sans);font-weight:500;font-size:14px;color:var(--ivory);margin:0 0 12px}
+  footer ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+  footer a{text-decoration:none;color:#CDBBA3;font-size:14.5px}
+  footer a:hover{color:var(--ivory)}
+  .f-bottom{margin-top:40px;padding-top:20px;border-top:1px solid rgba(230,213,188,.16);font-size:13px;color:#A8957D;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}
+
+  /* reveal */
+  .js .rv{opacity:0;transform:translateY(22px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+  .js .rv.in{opacity:1;transform:none}
+  .js .rv.d1{transition-delay:.1s} .js .rv.d2{transition-delay:.2s}
   [hidden]{display:none!important}
-  @media (min-width:640px){ .services{grid-template-columns:1fr 1fr} .word{font-size:76px} }
-  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+
+  /* ---------- tablet ---------- */
+  @media (min-width:640px){
+    .row2{grid-template-columns:1fr 1fr}
+    .gallery{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+    .card{padding:34px 32px}
+    .f-grid{grid-template-columns:2fr 1fr 1fr}
+  }
+  /* ---------- desktop ---------- */
+  @media (min-width:900px){
+    :root{--nav-h:78px}
+    .hero-grid{grid-template-columns:1.05fr .95fr;align-items:center;gap:64px;min-height:calc(100svh - var(--nav-h));padding-top:24px;padding-bottom:48px}
+    .hero-text{text-align:right;order:0}
+    .hero .lead{margin:0 0 34px}
+    .hero-ctas,.hero-note{justify-content:flex-start}
+    .hero-media{order:1;max-width:520px;justify-self:end;width:100%}
+    .hero-media .main{aspect-ratio:auto;height:min(78svh,720px)}
+    .hero-media .inset{display:block;position:absolute;width:30%;aspect-ratio:3/4;object-fit:cover;bottom:-34px;inset-inline-end:-44px;border:7px solid var(--ivory);border-radius:4px;box-shadow:0 24px 50px -28px rgba(42,31,24,.55)}
+    .sec{padding:120px 0}
+    .svc{grid-template-columns:1fr 1fr;gap:80px}
+    .svc + .svc{margin-top:120px}
+    .svc.rev .svc-media{order:2}
+    .svc-media{max-width:480px;width:100%;justify-self:center}
+    .svc-media .small{width:40%;bottom:-40px;inset-inline-start:-48px}
+    .svc.rev .svc-media .small{inset-inline-start:auto;inset-inline-end:-48px}
+    .gallery{grid-template-columns:1.25fr 1fr 1fr;grid-auto-rows:auto;gap:18px}
+    .g figcaption{opacity:0;font-size:14px;padding:40px 18px 16px}
+    .g:hover figcaption,.g:focus-visible figcaption{opacity:1}
+    .steps{grid-template-columns:repeat(3,1fr);gap:40px}
+    .steps::before{content:"";position:absolute;top:28px;inset-inline:16% 16%;height:1px;background:var(--line);z-index:0}
+    .step{grid-template-columns:1fr;text-align:center;justify-items:center;gap:10px;position:relative;z-index:1}
+    .book-grid{grid-template-columns:.85fr 1.15fr;gap:72px;align-items:start}
+    .book-aside{position:sticky;top:calc(var(--nav-h) + 30px)}
+    .book-aside img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:999px 999px 4px 4px;max-width:380px}
+    .final{padding:150px 0}
+  }
+  @media (max-width:899px){
+    .nav-links,.nav .nav-cta{display:none}
+    .menu-btn{display:block}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
+    .js .rv{opacity:1;transform:none}
+    .g:hover img{transform:none}
+  }
 </style>
 </head>
 <body>
 
-<header class="hero wrap">
-  <img class="mark" src="icons/mark.png" alt="" width="150" height="117">
-  <h1 class="word">Ambere</h1>
-  <p class="sub">PERFUME STATION</p>
-  <p class="tag">خلّي ريحة فرحتك تضل بذاكرة المعازيم</p>
-  <p class="lead">بوث تعطير وتبخير للأعراس، وتوزيعات عطور بأحجام صغيرة كتذكار من ليلتك.</p>
-  <a class="cta" href="#book">اطلب حجز</a>
-</header>
+<a class="skip" href="#book">انتقل لفورم الحجز</a>
 
-<main class="wrap">
-  <div class="rule">خدماتنا</div>
-  <div class="services">
-    <div class="svc">
-      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
-        <path d="M24 6c-4 4 4 7 0 11s4 7 0 11"/><path d="M16 12c-3 3 3 5 0 8"/><path d="M32 12c-3 3 3 5 0 8"/>
-        <path d="M12 32h24l-3 10H15z"/><path d="M10 32h28"/>
-      </svg>
-      <div>
-        <h3>بوث التعطير والتبخير</h3>
-        <p>بوث مزيّن على مدخل القاعة، بنعطّر ونبخّر المعازيم أول ما يوصلوا.</p>
+<!-- ================= NAV ================= -->
+<header class="nav" id="nav">
+  <div class="container nav-in">
+    <a class="brand" href="#home" aria-label="Ambere — الرئيسية">
+      <img src="icons/mark.png" alt="" width="34" height="27">
+      <span>Ambere</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#home">الرئيسية</a></li>
+      <li><a href="#services">خدماتنا</a></li>
+      <li><a href="#work">معرض أعمالنا</a></li>
+      <li><a href="#how">كيف بنشتغل</a></li>
+    </ul>
+    <a class="btn btn-line nav-cta" href="#book">احجز موعدك</a>
+    <button class="menu-btn" id="menuBtn" type="button" aria-label="القائمة" aria-expanded="false" aria-controls="drawer"><span></span><span></span><span></span></button>
+  </div>
+</header>
+<nav class="drawer" id="drawer" aria-label="القائمة الرئيسية">
+  <a href="#home">الرئيسية</a>
+  <a href="#services">خدماتنا</a>
+  <a href="#work">معرض أعمالنا</a>
+  <a href="#how">كيف بنشتغل</a>
+  <a class="btn btn-dark" href="#book">احجز موعدك</a>
+</nav>
+
+<main>
+<!-- ================= HERO ================= -->
+<section class="hero" id="home">
+  <div class="container hero-grid">
+    <div class="hero-text">
+      <p class="eyebrow rv"><span class="latin">Ambere — Perfume Station</span></p>
+      <h1 class="rv d1">خلّي ريحة فرحتك تضل بذاكرة المعازيم</h1>
+      <p class="lead rv d1">بوث تعطير وتبخير للأعراس، وتوزيعات عطور بتفاصيل مخصصة تخلي كل لحظة إلها ذكرى.</p>
+      <div class="hero-ctas rv d2">
+        <a class="btn btn-dark" href="#book">احجز مناسبتك <span class="arr" aria-hidden="true">←</span></a>
+        <a class="link" href="#work">اكتشف شغلنا</a>
       </div>
+      <p class="hero-note rv d2"><span>بوث تعطير وتبخير</span><span>توزيعات عطور 5 · 10 · 30 مل</span></p>
     </div>
-    <div class="svc">
-      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true">
-        <rect x="20" y="6" width="8" height="6" rx="1.5"/><path d="M21 12v4h6v-4"/>
-        <path d="M16 20q0-4 4-4h8q4 0 4 4v18q0 4-4 4h-8q-4 0-4-4z"/><path d="M20 27h8M20 31h8"/>
-      </svg>
-      <div>
-        <h3>توزيعات عطور</h3>
-        <p>عطور صغيرة مع كرت لكل حبة، تذكار للمعازيم.</p>
-        <div class="sizes"><span>5 مل</span><span>10 مل</span><span>30 مل</span></div>
+    <figure class="hero-media rv">
+      <picture>
+        <img class="main" src="images/work/station-ambere-counter-960.webp"
+             srcset="images/work/station-ambere-counter-480.webp 480w, images/work/station-ambere-counter-960.webp 960w"
+             sizes="(min-width: 900px) 46vw, 100vw" width="960" height="1280" fetchpriority="high"
+             alt="بوث Ambere المضاء بمدخل القاعة، وعليه عطور وتوزيعات وشموع وورد">
+      </picture>
+      <img class="inset" src="images/work/favors-linda-hand-480.webp" width="480" height="640" loading="lazy" decoding="async"
+           alt="عطر توزيعات بكرت مخصص بالاسم والتاريخ ومربوط بشريطة بيضا">
+    </figure>
+  </div>
+</section>
+
+<!-- ================= SERVICES ================= -->
+<section class="sec alt" id="services">
+  <div class="container">
+    <div class="sec-head rv">
+      <p class="eyebrow">خدماتنا</p>
+      <h2 class="h2">تجربتين بتكمّلوا بعض</h2>
+      <p class="lead">استقبال بالعطر والبخور على المدخل، وتذكار صغير بياخذه كل ضيف معه.</p>
+    </div>
+
+    <article class="svc" id="station">
+      <figure class="svc-media rv">
+        <img class="big" src="images/work/station-hand-favor-960.webp"
+             srcset="images/work/station-hand-favor-480.webp 480w, images/work/station-hand-favor-960.webp 960w"
+             sizes="(min-width: 900px) 44vw, 100vw" width="960" height="1280" loading="lazy" decoding="async"
+             alt="يد بقفاز دانتيل بتقدّم عطر قدام بوث Ambere، وعلى البوث شموع وعطور ومبخرة">
+        <img class="small" src="images/work/station-tiered-favors-480.webp" width="480" height="640" loading="lazy" decoding="async"
+             alt="مدرّج توزيعات عطور بكروت أسماء العروسين جنب الشموع">
+      </figure>
+      <div class="svc-text rv d1">
+        <p class="num latin">01</p>
+        <h3>بوث التعطير والتبخير</h3>
+        <p>بوث أنيق على مدخل القاعة، بنستقبل فيه المعازيم بالعطر والبخور أول ما يوصلوا، فتصير أول لحظة بفرحتك إلها ريحة بتنحفظ.</p>
+        <ul class="ticks">
+          <li>تعطير وتبخير المعازيم على المدخل</li>
+          <li>بتقدر تجمعه مع توزيعات العطور بنفس الحجز</li>
+        </ul>
+        <a class="btn btn-dark" href="#book" data-pick="booth">احجز بوث العطور <span class="arr" aria-hidden="true">←</span></a>
+      </div>
+    </article>
+
+    <article class="svc rev" id="favors">
+      <figure class="svc-media rv">
+        <img class="big" src="images/work/favors-linda-hand-960.webp"
+             srcset="images/work/favors-linda-hand-480.webp 480w, images/work/favors-linda-hand-960.webp 960w"
+             sizes="(min-width: 900px) 44vw, 100vw" width="960" height="1280" loading="lazy" decoding="async"
+             alt="عطر صغير على كرت أبيض مكتوب عليه الاسم وتاريخ المناسبة، وخلفه سلة مليانة توزيعات">
+        <img class="small" src="images/work/station-candles-tags-480.webp" width="480" height="640" loading="lazy" decoding="async"
+             alt="عطور توزيعات مربوط عليها كروت بخط يدوي بأسماء العروسين وتاريخ العرس">
+      </figure>
+      <div class="svc-text rv d1">
+        <p class="num latin">02</p>
+        <h3>توزيعات العطور</h3>
+        <p>عطور بأحجام صغيرة كتذكار للمعازيم، كل حبة معها كرت مخصص بأسماء أصحاب المناسبة وتاريخها.</p>
+        <div class="sizes" aria-label="الأحجام المتوفرة">
+          <span><b>5</b><small>مل</small></span>
+          <span><b>10</b><small>مل</small></span>
+          <span><b>30</b><small>مل</small></span>
+        </div>
+        <a class="btn btn-dark" href="#book" data-pick="gifts">اطلب توزيعاتك <span class="arr" aria-hidden="true">←</span></a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ================= PORTFOLIO ================= -->
+<section class="sec" id="work">
+  <div class="container">
+    <div class="sec-head center rv">
+      <p class="eyebrow">معرض أعمالنا</p>
+      <h2 class="h2">تفاصيل صغيرة، وذكريات بتضل</h2>
+      <p class="lead">لقطات حقيقية من مناسبات جهّزناها.</p>
+    </div>
+    <div class="gallery" id="gallery">
+      <button type="button" class="g tall rv" data-src="images/work/station-tiered-favors-960.webp">
+        <img src="images/work/station-tiered-favors-960.webp" srcset="images/work/station-tiered-favors-480.webp 480w, images/work/station-tiered-favors-960.webp 960w"
+             sizes="(min-width: 900px) 38vw, 50vw" width="960" height="1280" loading="lazy" decoding="async"
+             alt="مدرّج توزيعات عطور بكروت أسماء العروسين، وخلفه شموع وعطور على البوث">
+        <figcaption>توزيعات مرتّبة على البوث بكروت أسماء العروسين</figcaption>
+      </button>
+      <button type="button" class="g rv d1" data-src="images/work/station-candles-tags-960.webp">
+        <img src="images/work/station-candles-tags-480.webp" srcset="images/work/station-candles-tags-480.webp 480w, images/work/station-candles-tags-960.webp 960w"
+             sizes="(min-width: 900px) 28vw, 50vw" width="480" height="640" loading="lazy" decoding="async"
+             alt="شموع مضاءة ومبخرة سوداء جنب مدرّج عطور التوزيعات">
+        <figcaption>شموع وبخور وتفاصيل الكروت</figcaption>
+      </button>
+      <button type="button" class="g rv d2" data-src="images/work/favors-linda-basket-960.webp">
+        <img src="images/work/favors-linda-basket-480.webp" srcset="images/work/favors-linda-basket-480.webp 480w, images/work/favors-linda-basket-960.webp 960w"
+             sizes="(min-width: 900px) 28vw, 50vw" width="480" height="640" loading="lazy" decoding="async"
+             alt="سلة قش مليانة توزيعات عطور على كروت بيضا بشرايط، ويد بتمسك وحدة منها">
+        <figcaption>توزيعات مخصصة بالاسم والتاريخ</figcaption>
+      </button>
+      <button type="button" class="g rv d1" data-src="images/work/station-hand-favor-960.webp">
+        <img src="images/work/station-hand-favor-480.webp" srcset="images/work/station-hand-favor-480.webp 480w, images/work/station-hand-favor-960.webp 960w"
+             sizes="(min-width: 900px) 28vw, 50vw" width="480" height="640" loading="lazy" decoding="async"
+             alt="تقديم عطر توزيعات للمعازيم قدام البوث">
+        <figcaption>تقديم التوزيعات للمعازيم</figcaption>
+      </button>
+      <button type="button" class="g rv d2" data-src="images/work/station-ambere-counter-960.webp">
+        <img src="images/work/station-ambere-counter-480.webp" srcset="images/work/station-ambere-counter-480.webp 480w, images/work/station-ambere-counter-960.webp 960w"
+             sizes="(min-width: 900px) 28vw, 50vw" width="480" height="640" loading="lazy" decoding="async"
+             alt="بوث Ambere المضاء جاهز لاستقبال المعازيم">
+        <figcaption>بوث Ambere جاهز لاستقبال المعازيم</figcaption>
+      </button>
+    </div>
+    <p class="gallery-note">اكبس على أي صورة لتشوفها أكبر</p>
+  </div>
+</section>
+
+<dialog class="lb" id="lb" aria-label="عرض الصورة">
+  <div class="lb-in">
+    <button class="x" type="button" id="lbClose" aria-label="سكّر">✕</button>
+    <button class="prev" type="button" id="lbPrev" aria-label="الصورة السابقة">→</button>
+    <img id="lbImg" alt="">
+    <p id="lbCap"></p>
+    <button class="next" type="button" id="lbNext" aria-label="الصورة التالية">←</button>
+  </div>
+</dialog>
+
+<!-- ================= HOW ================= -->
+<section class="sec alt" id="how">
+  <div class="container">
+    <div class="sec-head center rv">
+      <p class="eyebrow">كيف بنشتغل</p>
+      <h2 class="h2">ثلاث خطوات لفرحة بريحة حلوة</h2>
+    </div>
+    <ol class="steps">
+      <li class="step rv"><span class="n">1</span><div><h3>احكيلنا عن مناسبتك</h3><p>ابعتلنا التاريخ والمكان والخدمات اللي بتفكر فيها من فورم الحجز.</p></div></li>
+      <li class="step rv d1"><span class="n">2</span><div><h3>بنتفق على التفاصيل</h3><p>بنتواصل معك على واتساب ومنتفق على كل التفاصيل والسعر.</p></div></li>
+      <li class="step rv d2"><span class="n">3</span><div><h3>منجهّز كل شي ليوم فرحتك</h3><p>يوم المناسبة منكون جاهزين، وإنت بتستمتع بفرحتك.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= BOOKING ================= -->
+<section class="sec" id="book">
+  <div class="container book-grid">
+    <aside class="book-aside rv">
+      <p class="eyebrow">احجز موعدك</p>
+      <h2 class="h2">احكيلنا عن مناسبتك</h2>
+      <p class="lead">عبّي المعلومات وبنرجعلك على واتساب بأقرب وقت لنتفق على التفاصيل.</p>
+      <img src="images/work/station-candles-tags-960.webp" srcset="images/work/station-candles-tags-480.webp 480w, images/work/station-candles-tags-960.webp 960w"
+           sizes="380px" width="960" height="1280" loading="lazy" decoding="async" alt="">
+    </aside>
+
+    <div class="card rv d1">
+      <form id="form" novalidate>
+        <div class="field">
+          <label for="name">الاسم</label>
+          <input class="inp" id="name" autocomplete="name" maxlength="80" aria-describedby="e-name">
+          <p class="ferr" id="e-name"></p>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="phone">رقم الواتساب</label>
+            <input class="inp" id="phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="07XXXXXXXX" maxlength="20" aria-describedby="e-phone">
+            <p class="ferr" id="e-phone"></p>
+          </div>
+          <div class="field">
+            <label for="date">تاريخ المناسبة</label>
+            <input class="inp" id="date" type="date" aria-describedby="e-date">
+            <p class="ferr" id="e-date"></p>
+          </div>
+        </div>
+        <div class="field">
+          <label for="venue">القاعة أو المدينة <span class="opt">(اختياري)</span></label>
+          <input class="inp" id="venue" maxlength="120">
+        </div>
+
+        <div class="field" role="group" aria-labelledby="svcLbl" aria-describedby="e-svc">
+          <span class="lbl" id="svcLbl">شو الخدمات اللي بدك ياها؟</span>
+          <div class="pick">
+            <button type="button" class="pk" id="cBooth" aria-pressed="true">
+              <img src="images/work/station-ambere-counter-480.webp" alt="" width="480" height="640" loading="lazy" decoding="async" style="object-position:50% 45%">
+              <span class="t"><span class="box"></span><span><b>بوث التعطير والتبخير</b><small>على مدخل القاعة</small></span></span>
+            </button>
+            <button type="button" class="pk" id="cGifts" aria-pressed="false">
+              <img src="images/work/favors-linda-hand-480.webp" alt="" width="480" height="640" loading="lazy" decoding="async" style="object-position:50% 60%">
+              <span class="t"><span class="box"></span><span><b>توزيعات العطور</b><small>5 · 10 · 30 مل</small></span></span>
+            </button>
+          </div>
+          <p class="ferr" id="e-svc"></p>
+          <div class="qty" id="qty" aria-hidden="true">
+            <div>
+              <div class="qbox">
+                <p class="qnote">اكتب العدد التقريبي لكل حجم بدك ياه:</p>
+                <div class="qrow"><span class="sz"><b>5</b><small>مل</small></span>
+                  <span class="stepper"><button type="button" data-step="-10" data-for="q5" aria-label="أقل 5 مل">−</button><input id="q5" data-size="5" inputmode="numeric" placeholder="0" aria-label="عدد 5 مل"><button type="button" data-step="10" data-for="q5" aria-label="أكثر 5 مل">+</button></span></div>
+                <div class="qrow"><span class="sz"><b>10</b><small>مل</small></span>
+                  <span class="stepper"><button type="button" data-step="-10" data-for="q10" aria-label="أقل 10 مل">−</button><input id="q10" data-size="10" inputmode="numeric" placeholder="0" aria-label="عدد 10 مل"><button type="button" data-step="10" data-for="q10" aria-label="أكثر 10 مل">+</button></span></div>
+                <div class="qrow"><span class="sz"><b>30</b><small>مل</small></span>
+                  <span class="stepper"><button type="button" data-step="-10" data-for="q30" aria-label="أقل 30 مل">−</button><input id="q30" data-size="30" inputmode="numeric" placeholder="0" aria-label="عدد 30 مل"><button type="button" data-step="10" data-for="q30" aria-label="أكثر 30 مل">+</button></span></div>
+                <p class="qnote">العدد تقريبي، منقدر نعدّله لما نحكي.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="notes">ملاحظات <span class="opt">(اختياري)</span></label>
+          <textarea class="inp" id="notes" maxlength="1000" placeholder="أي تفاصيل بتحب نعرفها"></textarea>
+        </div>
+
+        <div class="hp" aria-hidden="true"><label for="website">لا تعبّي هالخانة</label><input id="website" tabindex="-1" autocomplete="off"></div>
+
+        <button class="btn btn-dark submit" id="send" type="submit"><span class="spin" aria-hidden="true"></span><span id="sendTxt">ابعث طلب الحجز</span></button>
+        <p class="form-msg" id="msg" role="alert"></p>
+        <p class="privacy">معلوماتك بتوصل لـ Ambere بس، وما بنشاركها مع حدا.</p>
+      </form>
+
+      <div class="done" id="done" hidden tabindex="-1">
+        <div class="ok" aria-hidden="true">✓</div>
+        <h3>وصلنا طلبك</h3>
+        <p>شكراً إلك! رح نتواصل معك على واتساب بأقرب وقت.</p>
+        <dl class="summary" id="summary"></dl>
+        <a class="btn wa" id="wa" href="#" target="_blank" rel="noopener" hidden>تابع معنا على واتساب</a>
+        <button class="again" id="again" type="button">ابعث طلب ثاني</button>
       </div>
     </div>
   </div>
+</section>
 
-  <div class="rule">كيف بنشتغل</div>
-  <ol class="steps">
-    <li>بتبعتلنا طلب الحجز من هون.</li>
-    <li>بنتواصل معك واتساب ونتفق على التفاصيل والسعر.</li>
-    <li>بنيجي يوم العرس ونعطّر فرحتك.</li>
-  </ol>
-
-  <section class="card" id="book">
-    <form id="form" novalidate>
-      <h2>طلب حجز</h2>
-      <p class="hint">عبّي المعلومات وبنرجعلك بأقرب وقت.</p>
-
-      <div class="field"><label for="name">الاسم</label><input id="name" autocomplete="name" maxlength="80" required></div>
-      <div class="two">
-        <div class="field"><label for="phone">رقم الهاتف (واتساب)</label><input id="phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="07XXXXXXXX" maxlength="20" required></div>
-        <div class="field"><label for="date">تاريخ العرس</label><input id="date" type="date" required></div>
-      </div>
-      <div class="field"><label for="venue">القاعة / المدينة <span class="opt">(اختياري)</span></label><input id="venue" maxlength="120" placeholder="مثلاً: قاعة ... — إربد"></div>
-
-      <div class="field">
-        <span class="lbl">شو الخدمات اللي بدك ياها؟</span>
-        <div class="choices">
-          <button type="button" class="choice" id="cBooth" aria-pressed="true">
-            <span class="box"></span><span><b>بوث تعطير وتبخير</b><small>على مدخل القاعة</small></span>
-          </button>
-          <button type="button" class="choice" id="cGifts" aria-pressed="false">
-            <span class="box"></span><span><b>توزيعات عطور</b><small>اختار الحجم والعدد التقريبي</small></span>
-          </button>
-        </div>
-        <div class="qty" id="qty">
-          <div class="qrow"><span>5 مل</span><input data-size="5" inputmode="numeric" placeholder="0" aria-label="عدد 5 مل"></div>
-          <div class="qrow"><span>10 مل</span><input data-size="10" inputmode="numeric" placeholder="0" aria-label="عدد 10 مل"></div>
-          <div class="qrow"><span>30 مل</span><input data-size="30" inputmode="numeric" placeholder="0" aria-label="عدد 30 مل"></div>
-          <p class="qnote">العدد تقريبي، منقدر نعدّله لما نحكي.</p>
-        </div>
-      </div>
-
-      <div class="field"><label for="notes">ملاحظات <span class="opt">(اختياري)</span></label><textarea id="notes" maxlength="1000" placeholder="أي تفاصيل بتحب نعرفها"></textarea></div>
-
-      <div class="hp" aria-hidden="true"><label for="website">لا تعبّي هالخانة</label><input id="website" tabindex="-1" autocomplete="off"></div>
-
-      <button class="send" id="send" type="submit">ابعت الطلب</button>
-      <div class="msg" id="msg" role="alert"></div>
-      <p class="privacy">معلوماتك بتوصل لـ Ambere بس، وما بنشاركها مع حدا.</p>
-    </form>
-
-    <div class="done" id="done" hidden>
-      <div class="ok">✓</div>
-      <h2>وصلنا طلبك</h2>
-      <p class="hint">شكراً إلك! رح نتواصل معك على واتساب بأقرب وقت.</p>
-      <div class="summary" id="summary"></div>
-      <a class="wa" id="wa" href="#" target="_blank" rel="noopener" hidden>تابع معنا على واتساب</a>
-      <button class="again" id="again" type="button">بعت طلب ثاني</button>
-    </div>
-  </section>
+<!-- ================= FINAL CTA ================= -->
+<section class="final">
+  <img src="images/work/station-candles-tags-960.webp" srcset="images/work/station-candles-tags-480.webp 480w, images/work/station-candles-tags-960.webp 960w" sizes="100vw" width="960" height="1280" loading="lazy" decoding="async" alt="">
+  <div class="container rv">
+    <h2>خلّينا نكون جزء من فرحتك</h2>
+    <p>احكيلنا عن مناسبتك، ومنساعدك تختار التجربة اللي بتناسبها.</p>
+    <a class="btn btn-light" href="#book">ابدأ حجزك <span class="arr" aria-hidden="true">←</span></a>
+  </div>
+</section>
 </main>
 
-<footer class="wrap">
-  <div class="links" id="links"></div>
-  <div>© <span id="yr"></span> Ambere — Perfume Station</div>
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="container">
+    <div class="f-grid">
+      <div class="f-brand">
+        <span class="w">Ambere</span>
+        <span class="s">PERFUME STATION</span>
+        <p>بوث تعطير وتبخير للأعراس والمناسبات، وتوزيعات عطور بكروت مخصصة.</p>
+      </div>
+      <div>
+        <h4>روابط</h4>
+        <ul>
+          <li><a href="#services">خدماتنا</a></li>
+          <li><a href="#work">معرض أعمالنا</a></li>
+          <li><a href="#how">كيف بنشتغل</a></li>
+          <li><a href="#book">احجز موعدك</a></li>
+        </ul>
+      </div>
+      <div id="contactCol" hidden>
+        <h4>تواصل معنا</h4>
+        <ul id="contactList"></ul>
+      </div>
+    </div>
+    <div class="f-bottom"><span>© <span id="yr"></span> Ambere — Perfume Station</span></div>
+  </div>
 </footer>
 
 <script>
   const cfg = window.AMBERE_CONFIG || {};
   const $ = id => document.getElementById(id);
   const SIZE_NAME = { '5':'5 مل', '10':'10 مل', '30':'30 مل' };
-
-  function clean(v){
-    return String(v ?? '').trim()
-      .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))
-      .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
-  }
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const clean = v => String(v ?? '').trim().replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
   const digits = v => clean(v).replace(/[^\d+]/g, '');
   const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
   const showDate = s => { const p = s.split('-'); return `${p[2]}/${p[1]}/${p[0]}`; };
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------- روابط الفوتر ---------- */
+  /* ---------- footer contact (from config.js only) ---------- */
   $('yr').textContent = new Date().getFullYear();
-  const links = [];
-  if (cfg.INSTAGRAM) links.push(`<a href="${cfg.INSTAGRAM}" target="_blank" rel="noopener">إنستغرام</a>`);
-  if (cfg.WHATSAPP) links.push(`<a href="https://wa.me/${cfg.WHATSAPP}" target="_blank" rel="noopener">واتساب</a>`);
-  $('links').innerHTML = links.join('');
+  const contacts = [];
+  if (cfg.INSTAGRAM) contacts.push(`<li><a href="${esc(cfg.INSTAGRAM)}" target="_blank" rel="noopener">إنستغرام</a></li>`);
+  if (cfg.WHATSAPP) contacts.push(`<li><a href="https://wa.me/${esc(cfg.WHATSAPP)}" target="_blank" rel="noopener">واتساب</a></li>`);
+  if (contacts.length) { $('contactList').innerHTML = contacts.join(''); $('contactCol').hidden = false; }
 
-  /* ---------- الخيارات ---------- */
+  /* ---------- nav ---------- */
+  const nav = $('nav');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
+  onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+  const drawer = $('drawer'), menuBtn = $('menuBtn');
+  function setMenu(open){
+    drawer.classList.toggle('open', open);
+    menuBtn.setAttribute('aria-expanded', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+  menuBtn.addEventListener('click', () => setMenu(!drawer.classList.contains('open')));
+  drawer.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && drawer.classList.contains('open')) { setMenu(false); menuBtn.focus(); } });
+  window.addEventListener('resize', () => { if (window.innerWidth >= 900) setMenu(false); });
+
+  // active link
+  const links = [...document.querySelectorAll('.nav-links a')];
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => es.forEach(en => {
+      if (en.isIntersecting) links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + en.target.id));
+    }), { rootMargin: '-45% 0px -50% 0px' });
+    ['home','services','work','how','book'].forEach(id => $(id) && io.observe($(id)));
+  }
+
+  /* ---------- reveal ---------- */
+  const rvs = document.querySelectorAll('.rv');
+  if (reduced || !('IntersectionObserver' in window)) rvs.forEach(el => el.classList.add('in'));
+  else {
+    const ro = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); ro.unobserve(en.target); } }), { threshold: .12, rootMargin: '0px 0px -40px 0px' });
+    rvs.forEach(el => ro.observe(el));
+  }
+
+  /* ---------- lightbox ---------- */
+  const items = [...document.querySelectorAll('#gallery .g')];
+  const lb = $('lb'); let cur = 0;
+  function showLb(i){
+    cur = (i + items.length) % items.length;
+    const it = items[cur], im = it.querySelector('img');
+    $('lbImg').src = it.dataset.src; $('lbImg').alt = im.alt;
+    $('lbCap').textContent = it.querySelector('figcaption').textContent;
+  }
+  items.forEach((it, i) => it.addEventListener('click', () => {
+    showLb(i);
+    if (typeof lb.showModal === 'function') { lb.showModal(); document.body.style.overflow = 'hidden'; }
+    else window.open(it.dataset.src, '_blank');
+  }));
+  const closeLb = () => { lb.close(); };
+  lb.addEventListener('close', () => { document.body.style.overflow = ''; items[cur].focus(); });
+  $('lbClose').addEventListener('click', closeLb);
+  $('lbPrev').addEventListener('click', () => showLb(cur - 1));
+  $('lbNext').addEventListener('click', () => showLb(cur + 1));
+  lb.addEventListener('click', e => { if (e.target === lb || e.target.classList.contains('lb-in')) closeLb(); });
+  lb.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') showLb(cur + 1); if (e.key === 'ArrowRight') showLb(cur - 1); });
+
+  /* ---------- booking form ---------- */
+  const cBooth = $('cBooth'), cGifts = $('cGifts');
+  const on = el => el.getAttribute('aria-pressed') === 'true';
+  function setPick(el, v){ el.setAttribute('aria-pressed', v); syncQty(); setErr('svc', ''); }
+  function syncQty(){
+    const open = on(cGifts);
+    $('qty').classList.toggle('on', open); $('qty').setAttribute('aria-hidden', !open);
+    $('qty').querySelectorAll('input,button').forEach(x => x.tabIndex = open ? 0 : -1);
+  }
+  cBooth.addEventListener('click', () => setPick(cBooth, !on(cBooth)));
+  cGifts.addEventListener('click', () => { setPick(cGifts, !on(cGifts)); if (on(cGifts)) setTimeout(() => $('q5').focus({ preventScroll: true }), 300); });
+  syncQty();
+
+  // CTAs that preselect a service
+  document.querySelectorAll('[data-pick]').forEach(a => a.addEventListener('click', () => {
+    if (a.dataset.pick === 'booth') { setPick(cBooth, true); }
+    if (a.dataset.pick === 'gifts') { setPick(cGifts, true); }
+  }));
+
+  // steppers
+  $('qty').addEventListener('click', e => {
+    const b = e.target.closest('[data-step]'); if (!b) return;
+    const inp = $(b.dataset.for);
+    const v = Math.max(0, (parseInt(digits(inp.value), 10) || 0) + Number(b.dataset.step));
+    inp.value = v || ''; setErr('svc', '');
+  });
+
   $('date').min = todayStr();
-  function toggle(btn){ btn.setAttribute('aria-pressed', btn.getAttribute('aria-pressed') !== 'true'); syncQty(); }
-  function syncQty(){ $('qty').classList.toggle('on', $('cGifts').getAttribute('aria-pressed') === 'true'); }
-  $('cBooth').addEventListener('click', () => toggle($('cBooth')));
-  $('cGifts').addEventListener('click', () => { toggle($('cGifts')); if ($('qty').classList.contains('on')) document.querySelector('#qty input').focus(); });
 
-  /* ---------- الإرسال ---------- */
+  function setErr(key, msg){
+    const map = { name:'name', phone:'phone', date:'date' };
+    $('e-' + key).textContent = msg;
+    if (map[key]) $(map[key]).setAttribute('aria-invalid', msg ? 'true' : 'false');
+  }
+  ['name','phone','date'].forEach(k => $(k).addEventListener('input', () => setErr(k, '')));
+
   let sb = null;
   try {
-    if (window.supabase && cfg.SUPABASE_URL && cfg.SUPABASE_KEY && !cfg.SUPABASE_KEY.includes('PASTE')) {
+    if (window.supabase && cfg.SUPABASE_URL && cfg.SUPABASE_KEY && !String(cfg.SUPABASE_KEY).includes('PASTE')) {
       sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_KEY, {
         auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, storageKey: 'ambere-public' }
       });
     }
-  } catch(e) {}
-
-  function fail(msg, el){
-    $('msg').textContent = msg;
-    document.querySelectorAll('.bad').forEach(x => x.classList.remove('bad'));
-    if (el) { el.classList.add('bad'); el.focus(); }
-  }
+  } catch (e) {}
 
   function collect(){
-    const booth = $('cBooth').getAttribute('aria-pressed') === 'true';
-    const gifts = $('cGifts').getAttribute('aria-pressed') === 'true';
-    const items = gifts ? [...document.querySelectorAll('#qty input')]
-      .map(i => ({ size: i.dataset.size, qty: parseInt(digits(i.value), 10) || 0 }))
+    const items = on(cGifts) ? ['q5','q10','q30']
+      .map(id => ({ size: $(id).dataset.size, qty: parseInt(digits($(id).value), 10) || 0 }))
       .filter(i => i.qty > 0) : [];
     return {
-      name: $('name').value.trim(),
-      phone: digits($('phone').value),
-      wedding_date: $('date').value,
-      venue: $('venue').value.trim() || null,
-      booth, items, gifts,
+      name: $('name').value.trim(), phone: digits($('phone').value), wedding_date: $('date').value,
+      venue: $('venue').value.trim() || null, booth: on(cBooth), gifts: on(cGifts), items,
       notes: $('notes').value.trim() || null
     };
   }
 
+  function validate(r){
+    const errs = [];
+    if (r.name.length < 2) errs.push(['name', 'اكتب اسمك لو سمحت.']);
+    if (!/^\+?\d{9,15}$/.test(r.phone)) errs.push(['phone', 'اكتب رقم واتساب صحيح، مثلاً 0791234567.']);
+    if (!r.wedding_date) errs.push(['date', 'اختار تاريخ المناسبة.']);
+    else if (r.wedding_date < todayStr()) errs.push(['date', 'التاريخ لازم يكون اليوم أو بعده.']);
+    if (!r.booth && !r.gifts) errs.push(['svc', 'اختار خدمة وحدة على الأقل.']);
+    else if (r.gifts && !r.items.length) errs.push(['svc', 'اكتب العدد التقريبي لحجم واحد على الأقل.']);
+    else if (r.items.some(i => i.qty > 10000)) errs.push(['svc', 'العدد كبير كثير، تواصل معنا مباشرة.']);
+    return errs;
+  }
+
   $('form').addEventListener('submit', async e => {
     e.preventDefault();
-    const r = collect();
-    if (r.name.length < 2) return fail('اكتب اسمك لو سمحت.', $('name'));
-    if (!/^\+?\d{9,15}$/.test(r.phone)) return fail('اكتب رقم هاتف صحيح، مثلاً 0791234567.', $('phone'));
-    if (!r.wedding_date) return fail('اختار تاريخ العرس.', $('date'));
-    if (r.wedding_date < todayStr()) return fail('التاريخ لازم يكون اليوم أو بعده.', $('date'));
-    if (!r.booth && !r.gifts) return fail('اختار خدمة وحدة على الأقل.');
-    if (r.gifts && !r.items.length) return fail('اكتب العدد التقريبي للتوزيعات.', document.querySelector('#qty input'));
-    if (r.items.some(i => i.qty > 10000)) return fail('العدد كبير كثير، تواصل معنا مباشرة.');
+    ['name','phone','date','svc'].forEach(k => setErr(k, '')); $('msg').textContent = '';
+    const r = collect(), errs = validate(r);
+    if (errs.length) {
+      errs.forEach(([k, m]) => setErr(k, m));
+      const first = errs[0][0];
+      (first === 'svc' ? (r.gifts ? $('q5') : cBooth) : $(first)).focus();
+      return;
+    }
+    if ($('website').value) return showDone(r);           // bot trap: pretend success
+    if (!sb) { $('msg').textContent = 'الحجز أونلاين مش متاح هلأ، تواصل معنا مباشرة.'; return; }
 
-    // فخ للبوتات: إذا انعبّت الخانة المخفية منعمل كأنه انبعت
-    if ($('website').value) return showDone(r);
-
-    if (!sb) return fail('الحجز مش متاح هلأ، تواصل معنا على إنستغرام.');
-    const btn = $('send'); btn.disabled = true; btn.textContent = 'جاري الإرسال…'; fail('');
+    const btn = $('send'); btn.disabled = true; $('sendTxt').textContent = 'جاري الإرسال…';
     const { error } = await sb.from('booking_requests').insert({
       name: r.name, phone: r.phone, wedding_date: r.wedding_date, venue: r.venue,
       booth: r.booth, items: r.items, notes: r.notes
     });
-    btn.disabled = false; btn.textContent = 'ابعت الطلب';
+    btn.disabled = false; $('sendTxt').textContent = 'ابعث طلب الحجز';
     if (error) {
       const m = error.message || '';
-      if (m.includes('AMB:')) return fail(m.split('AMB:')[1].trim());
-      if (/fetch|network/i.test(m)) return fail('في مشكلة بالإنترنت، جرّب كمان مرة.');
-      return fail('صار خطأ، جرّب كمان مرة أو تواصل معنا على إنستغرام.');
+      if (m.includes('AMB:')) $('msg').textContent = m.split('AMB:')[1].trim();
+      else if (/fetch|network/i.test(m)) $('msg').textContent = 'في مشكلة بالإنترنت، جرّب كمان مرة.';
+      else $('msg').textContent = 'صار خطأ، جرّب كمان مرة أو تواصل معنا مباشرة.';
+      return;
     }
     showDone(r);
   });
 
   function showDone(r){
-    const services = [r.booth ? 'بوث تعطير وتبخير' : null, r.items.length ? 'توزيعات عطور' : null].filter(Boolean).join(' + ');
+    const services = [r.booth ? 'بوث التعطير والتبخير' : null, r.items.length ? 'توزيعات العطور' : null].filter(Boolean).join(' + ');
     const gifts = r.items.map(i => `${SIZE_NAME[i.size]} × ${i.qty}`).join('، ');
-    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     $('summary').innerHTML = `
-      <div><span>الاسم</span><span>${esc(r.name)}</span></div>
-      <div><span>التاريخ</span><span>${showDate(r.wedding_date)}</span></div>
-      ${r.venue ? `<div><span>المكان</span><span>${esc(r.venue)}</span></div>` : ''}
-      <div><span>الخدمات</span><span>${services}</span></div>
-      ${gifts ? `<div><span>التوزيعات</span><span>${gifts}</span></div>` : ''}`;
+      <div><dt>الاسم</dt><dd>${esc(r.name)}</dd></div>
+      <div><dt>التاريخ</dt><dd>${showDate(r.wedding_date)}</dd></div>
+      ${r.venue ? `<div><dt>المكان</dt><dd>${esc(r.venue)}</dd></div>` : ''}
+      <div><dt>الخدمات</dt><dd>${services}</dd></div>
+      ${gifts ? `<div><dt>التوزيعات</dt><dd>${gifts}</dd></div>` : ''}`;
     if (cfg.WHATSAPP) {
       const text = `مرحبا Ambere، بعثت طلب حجز:\nالاسم: ${r.name}\nالتاريخ: ${showDate(r.wedding_date)}${r.venue ? '\nالمكان: ' + r.venue : ''}\nالخدمات: ${services}${gifts ? '\nالتوزيعات: ' + gifts : ''}`;
       $('wa').href = `https://wa.me/${cfg.WHATSAPP}?text=${encodeURIComponent(text)}`;
       $('wa').hidden = false;
     }
     $('form').hidden = true; $('done').hidden = false;
-    $('book').scrollIntoView({ block: 'start' });
+    $('book').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+    $('done').focus({ preventScroll: true });
   }
 
   $('again').addEventListener('click', () => {
-    $('form').reset(); $('cBooth').setAttribute('aria-pressed', true); $('cGifts').setAttribute('aria-pressed', false); syncQty();
-    $('done').hidden = true; $('form').hidden = false; fail('');
+    $('form').reset(); setPick(cBooth, true); setPick(cGifts, false);
+    $('done').hidden = true; $('form').hidden = false; $('wa').hidden = true; $('name').focus();
   });
 </script>
 </body>
