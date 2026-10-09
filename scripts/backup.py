@@ -22,7 +22,7 @@ STATUS = {"confirmed": "مؤكد", "done": "منفّذ", "cancelled": "ملغي"
 REQ_STATUS = {"new": "جديد", "accepted": "صار حجز", "rejected": "مرفوض"}
 
 
-def fetch(table, order):
+def fetch(table, order, optional=False):
     rows, start, page = [], 0, 1000
     while True:
         req = urllib.request.Request(
@@ -32,6 +32,8 @@ def fetch(table, order):
             with urllib.request.urlopen(req, timeout=60) as r:
                 chunk = json.loads(r.read().decode())
         except urllib.error.HTTPError as e:
+            if optional:
+                return []          # table not created yet
             sys.exit(f"Supabase error on {table}: {e.code} {e.read().decode()[:300]}")
         rows += chunk
         if len(chunk) < page:
@@ -69,6 +71,7 @@ def csv_bytes(header, rows):
 
 bookings = fetch("bookings", "wedding_date.asc")
 requests = fetch("booking_requests", "created_at.asc")
+expenses = fetch("expenses", "id.asc", optional=True)
 
 b_rows, total_profit, total_owed = [], 0.0, 0.0
 for b in bookings:
@@ -89,6 +92,12 @@ for r in requests:
                    r.get("wedding_date"), r.get("venue") or "", "نعم" if r.get("booth") else "لا", gifts,
                    REQ_STATUS.get(r.get("status"), r.get("status")), r.get("notes") or ""])
 
+e_rows = [["تأسيسي" if e.get("kind") == "startup" else "تشغيلي", e.get("title"), e.get("category") or "",
+           f'{num(e.get("amount")):.2f}', e.get("spent_on") or "", e.get("notes") or ""] for e in expenses]
+startup_total = sum(num(e.get("amount")) for e in expenses if e.get("kind") == "startup")
+running_total = sum(num(e.get("amount")) for e in expenses if e.get("kind") == "running")
+net_profit = total_profit - running_total
+
 jo = timezone(timedelta(hours=3))
 stamp = datetime.now(jo).strftime("%Y-%m-%d")
 zbuf = io.BytesIO()
@@ -98,14 +107,19 @@ with zipfile.ZipFile(zbuf, "w", zipfile.ZIP_DEFLATED) as z:
          "التكلفة", "المبلغ", "الربح", "المدفوع", "المتبقي", "ملاحظات"], b_rows))
     z.writestr(f"ambere-requests-{stamp}.csv", csv_bytes(
         ["رقم", "وصل", "الاسم", "الهاتف", "تاريخ العرس", "المكان", "بوث", "التوزيعات", "الحالة", "ملاحظات"], r_rows))
+    z.writestr(f"ambere-expenses-{stamp}.csv", csv_bytes(
+        ["النوع", "البند", "الفئة", "المبلغ", "التاريخ", "ملاحظات"], e_rows))
     z.writestr(f"ambere-full-{stamp}.json",
-               json.dumps({"exported_at": stamp, "bookings": bookings, "booking_requests": requests},
+               json.dumps({"exported_at": stamp, "bookings": bookings, "booking_requests": requests, "expenses": expenses},
                           ensure_ascii=False, indent=2))
 zip_bytes = zbuf.getvalue()
 
 caption = (f"🗂 <b>نسخة احتياطية — Ambere</b>\n{stamp}\n\n"
            f"الحجوزات: {len(bookings)}\nطلبات العملاء: {len(requests)}\n"
-           f"صافي الربح (كل الفترة): {total_profit:,.2f} د.أ\nمتبقي على العملاء: {total_owed:,.2f} د.أ")
+           f"المصاريف: {len(expenses)}\n"
+           f"صافي الربح (بعد المصاريف التشغيلية): {net_profit:,.2f} د.أ\n"
+           f"رأس المال: {startup_total:,.2f} — رجع منه {max(0.0, min(net_profit, startup_total)):,.2f}\n"
+           f"متبقي على العملاء: {total_owed:,.2f} د.أ")
 
 
 def send_document(chat_id):

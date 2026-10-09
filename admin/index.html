@@ -237,6 +237,45 @@
   .toast.show{transform:translate(-50%,0);visibility:visible;opacity:1}
   .toast.err{background:var(--loss)}
 
+  /* ---------- finance ---------- */
+  .action.wide{grid-column:1/-1;padding:11px 14px}
+  .cap{padding:16px;margin-bottom:20px;width:100%;text-align:right;display:block;border:1px solid var(--line)}
+  .cap-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}
+  .cap-top b{font-size:15px;font-weight:600}
+  .cap-top span{font-size:13px;color:var(--muted)}
+  .bar{height:10px;border-radius:999px;background:var(--cream);overflow:hidden;display:flex;justify-content:flex-start}
+  .bar i{display:block;flex:none;height:100%;border-radius:999px;background:linear-gradient(270deg,var(--gold),#C9A66B);transition:width .6s}
+  .bar.done i{background:var(--gain)}
+  .cap-foot{display:flex;justify-content:space-between;gap:10px;margin-top:8px;font-size:13px;color:var(--ink-2)}
+  .fin-sum{padding:4px 16px;margin-bottom:12px}
+  .fin-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+  .fin-row:last-child{border-bottom:0}
+  .fin-row span{color:var(--ink-2)}
+  .fin-row b{font-weight:600}
+  .fin-row.total b{font-size:20px}
+  .fin-row .neg{color:var(--loss)} .fin-row .pos{color:var(--gain)}
+  .exp{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;margin-bottom:8px;text-align:right;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--card);box-shadow:var(--shadow)}
+  .exp i{width:38px;height:38px;flex:none;border-radius:12px;display:grid;place-items:center;background:var(--cream);font-style:normal;font-size:17px}
+  .exp .t{flex:1;min-width:0}
+  .exp .t b{display:block;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .exp .t small{display:block;color:var(--muted);font-size:12.5px}
+  .exp .a{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .tot-line{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin:4px 4px 10px}
+  /* sheet dialog */
+  .sheet{border:0;padding:0;margin:auto auto 0;width:100%;max-width:560px;max-height:92vh;border-radius:22px 22px 0 0;background:var(--bg);color:var(--ink)}
+  .sheet::backdrop{background:rgba(42,31,24,.45)}
+  .sheet form{padding:18px 16px calc(16px + env(safe-area-inset-bottom))}
+  .sheet .grab{width:40px;height:4px;border-radius:4px;background:var(--line-2);margin:0 auto 14px}
+  .sheet h2{font-family:var(--display);font-size:22px;margin:0 0 14px}
+  .sheet .field{margin-bottom:12px}
+  .cats{display:flex;flex-wrap:wrap;gap:6px}
+  .cats button{border:1px solid var(--line-2);background:#fff;border-radius:999px;padding:6px 12px;font-size:13.5px}
+  .cats button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+  .sheet-acts{display:flex;gap:8px;margin-top:16px}
+  .sheet-acts .btn{flex:1;height:48px}
+  .sheet-acts .del{flex:0 0 auto;color:var(--loss);border-color:#EBC3BE}
+  @media (min-width:600px){.sheet{margin:auto;border-radius:22px}}
+
   /* ---------- calendar ---------- */
   .cal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
   .cal-head h2{font-family:var(--display);font-size:24px;margin:0;line-height:1.3}
@@ -321,7 +360,13 @@
         <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4h4"/><path d="M12 8v4l3 2"/></svg></i>
         <span><b>حجز سابق</b><small>عرس صار قبل</small></span>
       </button>
+      <button class="action wide" type="button" data-exp="new">
+        <i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16v12H4z"/><path d="M4 11h16"/><path d="M8 15h3"/></svg></i>
+        <span><b>+ مصروف</b><small>تعبئة عطور، بخور، مواصلات…</small></span>
+      </button>
     </div>
+
+    <button type="button" class="card cap" data-goto="fin" id="homeCap"></button>
 
     <div class="sec-h"><h2>الأعراس الجاية</h2><button type="button" data-goto="list" data-filter="upcoming">عرض الكل</button></div>
     <div id="homeUpcoming"></div>
@@ -363,6 +408,51 @@
     <p class="who">رابط صفحة الحجز للعملاء: <a id="publicLink" href="../" target="_blank" rel="noopener"></a></p>
   </div>
 
+  <!-- ---------- FINANCE ---------- -->
+  <div class="shell" id="vFin" data-view hidden>
+    <div class="top">
+      <h1 class="page-title" style="margin:0">المالية</h1>
+      <button class="btn primary" type="button" data-exp="new">+ مصروف</button>
+    </div>
+    <div class="chips" id="finChips">
+      <button class="chip" type="button" data-f="month" aria-pressed="true">هالشهر</button>
+      <button class="chip" type="button" data-f="year" aria-pressed="false">هالسنة</button>
+      <button class="chip" type="button" data-f="all" aria-pressed="false">من البداية</button>
+    </div>
+    <div class="card fin-sum" id="finSum"></div>
+    <div class="card cap" id="finCap" style="cursor:default"></div>
+    <div class="seg gap" id="segExp">
+      <button type="button" data-v="running" aria-pressed="true">مصاريف تشغيلية</button>
+      <button type="button" data-v="startup" aria-pressed="false">تكاليف تأسيسية</button>
+    </div>
+    <div id="expList"></div>
+  </div>
+
+  <dialog class="sheet" id="expDlg" aria-labelledby="expTitle">
+    <form id="expForm" novalidate>
+      <div class="grab"></div>
+      <h2 id="expTitle">مصروف جديد</h2>
+      <div class="field">
+        <div class="seg" id="segExpKind">
+          <button type="button" data-v="running" aria-pressed="true">تشغيلي</button>
+          <button type="button" data-v="startup" aria-pressed="false">تأسيسي (مرة وحدة)</button>
+        </div>
+      </div>
+      <div class="field" id="catWrap"><span class="lbl">الفئة</span><div class="cats" id="cats"></div></div>
+      <div class="field"><label for="eTitle">البند *</label><input class="inp" id="eTitle" maxlength="120" placeholder="مثلاً: تعبئة عطور التبخير"></div>
+      <div class="grid">
+        <div><label for="eAmount">المبلغ (د.أ) *</label><input class="inp" id="eAmount" inputmode="decimal" dir="ltr" placeholder="0"></div>
+        <div><label for="eDate" id="eDateLbl">التاريخ *</label><input class="inp" id="eDate" type="date"></div>
+      </div>
+      <div class="field" style="margin-top:12px"><label for="eNotes">ملاحظات</label><input class="inp" id="eNotes" maxlength="500"></div>
+      <div class="sheet-acts">
+        <button type="button" class="btn del" id="eDel" hidden>حذف</button>
+        <button type="button" class="btn" id="eCancel">إلغاء</button>
+        <button type="button" class="btn primary" id="eSave">حفظ</button>
+      </div>
+    </form>
+  </dialog>
+
   <!-- ---------- CALENDAR ---------- -->
   <div class="shell" id="vCal" data-view hidden>
     <div class="cal-head">
@@ -390,6 +480,10 @@
   <div class="shell" id="vMore" data-view hidden>
     <div class="top"><h1 class="page-title" style="margin:0">المزيد</h1></div>
     <div class="card list-menu">
+      <button type="button" data-goto="fin">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg>
+        المالية والمصاريف
+      </button>
       <a id="publicLink2" href="../" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg>
         فتح صفحة الحجز للعملاء
@@ -572,7 +666,10 @@
   }
 
   /* ---------- navigation ---------- */
-  const VIEWS = { home:'vHome', list:'vList', cal:'vCal', req:'vReq', more:'vMore', form:'vForm' };
+  const VIEWS = { home:'vHome', list:'vList', cal:'vCal', req:'vReq', more:'vMore', fin:'vFin', form:'vForm' };
+  let expenses = [], finPeriod = 'month', finKind = 'running', expEditing = null, expCat = '';
+  const CATS = ['تعبئة عطور','بخور وفحم','كروت وطباعة','تغليف','مواصلات','ترويج','صيانة','أخرى'];
+  const CAT_ICON = { 'تعبئة عطور':'🧴','بخور وفحم':'🔥','كروت وطباعة':'🏷️','تغليف':'🎀','مواصلات':'🚗','ترويج':'📣','صيانة':'🔧','أخرى':'•' };
   function go(v){
     if (v !== 'form') backTo = v;
     view = v;
@@ -584,6 +681,7 @@
     if (v === 'list') renderList();
     if (v === 'req') renderRequests();
     if (v === 'cal') renderCal();
+    if (v === 'fin') renderFin();
     window.scrollTo({ top: 0 });
   }
 
@@ -628,11 +726,13 @@
     if (fresh) al += `<button type="button" class="alert red" data-goto="req"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16v10H8l-4 4z"/></svg>عندك ${fresh} ${fresh === 1 ? 'طلب جديد' : 'طلبات جديدة'} من العملاء</button>`;
     if (late) al += `<button type="button" class="alert" data-goto="list" data-filter="late"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>${late} ${late === 1 ? 'عرس صار ولسا' : 'أعراس صاروا ولسا'} «مؤكد»، سكّرهم</button>`;
     $('alerts').innerHTML = al;
-    $('heroStat').innerHTML = `<span>ربح ${MONTHS[now.getMonth()]}</span><b class="num">${fmt(mP)} د.أ</b><small>${mN} ${mN === 1 ? 'حجز' : 'حجوزات'} هالشهر</small>`;
+    const mE = runningSum(month), yE = runningSum(year);
+    $('heroStat').innerHTML = `<span>صافي ربح ${MONTHS[now.getMonth()]}</span><b class="num">${fmt(mP - mE)} د.أ</b><small>${mN} ${mN === 1 ? 'حجز' : 'حجوزات'}${mE ? ` · مصاريف ${fmt(mE)}` : ''}</small>`;
     $('stats').innerHTML = `
-      <div class="card stat"><span>ربح ${year}</span><b class="num">${fmt(yP)}</b></div>
+      <div class="card stat"><span>صافي ${year}</span><b class="num">${fmt(yP - yE)}</b></div>
       <div class="card stat"><span>أعراس جاية</span><b class="num">${up}</b></div>
       <div class="card stat ${owed > 0 ? 'warn' : ''}"><span>متبقي ع العملاء</span><b class="num">${fmt(owed)}</b></div>`;
+    $('homeCap').innerHTML = capitalHTML(true);
     const next = bookings.filter(b => b.status === 'confirmed' && b.wedding_date >= today).sort((a, b) => a.wedding_date.localeCompare(b.wedding_date)).slice(0, 3);
     $('homeUpcoming').innerHTML = next.length ? next.map(bkItem).join('')
       : `<div class="card empty" style="padding:28px 16px">ما في أعراس جاية لسا.</div>`;
@@ -971,6 +1071,111 @@
     toast('انحذف الحجز'); resetForm(); go('list');
   }
 
+  /* ---------- FINANCE ---------- */
+  const runningSum = prefix => expenses.filter(e => e.kind === 'running' && (!prefix || (e.spent_on || '').startsWith(prefix))).reduce((s, e) => s + n(e.amount), 0);
+  function capital(){
+    const startup = expenses.filter(e => e.kind === 'startup').reduce((s, e) => s + n(e.amount), 0);
+    const earned = bookings.reduce((s, b) => s + calc(b).profit, 0) - runningSum('');
+    const left = Math.max(0, startup - earned), pct = startup ? Math.max(0, Math.min(1, earned / startup)) : 1;
+    return { startup, earned, left, pct };
+  }
+  function capitalHTML(link){
+    const c = capital();
+    if (!c.startup) return `<div class="cap-top"><b>رأس المال</b><span>${link ? 'ضيف التكاليف التأسيسية ←' : 'ما في تكاليف تأسيسية مسجّلة'}</span></div>`;
+    const done = c.left === 0;
+    return `
+      <div class="cap-top"><b>${done ? '✅ رجع رأس المال كامل' : 'ترجيع رأس المال'}</b><span class="num">${Math.round(c.pct * 100)}%</span></div>
+      <div class="bar ${done ? 'done' : ''}"><i style="width:${(c.pct * 100).toFixed(1)}%"></i></div>
+      <div class="cap-foot"><span>رجع <b class="num">${fmt(Math.max(0, c.earned))}</b> من <span class="num">${fmt(c.startup)}</span></span>
+      <span>${done ? `ربح فوق رأس المال: <b class="num">${fmt(c.earned - c.startup)}</b>` : `ضايل <b class="num">${fmt(c.left)}</b> د.أ`}</span></div>`;
+  }
+  function renderFin(){
+    const today = todayStr(), now = new Date();
+    const prefix = finPeriod === 'month' ? today.slice(0, 7) : finPeriod === 'year' ? today.slice(0, 4) : '';
+    const label = finPeriod === 'month' ? `${MONTHS[now.getMonth()]} ${now.getFullYear()}` : finPeriod === 'year' ? `سنة ${now.getFullYear()}` : 'من البداية';
+    let rev = 0, cost = 0, cnt = 0;
+    bookings.forEach(b => { if (b.status === 'cancelled' || (prefix && !b.wedding_date.startsWith(prefix))) return; const c = calc(b); rev += c.charged; cost += c.cost; cnt++; });
+    const run = runningSum(prefix), net = rev - cost - run;
+    $('finSum').innerHTML = `
+      <div class="fin-row"><span>${label} · ${cnt} ${cnt === 1 ? 'حجز' : 'حجوزات'}</span><span></span></div>
+      <div class="fin-row"><span>إيراد الحجوزات</span><b class="num">${fmt(rev)}</b></div>
+      <div class="fin-row"><span>تكلفة التوزيعات</span><b class="num neg">− ${fmt(cost)}</b></div>
+      <div class="fin-row"><span>مصاريف تشغيلية</span><b class="num neg">− ${fmt(run)}</b></div>
+      <div class="fin-row total"><span>صافي الربح</span><b class="num ${net < 0 ? 'neg' : 'pos'}">${fmt(net)} د.أ</b></div>`;
+    $('finCap').innerHTML = capitalHTML(false);
+    const list = expenses.filter(e => e.kind === finKind && (finKind === 'startup' || !prefix || (e.spent_on || '').startsWith(prefix)))
+      .sort((a, b) => (b.spent_on || '').localeCompare(a.spent_on || '') || b.id - a.id);
+    const total = list.reduce((s, e) => s + n(e.amount), 0);
+    if (!list.length) {
+      $('expList').innerHTML = `<div class="empty"><div>${finKind === 'running' ? 'ما في مصاريف تشغيلية بهالفترة.' : 'ما في تكاليف تأسيسية.'}</div><button type="button" class="btn" style="margin-top:12px" data-exp="new">+ إضافة</button></div>`;
+      return;
+    }
+    $('expList').innerHTML = `<div class="tot-line"><span>${list.length} بند${finKind === 'running' && prefix ? ' · ' + label : ''}</span><span>المجموع <b class="num">${fmt(total)}</b> د.أ</span></div>` +
+      list.map(e => `
+      <button type="button" class="exp" data-expedit="${e.id}">
+        <i>${e.kind === 'startup' ? '🏗️' : (CAT_ICON[e.category] || '•')}</i>
+        <span class="t"><b>${esc(e.title)}</b><small>${[e.category, e.spent_on ? showDate(e.spent_on) : null, e.notes].filter(Boolean).map(esc).join(' · ') || 'تأسيسي'}</small></span>
+        <span class="a">${fmt(n(e.amount))}</span>
+      </button>`).join('');
+  }
+  function renderCats(){
+    $('cats').innerHTML = CATS.map(c => `<button type="button" data-cat="${c}" aria-pressed="${c === expCat}">${CAT_ICON[c]} ${c}</button>`).join('');
+  }
+  function syncExpKind(){
+    const run = getSeg('segExpKind') === 'running';
+    $('catWrap').hidden = !run;
+    $('eDateLbl').textContent = run ? 'التاريخ *' : 'التاريخ (اختياري)';
+  }
+  function openExp(id, kind){
+    expEditing = id || null;
+    const e = id ? expenses.find(x => x.id === id) : null;
+    $('expForm').reset();
+    setSeg('segExpKind', e ? e.kind : (kind || (view === 'fin' ? finKind : 'running')));
+    expCat = e ? (e.category || '') : '';
+    $('eTitle').value = e ? e.title : ''; $('eAmount').value = e ? n(e.amount) : '';
+    $('eDate').value = e ? (e.spent_on || '') : (getSeg('segExpKind') === 'running' ? todayStr() : '');
+    $('eNotes').value = e ? (e.notes || '') : '';
+    $('expTitle').textContent = e ? 'تعديل مصروف' : 'مصروف جديد';
+    $('eDel').hidden = !e;
+    ['eTitle','eAmount','eDate'].forEach(i => $(i).removeAttribute('aria-invalid'));
+    renderCats(); syncExpKind();
+    if (typeof $('expDlg').showModal === 'function') $('expDlg').showModal(); else $('expDlg').setAttribute('open', '');
+    setTimeout(() => (e ? $('eAmount') : $('eTitle')).focus(), 60);
+  }
+  function closeExp(){ if ($('expDlg').open) $('expDlg').close(); }
+  async function saveExp(){
+    const kind = getSeg('segExpKind');
+    const row = {
+      kind, title: $('eTitle').value.trim(), category: kind === 'running' ? (expCat || null) : null,
+      amount: n($('eAmount').value), spent_on: $('eDate').value || null, notes: $('eNotes').value.trim() || null
+    };
+    const bad = !row.title ? ['eTitle', 'اكتب شو البند.'] : !filled($('eAmount').value) ? ['eAmount', 'اكتب المبلغ.'] : (kind === 'running' && !row.spent_on) ? ['eDate', 'اختار التاريخ.'] : null;
+    if (bad) { $(bad[0]).setAttribute('aria-invalid', 'true'); $(bad[0]).focus(); toast(bad[1], true); return; }
+    $('eSave').disabled = true;
+    const q = expEditing ? sb.from('expenses').update(row).eq('id', expEditing).select().single() : sb.from('expenses').insert(row).select().single();
+    const { data, error } = await q;
+    $('eSave').disabled = false;
+    if (error) { toast(/relation|does not exist|schema cache/i.test(error.message || '') ? 'لازم تشغّل ملف supabase-v5-expenses.sql أول.' : dbError(error), true); return; }
+    const k = expenses.findIndex(x => x.id === data.id); if (k >= 0) expenses[k] = data; else expenses.push(data);
+    closeExp(); toast(expEditing ? 'انحفظ التعديل ✓' : 'انضاف المصروف ✓');
+    if (view === 'fin') { finKind = data.kind; setSeg('segExp', finKind); renderFin(); } else if (view === 'home') renderHome();
+  }
+  async function deleteExp(){
+    if (!expEditing) return;
+    const e = expenses.find(x => x.id === expEditing);
+    if (!confirm(`تحذف «${e ? e.title : ''}»؟`)) return;
+    const { error } = await sb.from('expenses').delete().eq('id', expEditing);
+    if (error) return toast(dbError(error), true);
+    expenses = expenses.filter(x => x.id !== expEditing);
+    closeExp(); toast('انحذف'); if (view === 'fin') renderFin(); else if (view === 'home') renderHome();
+  }
+  async function loadExpenses(){
+    const { data, error } = await sb.from('expenses').select('*').order('spent_on', { ascending: false });
+    if (error) return;            // table not created yet — finance shows zeros
+    expenses = data || [];
+    if (view === 'home') renderHome(); if (view === 'fin') renderFin();
+  }
+
   /* ---------- CALENDAR ---------- */
   const ds = (y, m, d) => `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
   function dayInfo(day){
@@ -1062,7 +1267,8 @@
       const c = calc(b), q = k => n((b.items || []).find(i => i.size === k)?.qty);
       return [b.id, b.wedding_date, b.client, b.phone || '', b.venue || '', STATUS[b.status], b.booth ? 'نعم' : 'لا', q('5'), q('10'), q('30'), c.cost.toFixed(2), c.charged.toFixed(2), c.profit.toFixed(2), c.paid.toFixed(2), c.remaining.toFixed(2), b.notes || ''];
     });
-    const csv = [head, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\r\n');
+    const ex = [[], ['المصاريف'], ['النوع','البند','الفئة','المبلغ','التاريخ','ملاحظات'], ...expenses.map(e => [e.kind === 'startup' ? 'تأسيسي' : 'تشغيلي', e.title, e.category || '', n(e.amount).toFixed(2), e.spent_on || '', e.notes || ''])];
+    const csv = [head, ...rows, ...ex].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\r\n');
     const url = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' }));
     const a = Object.assign(document.createElement('a'), { href: url, download: `ambere-bookings-${todayStr()}.csv` });
     document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
@@ -1087,7 +1293,7 @@
     const h = new Date().getHours();
     $('hello').textContent = h < 12 ? 'صباح الخير ☀️' : h < 18 ? 'أهلاً 👋' : 'مسا الخير 🌙';
     go('home');
-    await Promise.all([loadBookings(), loadRequests(), loadMeta()]);
+    await Promise.all([loadBookings(), loadRequests(), loadMeta(), loadExpenses()]);
   }
   function showLogin(msg){ $('screenApp').hidden = true; $('screenLogin').hidden = false; $('loginErr').textContent = msg || ''; }
 
@@ -1106,7 +1312,7 @@
     $('btnSaveTop').addEventListener('click', save);
     $('btnDelete').addEventListener('click', removeBooking);
     $('btnBack').addEventListener('click', () => { resetForm(); go(backTo); });
-    $('btnRefresh').addEventListener('click', async () => { await Promise.all([loadBookings(), loadRequests(), loadMeta()]); toast('تحدّثت ✓'); });
+    $('btnRefresh').addEventListener('click', async () => { await Promise.all([loadBookings(), loadRequests(), loadMeta(), loadExpenses()]); toast('تحدّثت ✓'); });
     $('btnExport').addEventListener('click', exportCSV);
     $('btnLogout').addEventListener('click', async () => { await sb.auth.signOut(); bookings = []; requests = []; showLogin(); });
     $('q').addEventListener('input', renderList);
@@ -1118,6 +1324,19 @@
       const nb = e.target.closest('[data-newday]'); if (nb) { const d = nb.dataset.newday; openNew(d < todayStr() ? 'past' : 'new', d); return; }
       const bl = e.target.closest('[data-block]'); if (bl) toggleBlock(bl.dataset.block);
     });
+    $('finChips').addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; finPeriod = b.dataset.f; setChip('finChips', finPeriod); renderFin(); });
+    wireSeg('segExp', () => { finKind = getSeg('segExp'); renderFin(); });
+    wireSeg('segExpKind', () => { syncExpKind(); if (getSeg('segExpKind') === 'running' && !$('eDate').value) $('eDate').value = todayStr(); });
+    $('cats').addEventListener('click', e => {
+      const b = e.target.closest('[data-cat]'); if (!b) return;
+      expCat = expCat === b.dataset.cat ? '' : b.dataset.cat; renderCats();
+      if (!$('eTitle').value.trim() && expCat && expCat !== 'أخرى') $('eTitle').value = expCat;
+    });
+    $('eSave').addEventListener('click', saveExp);
+    $('eCancel').addEventListener('click', closeExp);
+    $('eDel').addEventListener('click', deleteExp);
+    $('expDlg').addEventListener('click', e => { if (e.target === $('expDlg')) closeExp(); });
+    $('expList').addEventListener('click', e => { const b = e.target.closest('[data-expedit]'); if (b) openExp(Number(b.dataset.expedit)); });
     $('maxMinus').addEventListener('click', () => setMaxPerDay(maxPerDay - 1));
     $('maxPlus').addEventListener('click', () => setMaxPerDay(maxPerDay + 1));
     const pub = new URL('../', location.href).href;
@@ -1125,7 +1344,8 @@
     $('publicLink2').href = pub;
 
     document.addEventListener('click', e => {
-      const t = e.target.closest('[data-goto],[data-new],[data-edit],[data-act]'); if (!t) return;
+      const t = e.target.closest('[data-goto],[data-new],[data-edit],[data-act],[data-exp]'); if (!t) return;
+      if (t.dataset.exp) return openExp(null);
       if (t.dataset.new) return openNew(t.dataset.new);
       if (t.dataset.edit) return openEdit(Number(t.dataset.edit));
       if (t.dataset.act) {
