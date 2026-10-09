@@ -237,6 +237,32 @@
   .toast.show{transform:translate(-50%,0);visibility:visible;opacity:1}
   .toast.err{background:var(--loss)}
 
+  /* ---------- visits ---------- */
+  .kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
+  .kpis .stat b{font-size:22px}
+  .chart{padding:14px 12px 10px;margin-bottom:12px}
+  .chart h3,.box h3{font-size:14px;font-weight:600;margin:0 0 12px;color:var(--ink-2)}
+  .bars{display:flex;align-items:flex-end;gap:2px;height:120px;direction:ltr}
+  .bars span{flex:1;min-width:2px;background:var(--champagne);border-radius:3px 3px 0 0;position:relative}
+  .bars span.today{background:var(--gold)}
+  .bars span:hover{background:var(--ink)}
+  .bars-x{display:flex;justify-content:space-between;direction:ltr;font-size:11px;color:var(--muted);margin-top:6px}
+  .box{padding:14px;margin-bottom:12px}
+  .hrow{margin-bottom:10px}
+  .hrow:last-child{margin-bottom:0}
+  .hrow .l{display:flex;justify-content:space-between;font-size:14px;margin-bottom:5px}
+  .hrow .l b{font-weight:600;font-variant-numeric:tabular-nums}
+  .hbar{height:8px;border-radius:999px;background:var(--cream);overflow:hidden;display:flex}
+  .hbar i{display:block;flex:none;height:100%;border-radius:999px;background:var(--ink)}
+  .funnel .hbar i{background:var(--gold)}
+  .tipbox{padding:14px;margin-bottom:12px;background:var(--gold-soft);border-color:#EAD9BD}
+  .tipbox p{margin:0 0 10px;font-size:13.5px;color:var(--ink-2)}
+  .copyrow{display:flex;gap:8px;align-items:center;margin-top:8px}
+  .copyrow code{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr;text-align:left;font-size:12px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+  .visits-card{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:14px 16px;margin-bottom:20px;text-align:right}
+  .visits-card b{font-size:15px;font-weight:600}
+  .visits-card small{display:block;color:var(--muted);font-size:12.5px}
+
   /* ---------- finance ---------- */
   .action.wide{grid-column:1/-1;padding:11px 14px}
   .cap{padding:16px;margin-bottom:20px;width:100%;text-align:right;display:block;border:1px solid var(--line)}
@@ -367,6 +393,7 @@
     </div>
 
     <button type="button" class="card cap" data-goto="fin" id="homeCap"></button>
+    <button type="button" class="card visits-card" data-goto="stats" id="homeVisits" hidden></button>
 
     <div class="sec-h"><h2>الأعراس الجاية</h2><button type="button" data-goto="list" data-filter="upcoming">عرض الكل</button></div>
     <div id="homeUpcoming"></div>
@@ -406,6 +433,17 @@
     </div>
     <div id="reqList"><div class="loading">جاري التحميل…</div></div>
     <p class="who">رابط صفحة الحجز للعملاء: <a id="publicLink" href="../" target="_blank" rel="noopener"></a></p>
+  </div>
+
+  <!-- ---------- VISITS ---------- -->
+  <div class="shell" id="vStats" data-view hidden>
+    <div class="top"><h1 class="page-title" style="margin:0">زيارات الموقع</h1></div>
+    <div class="chips" id="statChips">
+      <button class="chip" type="button" data-f="7" aria-pressed="true">آخر 7 أيام</button>
+      <button class="chip" type="button" data-f="30" aria-pressed="false">آخر 30 يوم</button>
+      <button class="chip" type="button" data-f="90" aria-pressed="false">آخر 90 يوم</button>
+    </div>
+    <div id="statsBody"><div class="loading">جاري التحميل…</div></div>
   </div>
 
   <!-- ---------- FINANCE ---------- -->
@@ -480,6 +518,10 @@
   <div class="shell" id="vMore" data-view hidden>
     <div class="top"><h1 class="page-title" style="margin:0">المزيد</h1></div>
     <div class="card list-menu">
+      <button type="button" data-goto="stats">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+        زيارات الموقع
+      </button>
       <button type="button" data-goto="fin">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg>
         المالية والمصاريف
@@ -666,7 +708,8 @@
   }
 
   /* ---------- navigation ---------- */
-  const VIEWS = { home:'vHome', list:'vList', cal:'vCal', req:'vReq', more:'vMore', fin:'vFin', form:'vForm' };
+  const VIEWS = { home:'vHome', list:'vList', cal:'vCal', req:'vReq', more:'vMore', fin:'vFin', stats:'vStats', form:'vForm' };
+  let statDays = 7, statsCache = {};
   let expenses = [], finPeriod = 'month', finKind = 'running', expEditing = null, expCat = '';
   const CATS = ['تعبئة عطور','بخور وفحم','كروت وطباعة','تغليف','مواصلات','ترويج','صيانة','أخرى'];
   const CAT_ICON = { 'تعبئة عطور':'🧴','بخور وفحم':'🔥','كروت وطباعة':'🏷️','تغليف':'🎀','مواصلات':'🚗','ترويج':'📣','صيانة':'🔧','أخرى':'•' };
@@ -682,6 +725,7 @@
     if (v === 'req') renderRequests();
     if (v === 'cal') renderCal();
     if (v === 'fin') renderFin();
+    if (v === 'stats') loadStats(statDays);
     window.scrollTo({ top: 0 });
   }
 
@@ -1071,6 +1115,74 @@
     toast('انحذف الحجز'); resetForm(); go('list');
   }
 
+  /* ---------- VISITS ---------- */
+  const SRC = { instagram:['📸','إنستغرام'], whatsapp:['💬','واتساب'], tiktok:['🎵','تيك توك'], facebook:['📘','فيسبوك'], snapchat:['👻','سناب'], google:['🔎','جوجل'], direct:['🔗','مباشر / رابط منسوخ'], other:['🌐','مواقع ثانية'] };
+  const DEV = { mobile:'📱 موبايل', desktop:'💻 كمبيوتر', tablet:'📟 تابلت' };
+  const pct = (a, b) => b ? Math.round(a / b * 100) : 0;
+  async function fetchStats(days){
+    const { data, error } = await sb.rpc('site_stats', { p_days: days });
+    if (error) throw error;
+    statsCache[days] = data; return data;
+  }
+  async function loadHomeVisits(){
+    try {
+      const d = await fetchStats(7);
+      const today = d.days.length ? d.days[d.days.length - 1].visitors : 0;
+      $('homeVisits').innerHTML = `<span><b>👀 ${d.visitors} زائر بآخر 7 أيام</b><small>اليوم ${today} · طلبات ${d.requests}${d.visitors ? ` · تحويل ${pct(d.requests, d.visitors)}%` : ''}</small></span><span style="color:var(--gold)">←</span>`;
+      $('homeVisits').hidden = false;
+    } catch (e) { $('homeVisits').hidden = true; }
+  }
+  async function loadStats(days){
+    statDays = days; setChip('statChips', String(days));
+    if (statsCache[days]) renderStats(statsCache[days]); else $('statsBody').innerHTML = '<div class="loading">جاري التحميل…</div>';
+    try { renderStats(await fetchStats(days)); }
+    catch (e) {
+      const m = (e && e.message) || '';
+      $('statsBody').innerHTML = `<div class="empty">${/function|does not exist|schema cache/i.test(m) ? 'لازم تشغّل ملف supabase-v7-analytics.sql أول.' : esc(dbError(e))}</div>`;
+    }
+  }
+  function renderStats(d){
+    if (statDays !== Math.round((new Date(d.to) - new Date(d.from)) / 86400000) + 1) return;
+    const max = Math.max(1, ...d.days.map(x => x.visitors));
+    const bars = d.days.map((x, i) => `<span class="${i === d.days.length - 1 ? 'today' : ''}" style="height:${Math.max(2, x.visitors / max * 100)}%" title="${showDate(x.d)}: ${x.visitors} زائر"></span>`).join('');
+    const first = d.days[0], last = d.days[d.days.length - 1];
+    const srcTotal = d.sources.reduce((s, x) => s + x.visitors, 0) || 1;
+    const devTotal = d.devices.reduce((s, x) => s + x.visitors, 0) || 1;
+    const fMax = Math.max(1, d.visitors);
+    const base = new URL('../', location.href).href;
+    const links = [['إنستغرام (البايو)', base + '?utm_source=instagram'], ['واتساب (ستوري ورسائل)', base + '?utm_source=whatsapp'], ['تيك توك', base + '?utm_source=tiktok']];
+    $('statsBody').innerHTML = `
+      <div class="kpis">
+        <div class="card stat"><span>زوار</span><b class="num">${d.visitors}</b></div>
+        <div class="card stat"><span>مشاهدات</span><b class="num">${d.views}</b></div>
+        <div class="card stat"><span>طلبات حجز</span><b class="num">${d.requests}</b></div>
+        <div class="card stat"><span>نسبة التحويل</span><b class="num">${pct(d.requests, d.visitors)}%</b></div>
+      </div>
+      <div class="card chart">
+        <h3>الزوار كل يوم</h3>
+        <div class="bars">${bars}</div>
+        <div class="bars-x"><span>${showDate(first.d).slice(0, 5)}</span><span>${showDate(last.d).slice(0, 5)}</span></div>
+      </div>
+      <div class="card box funnel">
+        <h3>من الزيارة للطلب</h3>
+        ${[['زاروا الموقع', d.visitors], ['بلّشوا يعبّوا الفورم', d.form_start], ['بعثوا طلب حجز', d.request_sent], ['كبسوا واتساب', d.whatsapp]].map(([l, v]) =>
+          `<div class="hrow"><div class="l"><span>${l}</span><b>${v}${d.visitors && l !== 'زاروا الموقع' ? ` <small style="color:var(--muted);font-weight:400">(${pct(v, d.visitors)}%)</small>` : ''}</b></div><div class="hbar"><i style="width:${v / fMax * 100}%"></i></div></div>`).join('')}
+      </div>
+      <div class="card box">
+        <h3>من وين إجوا</h3>
+        ${d.sources.length ? d.sources.map(x => { const [ic, nm] = SRC[x.source] || ['🌐', x.source]; return `<div class="hrow"><div class="l"><span>${ic} ${esc(nm)}</span><b>${x.visitors} <small style="color:var(--muted);font-weight:400">(${pct(x.visitors, srcTotal)}%)</small></b></div><div class="hbar"><i style="width:${x.visitors / srcTotal * 100}%"></i></div></div>`; }).join('') : '<p class="help">لسا ما في زيارات.</p>'}
+      </div>
+      <div class="card box">
+        <h3>الأجهزة</h3>
+        ${d.devices.length ? d.devices.map(x => `<div class="hrow"><div class="l"><span>${DEV[x.device] || x.device}</span><b>${pct(x.visitors, devTotal)}%</b></div><div class="hbar"><i style="width:${x.visitors / devTotal * 100}%"></i></div></div>`).join('') : '<p class="help">لسا ما في زيارات.</p>'}
+      </div>
+      <div class="card tipbox">
+        <p><b>نصيحة:</b> استخدم هالروابط بدل الرابط العادي، عشان تعرف بالزبط كل زائر من وين إجا. واتساب ما بيبيّن حاله لحاله، فرابطه مهم.</p>
+        ${links.map(([l, u]) => `<div class="copyrow"><code>${esc(u)}</code><button type="button" class="btn" data-copy="${esc(u)}">نسخ</button></div><div class="help" style="margin:2px 2px 6px">${l}</div>`).join('')}
+      </div>
+      <p class="who">زياراتك إنت وشريكك على هالأجهزة ما بتنحسب.</p>`;
+  }
+
   /* ---------- FINANCE ---------- */
   const runningSum = prefix => expenses.filter(e => e.kind === 'running' && (!prefix || (e.spent_on || '').startsWith(prefix))).reduce((s, e) => s + n(e.amount), 0);
   function capital(){
@@ -1296,7 +1408,8 @@
     if (!name) name = (session.user.email || '').split('@')[0];
     $('hello').textContent = h < 12 ? `صباح الخير يا ${name} ☀️` : h < 18 ? `أهلاً ${name} 👋` : `مسا الخير يا ${name} 🌙`;
     go('home');
-    await Promise.all([loadBookings(), loadRequests(), loadMeta(), loadExpenses()]);
+    try { localStorage.setItem('ambere-no-track', '1'); } catch (e) {}
+    await Promise.all([loadBookings(), loadRequests(), loadMeta(), loadExpenses(), loadHomeVisits()]);
   }
   function showLogin(msg){ $('screenApp').hidden = true; $('screenLogin').hidden = false; $('loginErr').textContent = msg || ''; }
 
@@ -1315,7 +1428,7 @@
     $('btnSaveTop').addEventListener('click', save);
     $('btnDelete').addEventListener('click', removeBooking);
     $('btnBack').addEventListener('click', () => { resetForm(); go(backTo); });
-    $('btnRefresh').addEventListener('click', async () => { await Promise.all([loadBookings(), loadRequests(), loadMeta(), loadExpenses()]); toast('تحدّثت ✓'); });
+    $('btnRefresh').addEventListener('click', async () => { statsCache = {}; await Promise.all([loadBookings(), loadRequests(), loadMeta(), loadExpenses(), loadHomeVisits()]); toast('تحدّثت ✓'); });
     $('btnExport').addEventListener('click', exportCSV);
     $('btnLogout').addEventListener('click', async () => { await sb.auth.signOut(); bookings = []; requests = []; showLogin(); });
     $('q').addEventListener('input', renderList);
@@ -1326,6 +1439,12 @@
     $('dayPanel').addEventListener('click', e => {
       const nb = e.target.closest('[data-newday]'); if (nb) { const d = nb.dataset.newday; openNew(d < todayStr() ? 'past' : 'new', d); return; }
       const bl = e.target.closest('[data-block]'); if (bl) toggleBlock(bl.dataset.block);
+    });
+    $('statChips').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) loadStats(Number(b.dataset.f)); });
+    $('statsBody').addEventListener('click', async e => {
+      const b = e.target.closest('[data-copy]'); if (!b) return;
+      try { await navigator.clipboard.writeText(b.dataset.copy); toast('انسخ الرابط ✓'); }
+      catch (er) { prompt('انسخ الرابط:', b.dataset.copy); }
     });
     $('finChips').addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; finPeriod = b.dataset.f; setChip('finChips', finPeriod); renderFin(); });
     wireSeg('segExp', () => { finKind = getSeg('segExp'); renderFin(); });

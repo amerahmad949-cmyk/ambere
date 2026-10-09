@@ -790,6 +790,7 @@
       booth: r.booth, items: r.items, notes: r.notes
     });
     btn.disabled = false; $('sendTxt').textContent = 'ابعث طلب الحجز';
+    if (!error) track('request_sent');
     if (error) {
       const m = error.message || '';
       if (m.includes('AMB:') && m.includes('محجوز')) { setErr('date', m.split('AMB:')[1].trim()); $('ok-date').textContent = ''; $('date').focus(); }
@@ -819,6 +820,38 @@
     $('book').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
     $('done').focus({ preventScroll: true });
   }
+
+
+  /* ---------- anonymous visit stats (no cookies, no personal data) ---------- */
+  const track = (() => {
+    let vid = null;
+    try {
+      if (localStorage.getItem('ambere-no-track') === '1') return () => {};      // admin devices
+      vid = localStorage.getItem('ambere-vid');
+      if (!vid) { vid = (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 12)).toLowerCase(); localStorage.setItem('ambere-vid', vid); }
+    } catch (e) { vid = 'tmp-' + Math.random().toString(36).slice(2, 12); }
+    const ua = navigator.userAgent || '';
+    if (!sb || navigator.webdriver || /bot|crawl|spider|slurp|preview|facebookexternalhit|whatsapp\/|headless|lighthouse/i.test(ua)) return () => {};
+    const qs = new URLSearchParams(location.search);
+    let source = (qs.get('utm_source') || qs.get('src') || '').toLowerCase();
+    if (!source) {
+      let ref = ''; try { ref = document.referrer ? new URL(document.referrer).hostname : ''; } catch (e) {}
+      if (/Instagram/i.test(ua) || /instagram/.test(ref)) source = 'instagram';
+      else if (/FBAN|FBAV|FB_IAB/i.test(ua) || /facebook|fb\.com|m\.me/.test(ref)) source = 'facebook';
+      else if (/TikTok|musical_ly|Bytedance/i.test(ua) || /tiktok/.test(ref)) source = 'tiktok';
+      else if (/Snapchat/i.test(ua) || /snapchat/.test(ref)) source = 'snapchat';
+      else if (/whatsapp|wa\.me/.test(ref)) source = 'whatsapp';
+      else if (/google\./.test(ref)) source = 'google';
+      else if (ref && ref !== location.hostname) source = 'other';
+      else source = 'direct';
+    }
+    const device = /iPad|Tablet/i.test(ua) ? 'tablet' : /Mobi|Android|iPhone/i.test(ua) ? 'mobile' : 'desktop';
+    return ev => { try { sb.rpc('track_event', { p_event: ev, p_visitor: vid, p_source: source, p_device: device, p_path: location.pathname.slice(-100) }).then(() => {}, () => {}); } catch (e) {} };
+  })();
+  track('view');
+  let formStarted = false;
+  $('form').addEventListener('focusin', () => { if (!formStarted) { formStarted = true; track('form_start'); } });
+  document.addEventListener('click', e => { if (e.target.closest('a[href*="wa.me"]')) track('whatsapp_click'); });
 
   $('again').addEventListener('click', () => {
     $('form').reset(); setPick(cBooth, true); setPick(cGifts, false); $('ok-date').textContent = ''; dateState = { day: '', full: false, checked: false };
