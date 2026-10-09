@@ -136,14 +136,16 @@
   .price:hover figure img{transform:scale(1.04)}
   .price-body{padding:22px 22px 24px;display:flex;flex-direction:column;flex:1}
   .price-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:8px}
-  .price h3{font-size:24px;margin:0}
+  .price h3{font-size:clamp(21px,2.4vw,24px);margin:0;line-height:1.4}
   .amount{display:flex;align-items:baseline;gap:6px;white-space:nowrap;color:var(--espresso)}
   .amount b{font-family:var(--latin);font-weight:500;font-size:46px;line-height:1;direction:ltr}
   .amount span{font-size:14px;color:var(--ink-2)}
   .per{display:block;font-size:12.5px;color:var(--muted);text-align:left;margin-top:2px}
   .price p{margin:0 0 18px;color:var(--ink-2);font-size:15px}
   .price .btn{margin-top:auto;align-self:flex-start;min-height:46px;padding:0 22px}
-  .price-note{max-width:880px;margin:22px auto 0;text-align:center;color:var(--muted);font-size:14px}
+  .price-close{max-width:560px;margin:46px auto 0;text-align:center}
+  .price-close h3{font-size:clamp(24px,3.4vw,30px);margin:0 0 6px}
+  .price-close p{margin:0 0 14px;color:var(--ink-2)}
   @media (min-width:640px){ .prices{grid-template-columns:1fr 1fr} }
 
   /* gallery */
@@ -443,8 +445,8 @@
   <div class="container">
     <div class="sec-head center rv">
       <p class="eyebrow">الأسعار</p>
-      <h2 class="h2">أسعار التوزيعات</h2>
-      <p class="lead">السعر للحبة الوحدة، وكل حبة إلها كرت مخصص.</p>
+      <h2 class="h2">توزيعات بتشبه فرحتكم</h2>
+      <p class="lead">عطور وتفاصيل على ذوقكم، بتخلّي لكل فرحة ذكرى حلوة.</p>
     </div>
     <div class="prices">
       <article class="price rv">
@@ -453,11 +455,11 @@
              alt="عطر توزيعات على كرت أبيض بشريطة مكتوب عليه الاسم وتاريخ المناسبة"></figure>
         <div class="price-body">
           <div class="price-top">
-            <h3>توزيعات الكرت</h3>
+            <h3>توزيعات عطر 10 مل</h3>
             <div><span class="amount"><b>1</b><span>دينار</span></span><span class="per">للحبة</span></div>
           </div>
-          <p>عطر صغير على كرت مكتوب عليه الاسم وتاريخ المناسبة، مربوط بشريطة.</p>
-          <a class="btn btn-dark" href="#book" data-pick="gifts">اطلب هالنوع <span class="arr" aria-hidden="true">←</span></a>
+          <p>عطر مع كرت باسم العروسين وتاريخ المناسبة، بتفاصيل بسيطة ومرتبة.</p>
+          <a class="btn btn-dark" href="#book" data-pick="gifts">بدي أطلب توزيعات <span class="arr" aria-hidden="true">←</span></a>
         </div>
       </article>
       <article class="price rv d1">
@@ -466,15 +468,19 @@
              alt="قناني عطر توزيعات مربوط عليها تاغ معلّق مكتوب عليه أسماء العروسين وتاريخ العرس"></figure>
         <div class="price-body">
           <div class="price-top">
-            <h3>توزيعات القنينة مع التاغ</h3>
+            <h3>توزيعات عطر 30 مل</h3>
             <div><span class="amount"><b>2</b><span>دينار</span></span><span class="per">للحبة</span></div>
           </div>
-          <p>قنينة عطر مع تاغ معلّق مكتوب عليه أسماء العروسين وتاريخ المناسبة.</p>
-          <a class="btn btn-dark" href="#book" data-pick="gifts">اطلب هالنوع <span class="arr" aria-hidden="true">←</span></a>
+          <p>قنينة عطر مع تاغ مميّز عليه أسماء العروسين وتاريخ فرحتهم.</p>
+          <a class="btn btn-dark" href="#book" data-pick="gifts">بدي أطلب توزيعات <span class="arr" aria-hidden="true">←</span></a>
         </div>
       </article>
     </div>
-    <p class="price-note rv">لبوث التعطير والتبخير وأي تفاصيل ثانية، ابعتلنا طلب وبنحكي معك.</p>
+    <div class="price-close rv">
+      <h3>عندك مناسبة قريبة؟</h3>
+      <p>احكيلنا شو ببالك، ومنساعدك تختار التوزيعات اللي بتناسب فرحتك.</p>
+      <a class="link" href="#book">احجز مناسبتك</a>
+    </div>
   </div>
 </section>
 
