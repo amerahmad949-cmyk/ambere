@@ -1291,7 +1291,10 @@
     $('screenLogin').hidden = true; $('screenApp').hidden = false;
     $('whoami').textContent = session.user.email;
     const h = new Date().getHours();
-    $('hello').textContent = h < 12 ? 'صباح الخير ☀️' : h < 18 ? 'أهلاً 👋' : 'مسا الخير 🌙';
+    let name = '';
+    try { const { data: nm } = await sb.rpc('my_name'); name = (nm || '').trim(); } catch (e) {}
+    if (!name) name = (session.user.email || '').split('@')[0];
+    $('hello').textContent = h < 12 ? `صباح الخير يا ${name} ☀️` : h < 18 ? `أهلاً ${name} 👋` : `مسا الخير يا ${name} 🌙`;
     go('home');
     await Promise.all([loadBookings(), loadRequests(), loadMeta(), loadExpenses()]);
   }
