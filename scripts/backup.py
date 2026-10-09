@@ -8,9 +8,9 @@ Nothing is written to the repository (it is public).
 import csv, io, json, os, sys, urllib.request, urllib.error, uuid, zipfile
 from datetime import datetime, timezone, timedelta
 
-URL = os.environ.get("SUPABASE_URL", "").rstrip("/")
-KEY = os.environ.get("SUPABASE_SECRET_KEY", "")
-TG_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+URL = "".join(os.environ.get("SUPABASE_URL", "").split()).rstrip("/")
+KEY = "".join(os.environ.get("SUPABASE_SECRET_KEY", "").split())
+TG_TOKEN = "".join(os.environ.get("TELEGRAM_BOT_TOKEN", "").split())
 TG_CHATS = [c.strip() for c in os.environ.get("TELEGRAM_CHAT_ID", "").split(",") if c.strip()]
 
 missing = [n for n, v in [("SUPABASE_URL", URL), ("SUPABASE_SECRET_KEY", KEY),

@@ -16,23 +16,30 @@ permissions:
 
 jobs:
   keepalive:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Ping Supabase
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+          RAW_URL: ${{ secrets.SUPABASE_URL }}
+          RAW_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
         run: |
-          set -e
-          curl -fsS --retry 3 --retry-delay 10 -X POST "$SUPABASE_URL/rest/v1/rpc/ping" \
-            -H "apikey: $SUPABASE_PUBLISHABLE_KEY" -H "Content-Type: application/json" -d '{}'
-          echo
+          set -euo pipefail
+          # clean up accidental spaces / line breaks / trailing slash
+          URL="$(printf '%s' "$RAW_URL" | tr -d '[:space:]')"; URL="${URL%/}"
+          KEY="$(printf '%s' "$RAW_KEY" | tr -d '[:space:]')"
+          [ -n "$URL" ] || { echo "::error::Secret SUPABASE_URL is empty or missing (check the exact name)"; exit 1; }
+          [ -n "$KEY" ] || { echo "::error::Secret SUPABASE_PUBLISHABLE_KEY is empty or missing (check the exact name)"; exit 1; }
+          case "$URL" in https://*.supabase.co) ;; *) echo "::error::SUPABASE_URL must look like https://xxxx.supabase.co (got ${#URL} chars)"; exit 1;; esac
+          code=$(curl -sS -o resp.txt -w '%{http_code}' --retry 3 --retry-delay 10 -X POST "$URL/rest/v1/rpc/ping" \
+            -H "apikey: $KEY" -H "Content-Type: application/json" -d '{}')
+          echo "HTTP $code: $(cat resp.txt)"
+          [ "$code" = "200" ] || { echo "::error::Ping failed with HTTP $code"; exit 1; }
           echo "Supabase is awake ✅"
 
   backup:
     if: github.event.schedule == '0 6 * * 5' || (github.event_name == 'workflow_dispatch' && inputs.backup)
     needs: keepalive
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Export bookings and send to Telegram
