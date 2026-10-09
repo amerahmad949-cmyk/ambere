@@ -173,6 +173,9 @@
   .inp[aria-invalid="true"]{border-color:var(--err);background:#FFF8F6}
   .ferr{color:var(--err);font-size:13.5px;margin:6px 0 0;min-height:0}
   .ferr:empty{display:none}
+  .fok{color:#2F6B4F;font-size:13.5px;margin:6px 0 0;display:flex;align-items:center;gap:6px}
+  .fok:empty{display:none}
+  .fok.checking{color:var(--muted)}
   .row2{display:grid;grid-template-columns:1fr;gap:0 14px}
 
   .pick{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -503,8 +506,9 @@
           </div>
           <div class="field">
             <label for="date">تاريخ المناسبة</label>
-            <input class="inp" id="date" type="date" aria-describedby="e-date">
+            <input class="inp" id="date" type="date" aria-describedby="e-date ok-date">
             <p class="ferr" id="e-date"></p>
+            <p class="fok" id="ok-date" aria-live="polite"></p>
           </div>
         </div>
         <div class="field">
@@ -704,12 +708,31 @@
 
   $('date').min = todayStr();
 
+  /* ---------- date availability ---------- */
+  let dateState = { day: '', full: false, checked: false };
+  async function checkDate(){
+    const d = $('date').value; $('ok-date').textContent = ''; $('ok-date').className = 'fok';
+    dateState = { day: d, full: false, checked: false };
+    if (!d || d < todayStr() || !sb) return dateState;
+    $('ok-date').textContent = 'جاري التأكد من التاريخ…'; $('ok-date').className = 'fok checking';
+    try {
+      const { data, error } = await sb.rpc('day_is_full', { p: d });
+      if ($('date').value !== d) return dateState;          // user changed it meanwhile
+      if (error) { $('ok-date').textContent = ''; return dateState; }   // don't block if the check itself fails
+      dateState = { day: d, full: !!data, checked: true };
+      if (data) { $('ok-date').textContent = ''; setErr('date', 'هالتاريخ محجوز عنا. اختار تاريخ ثاني، أو تواصل معنا مباشرة.'); }
+      else { setErr('date', ''); $('ok-date').className = 'fok'; $('ok-date').textContent = '✓ التاريخ متاح'; }
+    } catch (e) { $('ok-date').textContent = ''; }
+    return dateState;
+  }
+
   function setErr(key, msg){
     const map = { name:'name', phone:'phone', date:'date' };
     $('e-' + key).textContent = msg;
     if (map[key]) $(map[key]).setAttribute('aria-invalid', msg ? 'true' : 'false');
   }
-  ['name','phone','date'].forEach(k => $(k).addEventListener('input', () => setErr(k, '')));
+  ['name','phone'].forEach(k => $(k).addEventListener('input', () => setErr(k, '')));
+  $('date').addEventListener('change', () => { setErr('date', ''); checkDate(); });
 
   let sb = null;
   try {
@@ -737,6 +760,7 @@
     if (!/^\+?\d{9,15}$/.test(r.phone)) errs.push(['phone', 'اكتب رقم واتساب صحيح، مثلاً 0791234567.']);
     if (!r.wedding_date) errs.push(['date', 'اختار تاريخ المناسبة.']);
     else if (r.wedding_date < todayStr()) errs.push(['date', 'التاريخ لازم يكون اليوم أو بعده.']);
+    else if (dateState.day === r.wedding_date && dateState.full) errs.push(['date', 'هالتاريخ محجوز عنا. اختار تاريخ ثاني، أو تواصل معنا مباشرة.']);
     if (!r.booth && !r.gifts) errs.push(['svc', 'اختار خدمة وحدة على الأقل.']);
     else if (r.gifts && !r.items.length) errs.push(['svc', 'اكتب العدد التقريبي لحجم واحد على الأقل.']);
     else if (r.items.some(i => i.qty > 10000)) errs.push(['svc', 'العدد كبير كثير، تواصل معنا مباشرة.']);
@@ -754,6 +778,10 @@
       return;
     }
     if ($('website').value) return showDone(r);           // bot trap: pretend success
+    if (sb && !(dateState.day === r.wedding_date && dateState.checked)) {
+      const st = await checkDate();
+      if (st.full) { $('date').focus(); return; }
+    }
     if (!sb) { $('msg').textContent = 'الحجز أونلاين مش متاح هلأ، تواصل معنا مباشرة.'; return; }
 
     const btn = $('send'); btn.disabled = true; $('sendTxt').textContent = 'جاري الإرسال…';
@@ -764,7 +792,8 @@
     btn.disabled = false; $('sendTxt').textContent = 'ابعث طلب الحجز';
     if (error) {
       const m = error.message || '';
-      if (m.includes('AMB:')) $('msg').textContent = m.split('AMB:')[1].trim();
+      if (m.includes('AMB:') && m.includes('محجوز')) { setErr('date', m.split('AMB:')[1].trim()); $('ok-date').textContent = ''; $('date').focus(); }
+      else if (m.includes('AMB:')) $('msg').textContent = m.split('AMB:')[1].trim();
       else if (/fetch|network/i.test(m)) $('msg').textContent = 'في مشكلة بالإنترنت، جرّب كمان مرة.';
       else $('msg').textContent = 'صار خطأ، جرّب كمان مرة أو تواصل معنا مباشرة.';
       return;
@@ -792,7 +821,7 @@
   }
 
   $('again').addEventListener('click', () => {
-    $('form').reset(); setPick(cBooth, true); setPick(cGifts, false);
+    $('form').reset(); setPick(cBooth, true); setPick(cGifts, false); $('ok-date').textContent = ''; dateState = { day: '', full: false, checked: false };
     $('done').hidden = true; $('form').hidden = false; $('wa').hidden = true; $('name').focus();
   });
 </script>

@@ -55,7 +55,7 @@
 
   /* ---------- tab bar ---------- */
   .tabbar{position:fixed;inset:auto 0 0 0;z-index:30;background:rgba(255,255,255,.98);border-top:1px solid var(--line);padding:6px 10px calc(6px + env(safe-area-inset-bottom))}
-  .tabbar-in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;height:var(--tabbar)}
+  .tabbar-in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;height:var(--tabbar)}
   .tab{border:0;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--muted);font-size:12px;font-weight:500;border-radius:var(--r-md);position:relative}
   .tab svg{width:22px;height:22px}
   .tab[aria-current="page"]{color:var(--ink)}
@@ -237,6 +237,41 @@
   .toast.show{transform:translate(-50%,0);visibility:visible;opacity:1}
   .toast.err{background:var(--loss)}
 
+  /* ---------- calendar ---------- */
+  .cal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+  .cal-head h2{font-family:var(--display);font-size:24px;margin:0;line-height:1.3}
+  .cal-nav{display:flex;gap:8px}
+  .cal{padding:12px 10px 14px}
+  .wk{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:11.5px;color:var(--muted);font-weight:500;margin-bottom:6px}
+  .days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+  .day{position:relative;aspect-ratio:1/1.08;border:1px solid transparent;border-radius:10px;background:none;padding:4px 0 0;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:14px;font-variant-numeric:tabular-nums;color:var(--ink)}
+  .day.out{visibility:hidden}
+  .day.past{color:var(--muted)}
+  .day.today{border-color:var(--gold)}
+  .day.isfull{background:var(--cream)}
+  .day.blocked{background:repeating-linear-gradient(135deg,#F1E9DE 0 5px,#FAF6EF 5px 10px);color:var(--muted)}
+  .day.sel{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .day .dots{display:flex;gap:2px;flex-wrap:wrap;justify-content:center;max-width:30px}
+  .day .dots i{width:6px;height:6px;border-radius:50%;background:var(--blue)}
+  .day .dots i.done{background:var(--gain)} .day .dots i.req{background:transparent;box-shadow:inset 0 0 0 1.5px var(--amber)}
+  .day.sel .dots i{box-shadow:0 0 0 1.5px var(--ink)}
+  .legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--muted);margin:12px 4px 0}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .legend i{width:8px;height:8px;border-radius:50%;display:inline-block}
+  .legend .lb{width:14px;height:10px;border-radius:3px;background:repeating-linear-gradient(135deg,#E6DACA 0 3px,#FAF6EF 3px 6px)}
+  .daypanel{margin-top:16px}
+  .daypanel h3{font-size:16px;font-weight:600;margin:0 0 4px}
+  .daypanel .sub{color:var(--muted);font-size:13px;margin:0 0 12px}
+  .day-acts{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+  .mini-req{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1px dashed #E2C99E;border-radius:var(--r-md);background:var(--amber-soft);margin-bottom:8px;font-size:14px;width:100%;text-align:right;color:var(--amber)}
+  .setting{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px}
+  .setting b{display:block;font-weight:500}
+  .setting small{display:block;color:var(--muted);font-size:12px}
+  .stepper{display:flex;align-items:center;border:1px solid var(--line-2);border-radius:999px;direction:ltr;flex:none}
+  .stepper button{width:38px;height:38px;border:0;background:none;font-size:20px;color:var(--ink-2);border-radius:50%}
+  .stepper span{min-width:28px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums}
+  .hint.conf{color:var(--amber);font-weight:500}
+
   @media (min-width:700px){
     .stats{grid-template-columns:repeat(3,1fr)}
     .page-title{font-size:32px}
@@ -328,6 +363,29 @@
     <p class="who">رابط صفحة الحجز للعملاء: <a id="publicLink" href="../" target="_blank" rel="noopener"></a></p>
   </div>
 
+  <!-- ---------- CALENDAR ---------- -->
+  <div class="shell" id="vCal" data-view hidden>
+    <div class="cal-head">
+      <h2 id="calTitle"></h2>
+      <div class="cal-nav">
+        <button class="icon-btn" type="button" id="calPrev" aria-label="الشهر السابق"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></button>
+        <button class="icon-btn" type="button" id="calToday" aria-label="هالشهر" style="width:auto;padding:0 12px;border-radius:999px;font-size:13px">اليوم</button>
+        <button class="icon-btn" type="button" id="calNext" aria-label="الشهر الجاي"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="m15 6-6 6 6 6"/></svg></button>
+      </div>
+    </div>
+    <div class="card cal">
+      <div class="wk"><span>سبت</span><span>أحد</span><span>إثنين</span><span>ثلاثاء</span><span>أربعاء</span><span>خميس</span><span>جمعة</span></div>
+      <div class="days" id="calDays"></div>
+      <div class="legend">
+        <span><i style="background:var(--blue)"></i>مؤكد</span>
+        <span><i style="background:var(--gain)"></i>منفّذ</span>
+        <span><i style="box-shadow:inset 0 0 0 1.5px var(--amber)"></i>طلب جديد</span>
+        <span><i class="lb"></i>مقفل</span>
+      </div>
+    </div>
+    <div class="daypanel" id="dayPanel"></div>
+  </div>
+
   <!-- ---------- MORE ---------- -->
   <div class="shell" id="vMore" data-view hidden>
     <div class="top"><h1 class="page-title" style="margin:0">المزيد</h1></div>
@@ -344,6 +402,11 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 5H5v14h5"/><path d="m15 8-4 4 4 4"/><path d="M11 12h10"/></svg>
         تسجيل خروج
       </button>
+    </div>
+    <div class="sec-h" style="margin-top:22px"><h2>الإعدادات</h2></div>
+    <div class="card setting">
+      <span><b>عدد الأعراس المسموح باليوم</b><small>لما يوصل اليوم لهالعدد، صفحة العملاء بتقول «محجوز»</small></span>
+      <span class="stepper"><button type="button" id="maxMinus" aria-label="أقل">−</button><span id="maxVal">1</span><button type="button" id="maxPlus" aria-label="أكثر">+</button></span>
     </div>
     <p class="who" id="whoami"></p>
   </div>
@@ -429,7 +492,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V20H4z"/><path d="M10 20v-5h4v5"/></svg>الرئيسية
       </button>
       <button class="tab" type="button" data-goto="list">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>الحجوزات
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r=".9"/><circle cx="4" cy="12" r=".9"/><circle cx="4" cy="18" r=".9"/></svg>الحجوزات
+      </button>
+      <button class="tab" type="button" data-goto="cal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>التقويم
       </button>
       <button class="tab" type="button" data-goto="req">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v10H8l-4 4z"/></svg>الطلبات<span class="dot" id="reqBadge" hidden>0</span>
@@ -467,6 +533,7 @@
   let filter = 'upcoming', reqFilter = 'new';
   let view = 'home', backTo = 'home';
   let formMode = 'new', editingId = null, fromRequestId = null, paidFull = false;
+  let maxPerDay = 1, blocked = new Map(), calMonth = null, calSel = null;
 
   const store = {
     get(k, d){ try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch(e){ return d; } },
@@ -505,7 +572,7 @@
   }
 
   /* ---------- navigation ---------- */
-  const VIEWS = { home:'vHome', list:'vList', req:'vReq', more:'vMore', form:'vForm' };
+  const VIEWS = { home:'vHome', list:'vList', cal:'vCal', req:'vReq', more:'vMore', form:'vForm' };
   function go(v){
     if (v !== 'form') backTo = v;
     view = v;
@@ -516,6 +583,7 @@
     if (v === 'home') renderHome();
     if (v === 'list') renderList();
     if (v === 'req') renderRequests();
+    if (v === 'cal') renderCal();
     window.scrollTo({ top: 0 });
   }
 
@@ -730,12 +798,19 @@
     recalc();
   }
   function dateHint(){
-    const v = $('fDate').value; if (!v) { $('dateHint').textContent = ''; return; }
+    const v = $('fDate').value, h = $('dateHint');
+    if (!v) { h.textContent = ''; h.className = 'hint'; return; }
     const d = daysUntil(v);
-    $('dateHint').textContent = whenTxt(d);
-    if (d < 0 && getSeg('segStatus') === 'confirmed' && formMode !== 'edit') {
-      $('dateHint').textContent += ' — التاريخ فات، رح ينحفظ «منفّذ»';
+    let txt = whenTxt(d), warn = false;
+    if (d < 0 && getSeg('segStatus') === 'confirmed' && formMode !== 'edit') txt += ' — التاريخ فات، رح ينحفظ «منفّذ»';
+    const others = bookings.filter(b => b.wedding_date === v && b.id !== editingId && b.status !== 'cancelled');
+    if (blocked.has(v)) { txt += ` — ⚠️ هاليوم مقفل${blocked.get(v) ? ' (' + blocked.get(v) + ')' : ''}`; warn = true; }
+    if (others.length) {
+      txt += ` — ⚠️ في ${others.length === 1 ? 'حجز ثاني' : others.length + ' حجوزات'} بهاليوم: ${others.map(b => b.client).join('، ')}`;
+      if (others.length >= maxPerDay) txt += ' (اليوم مليان)';
+      warn = true;
     }
+    h.textContent = txt; h.className = 'hint' + (warn ? ' conf' : '');
   }
   function recalc(){
     let cost = 0, value = 0;
@@ -775,7 +850,7 @@
   }
   function banner(txt){ $('formBanner').hidden = !txt; $('formBannerTxt').textContent = txt || ''; }
 
-  function openNew(mode){
+  function openNew(mode, date){
     resetForm(); formMode = mode;
     if (mode === 'past') {
       $('formTitle').textContent = 'إضافة حجز سابق';
@@ -785,8 +860,9 @@
     } else {
       $('formTitle').textContent = 'حجز جديد';
     }
+    if (date) $('fDate').value = date;
     go('form'); applyMode();
-    setTimeout(() => $('fDate').focus(), 50);
+    setTimeout(() => (date ? $('fClient') : $('fDate')).focus(), 50);
   }
 
   function openEdit(id){
@@ -895,6 +971,78 @@
     toast('انحذف الحجز'); resetForm(); go('list');
   }
 
+  /* ---------- CALENDAR ---------- */
+  const ds = (y, m, d) => `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  function dayInfo(day){
+    const bks = bookings.filter(b => b.wedding_date === day && b.status !== 'cancelled');
+    const reqs = requests.filter(r => r.wedding_date === day && r.status === 'new');
+    const active = bks.filter(b => b.status === 'confirmed' || b.status === 'done').length;
+    return { bks, reqs, full: blocked.has(day) || active >= maxPerDay };
+  }
+  function renderCal(){
+    if (!calMonth) { const t = new Date(); calMonth = new Date(t.getFullYear(), t.getMonth(), 1); }
+    const y = calMonth.getFullYear(), m = calMonth.getMonth(), today = todayStr();
+    $('calTitle').textContent = `${MONTHS[m]} ${y}`;
+    const first = new Date(y, m, 1), lead = (first.getDay() + 1) % 7, nDays = new Date(y, m + 1, 0).getDate();
+    let html = '';
+    for (let i = 0; i < lead; i++) html += '<span class="day out"></span>';
+    for (let d = 1; d <= nDays; d++) {
+      const key = ds(y, m, d), info = dayInfo(key);
+      const cls = ['day', key < today ? 'past' : '', key === today ? 'today' : '', blocked.has(key) ? 'blocked' : (info.full && info.bks.length ? 'isfull' : ''), key === calSel ? 'sel' : ''].filter(Boolean).join(' ');
+      const dots = info.bks.slice(0, 4).map(b => `<i class="${b.status === 'done' ? 'done' : ''}"></i>`).join('') + info.reqs.slice(0, 2).map(() => '<i class="req"></i>').join('');
+      const lbl = `${d} ${MONTHS[m]}${info.bks.length ? '، ' + info.bks.length + ' حجز' : ''}${blocked.has(key) ? '، مقفل' : ''}`;
+      html += `<button type="button" class="${cls}" data-day="${key}" aria-label="${lbl}"><span>${d}</span><span class="dots">${dots}</span></button>`;
+    }
+    $('calDays').innerHTML = html;
+    renderDayPanel();
+  }
+  function renderDayPanel(){
+    if (!calSel) { $('dayPanel').innerHTML = '<p class="sub" style="text-align:center;color:var(--muted)">اكبس على أي يوم لتشوف تفاصيله</p>'; return; }
+    const [y, m, d] = calSel.split('-').map(Number), info = dayInfo(calSel), isBlocked = blocked.has(calSel);
+    const dd = daysUntil(calSel), wd = new Date(y, m - 1, d).toLocaleDateString('ar', { weekday: 'long' });
+    const status = isBlocked ? `مقفل${blocked.get(calSel) ? ': ' + esc(blocked.get(calSel)) : ''}` : info.full ? 'اليوم مليان' : info.bks.length ? `في مكان لـ ${maxPerDay - info.bks.filter(b => b.status !== 'cancelled').length} حجز كمان` : 'فاضي';
+    $('dayPanel').innerHTML = `
+      <h3>${wd} ${d} ${MONTHS[m - 1]}</h3>
+      <p class="sub">${whenTxt(dd)} · ${status}</p>
+      ${info.reqs.map(r => `<button type="button" class="mini-req" data-goto="req"><span>طلب جديد: <b>${esc(r.name)}</b></span><span>عرض ←</span></button>`).join('')}
+      ${info.bks.length ? info.bks.map(bkItem).join('') : ''}
+      <div class="day-acts">
+        <button type="button" class="btn primary" data-newday="${calSel}">+ حجز بهاليوم</button>
+        <button type="button" class="btn" data-block="${calSel}">${isBlocked ? 'فتح اليوم' : 'قفل اليوم'}</button>
+      </div>`;
+  }
+  async function toggleBlock(day){
+    if (blocked.has(day)) {
+      const { error } = await sb.from('blocked_dates').delete().eq('day', day);
+      if (error) return toast(dbError(error), true);
+      blocked.delete(day); toast('انفتح اليوم ✓');
+    } else {
+      const reason = prompt('سبب القفل (اختياري)، مثلاً: إجازة', '');
+      if (reason === null) return;
+      const { error } = await sb.from('blocked_dates').insert({ day, reason: reason.trim().slice(0, 120) || null });
+      if (error) return toast(dbError(error), true);
+      blocked.set(day, reason.trim()); toast('انقفل اليوم، العملاء ما بيقدروا يحجزوه');
+    }
+    renderCal();
+  }
+  async function loadMeta(){
+    const [s, b] = await Promise.all([
+      sb.from('settings').select('*').eq('key', 'max_per_day'),
+      sb.from('blocked_dates').select('*')
+    ]);
+    if (!s.error && s.data && s.data[0]) maxPerDay = Math.max(1, parseInt(s.data[0].value, 10) || 1);
+    if (!b.error && b.data) blocked = new Map(b.data.map(x => [x.day, x.reason || '']));
+    $('maxVal').textContent = maxPerDay;
+    if (view === 'cal') renderCal();
+  }
+  async function setMaxPerDay(v){
+    v = Math.min(10, Math.max(1, v)); if (v === maxPerDay) return;
+    const { error } = await sb.from('settings').upsert({ key: 'max_per_day', value: v, updated_at: new Date().toISOString() });
+    if (error) return toast(dbError(error), true);
+    maxPerDay = v; $('maxVal').textContent = v;
+    toast(v === 1 ? 'صار مسموح عرس واحد باليوم' : `صار مسموح ${v} أعراس باليوم`);
+  }
+
   /* ---------- data ---------- */
   async function loadBookings(){
     const { data, error } = await sb.from('bookings').select('*').order('wedding_date', { ascending: false });
@@ -939,7 +1087,7 @@
     const h = new Date().getHours();
     $('hello').textContent = h < 12 ? 'صباح الخير ☀️' : h < 18 ? 'أهلاً 👋' : 'مسا الخير 🌙';
     go('home');
-    await Promise.all([loadBookings(), loadRequests()]);
+    await Promise.all([loadBookings(), loadRequests(), loadMeta()]);
   }
   function showLogin(msg){ $('screenApp').hidden = true; $('screenLogin').hidden = false; $('loginErr').textContent = msg || ''; }
 
@@ -958,10 +1106,20 @@
     $('btnSaveTop').addEventListener('click', save);
     $('btnDelete').addEventListener('click', removeBooking);
     $('btnBack').addEventListener('click', () => { resetForm(); go(backTo); });
-    $('btnRefresh').addEventListener('click', async () => { await Promise.all([loadBookings(), loadRequests()]); toast('تحدّثت ✓'); });
+    $('btnRefresh').addEventListener('click', async () => { await Promise.all([loadBookings(), loadRequests(), loadMeta()]); toast('تحدّثت ✓'); });
     $('btnExport').addEventListener('click', exportCSV);
     $('btnLogout').addEventListener('click', async () => { await sb.auth.signOut(); bookings = []; requests = []; showLogin(); });
     $('q').addEventListener('input', renderList);
+    $('calPrev').addEventListener('click', () => { calMonth = new Date(calMonth.getFullYear(), calMonth.getMonth() - 1, 1); renderCal(); });
+    $('calNext').addEventListener('click', () => { calMonth = new Date(calMonth.getFullYear(), calMonth.getMonth() + 1, 1); renderCal(); });
+    $('calToday').addEventListener('click', () => { const t = new Date(); calMonth = new Date(t.getFullYear(), t.getMonth(), 1); calSel = todayStr(); renderCal(); });
+    $('calDays').addEventListener('click', e => { const b = e.target.closest('[data-day]'); if (!b) return; calSel = b.dataset.day; renderCal(); });
+    $('dayPanel').addEventListener('click', e => {
+      const nb = e.target.closest('[data-newday]'); if (nb) { const d = nb.dataset.newday; openNew(d < todayStr() ? 'past' : 'new', d); return; }
+      const bl = e.target.closest('[data-block]'); if (bl) toggleBlock(bl.dataset.block);
+    });
+    $('maxMinus').addEventListener('click', () => setMaxPerDay(maxPerDay - 1));
+    $('maxPlus').addEventListener('click', () => setMaxPerDay(maxPerDay + 1));
     const pub = new URL('../', location.href).href;
     ['publicLink'].forEach(id => { $(id).href = pub; $(id).textContent = pub.replace(/^https?:\/\//, ''); });
     $('publicLink2').href = pub;
