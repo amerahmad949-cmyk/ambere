@@ -1,0 +1,44 @@
+name: Supabase keep-alive & weekly backup
+
+on:
+  schedule:
+    - cron: "17 5 * * *"   # every day 05:17 UTC (08:17 Jordan) — keep the database awake
+    - cron: "0 6 * * 5"    # every Friday 06:00 UTC (09:00 Jordan) — send backup to Telegram
+  workflow_dispatch:
+    inputs:
+      backup:
+        description: "Send a backup to Telegram now"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          set -e
+          curl -fsS --retry 3 --retry-delay 10 -X POST "$SUPABASE_URL/rest/v1/rpc/ping" \
+            -H "apikey: $SUPABASE_PUBLISHABLE_KEY" -H "Content-Type: application/json" -d '{}'
+          echo
+          echo "Supabase is awake ✅"
+
+  backup:
+    if: github.event.schedule == '0 6 * * 5' || (github.event_name == 'workflow_dispatch' && inputs.backup)
+    needs: keepalive
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Export bookings and send to Telegram
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python3 scripts/backup.py
