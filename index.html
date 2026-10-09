@@ -134,6 +134,8 @@
   .g.tall{grid-row:span 2}
   .g.tall{min-height:100%}
   .g.tall img{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto}
+  .g.wide{grid-column:1/-1}
+  .g.wide img{aspect-ratio:16/10;object-position:50% 55%}
   .g figcaption{position:absolute;inset:auto 0 0 0;padding:28px 14px 12px;color:var(--ivory);font-size:13px;line-height:1.5;background:linear-gradient(to top,rgba(30,22,16,.72),rgba(30,22,16,0));opacity:1;transition:opacity .5s var(--ease)}
   .g:hover img{transform:scale(1.04)}
   .gallery-note{margin:22px 0 0;text-align:center;color:var(--muted);font-size:14px}
@@ -258,6 +260,7 @@
   @media (min-width:640px){
     .row2{grid-template-columns:1fr 1fr}
     .gallery{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+    .g.wide{grid-column:auto} .g.wide img{aspect-ratio:4/5}
     .card{padding:34px 32px}
     .f-grid{grid-template-columns:2fr 1fr 1fr}
   }
@@ -280,6 +283,8 @@
     .svc.rev .svc-media .small{inset-inline-start:auto;inset-inline-end:-48px}
     .gallery{grid-template-columns:1.25fr 1fr 1fr;grid-auto-rows:auto;gap:18px}
     .g figcaption{opacity:0;font-size:14px;padding:40px 18px 16px}
+    .g.wide{grid-column:auto}
+    .g.wide img{aspect-ratio:4/5}
     .g:hover figcaption,.g:focus-visible figcaption{opacity:1}
     .steps{grid-template-columns:repeat(3,1fr);gap:40px}
     .steps::before{content:"";position:absolute;top:28px;inset-inline:16% 16%;height:1px;background:var(--line);z-index:0}
@@ -351,8 +356,8 @@
              sizes="(min-width: 900px) 46vw, 100vw" width="960" height="1280" fetchpriority="high"
              alt="بوث Ambere المضاء بمدخل القاعة، وعليه عطور وتوزيعات وشموع وورد">
       </picture>
-      <img class="inset" src="images/work/favors-linda-hand-480.webp" width="480" height="640" loading="lazy" decoding="async"
-           alt="عطر توزيعات بكرت مخصص بالاسم والتاريخ ومربوط بشريطة بيضا">
+      <img class="inset" src="images/work/favors-card-hand-480.webp" srcset="images/work/favors-card-hand-480.webp 480w, images/work/favors-card-hand-960.webp 960w, images/work/favors-card-hand-1440.webp 1440w" sizes="200px" width="480" height="640" loading="lazy" decoding="async"
+           alt="يد بقفاز دانتيل ماسكة عطر توزيعات على كرت مكتوب عليه الاسم وتاريخ المناسبة">
     </figure>
   </div>
 </section>
@@ -372,8 +377,8 @@
              srcset="images/work/station-hand-favor-480.webp 480w, images/work/station-hand-favor-960.webp 960w"
              sizes="(min-width: 900px) 44vw, 100vw" width="960" height="1280" loading="lazy" decoding="async"
              alt="يد بقفاز دانتيل بتقدّم عطر قدام بوث Ambere، وعلى البوث شموع وعطور ومبخرة">
-        <img class="small" src="images/work/station-tiered-favors-480.webp" width="480" height="640" loading="lazy" decoding="async"
-             alt="مدرّج توزيعات عطور بكروت أسماء العروسين جنب الشموع">
+        <img class="small" src="images/work/station-bottles-closeup-480.webp" srcset="images/work/station-bottles-closeup-480.webp 480w, images/work/station-bottles-closeup-960.webp 960w, images/work/station-bottles-closeup-1440.webp 1440w" sizes="(min-width: 900px) 200px, 40vw" width="480" height="640" loading="lazy" decoding="async"
+             alt="عطور البوث معروضة على ستاندات سودا جنب الشموع">
       </figure>
       <div class="svc-text rv d1">
         <p class="num latin">01</p>
@@ -389,12 +394,12 @@
 
     <article class="svc rev" id="favors">
       <figure class="svc-media rv">
-        <img class="big" src="images/work/favors-linda-hand-960.webp"
-             srcset="images/work/favors-linda-hand-480.webp 480w, images/work/favors-linda-hand-960.webp 960w"
-             sizes="(min-width: 900px) 44vw, 100vw" width="960" height="1280" loading="lazy" decoding="async"
-             alt="عطر صغير على كرت أبيض مكتوب عليه الاسم وتاريخ المناسبة، وخلفه سلة مليانة توزيعات">
-        <img class="small" src="images/work/station-candles-tags-480.webp" width="480" height="640" loading="lazy" decoding="async"
-             alt="عطور توزيعات مربوط عليها كروت بخط يدوي بأسماء العروسين وتاريخ العرس">
+        <img class="big" src="images/work/favors-card-hand-960.webp"
+             srcset="images/work/favors-card-hand-480.webp 480w, images/work/favors-card-hand-960.webp 960w, images/work/favors-card-hand-1440.webp 1440w"
+             sizes="(min-width: 900px) 480px, 100vw" width="960" height="1280" loading="lazy" decoding="async"
+             alt="عطر توزيعات على كرت أبيض بشريطة، مكتوب عليه الاسم وتاريخ المناسبة، وخلفه سلة توزيعات">
+        <img class="small" src="images/work/favors-basket-garden-480.webp" srcset="images/work/favors-basket-garden-480.webp 480w, images/work/favors-basket-garden-960.webp 960w, images/work/favors-basket-garden-1440.webp 1440w" sizes="(min-width: 900px) 200px, 40vw" width="480" height="640" loading="lazy" decoding="async"
+             alt="سلة قش مليانة توزيعات عطور على كروت بيضا مكتوب عليها الاسم">
       </figure>
       <div class="svc-text rv d1">
         <p class="num latin">02</p>
@@ -422,33 +427,51 @@
     <div class="gallery" id="gallery">
       <button type="button" class="g tall rv" data-src="images/work/station-tiered-favors-960.webp">
         <img src="images/work/station-tiered-favors-960.webp" srcset="images/work/station-tiered-favors-480.webp 480w, images/work/station-tiered-favors-960.webp 960w"
-             sizes="(min-width: 900px) 38vw, 50vw" width="960" height="1280" loading="lazy" decoding="async"
+             sizes="(min-width: 900px) 38vw, 100vw" width="960" height="1280" loading="lazy" decoding="async"
              alt="مدرّج توزيعات عطور بكروت أسماء العروسين، وخلفه شموع وعطور على البوث">
         <figcaption>توزيعات مرتّبة على البوث بكروت أسماء العروسين</figcaption>
       </button>
+      <button type="button" class="g rv d1" data-src="images/work/station-bottles-closeup-1440.webp">
+        <img src="images/work/station-bottles-closeup-480.webp" srcset="images/work/station-bottles-closeup-480.webp 480w, images/work/station-bottles-closeup-960.webp 960w, images/work/station-bottles-closeup-1440.webp 1440w"
+             sizes="(min-width: 900px) 28vw, 50vw" width="960" height="1280" loading="lazy" decoding="async"
+             alt="عطور معروضة على ستاندات سودا على البوث">
+        <figcaption>عطور البوث على الستاندات</figcaption>
+      </button>
+      <button type="button" class="g rv d2" data-src="images/work/station-tray-counter-1440.webp">
+        <img src="images/work/station-tray-counter-480.webp" srcset="images/work/station-tray-counter-480.webp 480w, images/work/station-tray-counter-960.webp 960w, images/work/station-tray-counter-1440.webp 1440w"
+             sizes="(min-width: 900px) 28vw, 50vw" width="960" height="1280" loading="lazy" decoding="async"
+             alt="ضيفة ماسكة صينية توزيعات عطور جنب بوث Ambere المضاء بالقاعة">
+        <figcaption>التوزيعات جاهزة للمعازيم على مدخل القاعة</figcaption>
+      </button>
+      <button type="button" class="g rv" data-src="images/work/favors-basket-garden-1440.webp">
+        <img src="images/work/favors-basket-garden-480.webp" srcset="images/work/favors-basket-garden-480.webp 480w, images/work/favors-basket-garden-960.webp 960w, images/work/favors-basket-garden-1440.webp 1440w"
+             sizes="(min-width: 900px) 28vw, 50vw" width="960" height="1280" loading="lazy" decoding="async"
+             alt="سلة قش مليانة توزيعات عطور على كروت بيضا بشرايط">
+        <figcaption>توزيعات مخصصة بالاسم</figcaption>
+      </button>
       <button type="button" class="g rv d1" data-src="images/work/station-candles-tags-960.webp">
         <img src="images/work/station-candles-tags-480.webp" srcset="images/work/station-candles-tags-480.webp 480w, images/work/station-candles-tags-960.webp 960w"
-             sizes="(min-width: 900px) 28vw, 50vw" width="480" height="640" loading="lazy" decoding="async"
+             sizes="(min-width: 900px) 28vw, 50vw" width="960" height="1280" loading="lazy" decoding="async"
              alt="شموع مضاءة ومبخرة سوداء جنب مدرّج عطور التوزيعات">
         <figcaption>شموع وبخور وتفاصيل الكروت</figcaption>
       </button>
-      <button type="button" class="g rv d2" data-src="images/work/favors-linda-basket-960.webp">
-        <img src="images/work/favors-linda-basket-480.webp" srcset="images/work/favors-linda-basket-480.webp 480w, images/work/favors-linda-basket-960.webp 960w"
-             sizes="(min-width: 900px) 28vw, 50vw" width="480" height="640" loading="lazy" decoding="async"
-             alt="سلة قش مليانة توزيعات عطور على كروت بيضا بشرايط، ويد بتمسك وحدة منها">
-        <figcaption>توزيعات مخصصة بالاسم والتاريخ</figcaption>
+      <button type="button" class="g rv d2" data-src="images/work/favors-card-hand-1440.webp">
+        <img src="images/work/favors-card-hand-480.webp" srcset="images/work/favors-card-hand-480.webp 480w, images/work/favors-card-hand-960.webp 960w, images/work/favors-card-hand-1440.webp 1440w"
+             sizes="(min-width: 900px) 28vw, 50vw" width="960" height="1280" loading="lazy" decoding="async"
+             alt="يد بقفاز دانتيل ماسكة عطر توزيعات على كرت بالاسم والتاريخ">
+        <figcaption>كرت مخصص بالاسم وتاريخ المناسبة</figcaption>
       </button>
-      <button type="button" class="g rv d1" data-src="images/work/station-hand-favor-960.webp">
+      <button type="button" class="g rv" data-src="images/work/station-hand-favor-960.webp">
         <img src="images/work/station-hand-favor-480.webp" srcset="images/work/station-hand-favor-480.webp 480w, images/work/station-hand-favor-960.webp 960w"
-             sizes="(min-width: 900px) 28vw, 50vw" width="480" height="640" loading="lazy" decoding="async"
+             sizes="(min-width: 900px) 28vw, 50vw" width="960" height="1280" loading="lazy" decoding="async"
              alt="تقديم عطر توزيعات للمعازيم قدام البوث">
         <figcaption>تقديم التوزيعات للمعازيم</figcaption>
       </button>
-      <button type="button" class="g rv d2" data-src="images/work/station-ambere-counter-960.webp">
-        <img src="images/work/station-ambere-counter-480.webp" srcset="images/work/station-ambere-counter-480.webp 480w, images/work/station-ambere-counter-960.webp 960w"
-             sizes="(min-width: 900px) 28vw, 50vw" width="480" height="640" loading="lazy" decoding="async"
-             alt="بوث Ambere المضاء جاهز لاستقبال المعازيم">
-        <figcaption>بوث Ambere جاهز لاستقبال المعازيم</figcaption>
+      <button type="button" class="g wide rv d1" data-src="images/work/station-bottles-wide-1440.webp">
+        <img src="images/work/station-bottles-wide-960.webp" srcset="images/work/station-bottles-wide-480.webp 480w, images/work/station-bottles-wide-960.webp 960w, images/work/station-bottles-wide-1440.webp 1440w"
+             sizes="(min-width: 900px) 38vw, 100vw" width="960" height="1280" loading="lazy" decoding="async"
+             alt="تشكيلة عطور البوث على ستاندات بين النباتات والشموع">
+        <figcaption>تفاصيل البوث</figcaption>
       </button>
     </div>
     <p class="gallery-note">اكبس على أي صورة لتشوفها أكبر</p>
@@ -487,8 +510,8 @@
       <p class="eyebrow">احجز موعدك</p>
       <h2 class="h2">احكيلنا عن مناسبتك</h2>
       <p class="lead">عبّي المعلومات وبنرجعلك على واتساب بأقرب وقت لنتفق على التفاصيل.</p>
-      <img src="images/work/station-candles-tags-960.webp" srcset="images/work/station-candles-tags-480.webp 480w, images/work/station-candles-tags-960.webp 960w"
-           sizes="380px" width="960" height="1280" loading="lazy" decoding="async" alt="">
+      <img src="images/work/station-tray-counter-960.webp" srcset="images/work/station-tray-counter-480.webp 480w, images/work/station-tray-counter-960.webp 960w, images/work/station-tray-counter-1440.webp 1440w"
+           sizes="380px" width="960" height="1280" loading="lazy" decoding="async" alt="" style="object-position:50% 60%">
     </aside>
 
     <div class="card rv d1">
@@ -524,7 +547,7 @@
               <span class="t"><span class="box"></span><span><b>بوث التعطير والتبخير</b><small>على مدخل القاعة</small></span></span>
             </button>
             <button type="button" class="pk" id="cGifts" aria-pressed="false">
-              <img src="images/work/favors-linda-hand-480.webp" alt="" width="480" height="640" loading="lazy" decoding="async" style="object-position:50% 60%">
+              <img src="images/work/favors-card-hand-480.webp" alt="" width="480" height="640" loading="lazy" decoding="async" style="object-position:50% 40%">
               <span class="t"><span class="box"></span><span><b>توزيعات العطور</b><small>5 · 10 · 30 مل</small></span></span>
             </button>
           </div>
