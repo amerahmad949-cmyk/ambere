@@ -286,6 +286,16 @@
   .exp .t b{display:block;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .exp .t small{display:block;color:var(--muted);font-size:12.5px}
   .exp .a{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .split{padding:4px 16px;margin-bottom:12px}
+  .split h3{font-size:14px;font-weight:600;color:var(--ink-2);margin:12px 0 2px}
+  .split .who-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
+  .split .who-row:last-of-type{border-bottom:0}
+  .split .av{width:34px;height:34px;border-radius:50%;background:var(--cream);display:grid;place-items:center;font-weight:600;flex:none}
+  .split .nm{display:flex;align-items:center;gap:10px;font-size:15px}
+  .split .nm small{display:block;color:var(--muted);font-size:12px}
+  .split b{font-size:18px;font-weight:600}
+  .split .neg{color:var(--loss)}
+  .split .foot{font-size:12px;color:var(--muted);padding:0 0 12px}
   .tot-line{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin:4px 4px 10px}
   /* sheet dialog */
   .sheet{border:0;padding:0;margin:auto auto 0;width:100%;max-width:560px;max-height:92vh;border-radius:22px 22px 0 0;background:var(--bg);color:var(--ink)}
@@ -458,6 +468,7 @@
       <button class="chip" type="button" data-f="all" aria-pressed="false">من البداية</button>
     </div>
     <div class="card fin-sum" id="finSum"></div>
+    <div class="card split" id="finSplit"></div>
     <div class="card cap" id="finCap" style="cursor:default"></div>
     <div class="seg gap" id="segExp">
       <button type="button" data-v="running" aria-pressed="true">مصاريف تشغيلية</button>
@@ -670,6 +681,7 @@
   const SIZES = [{ key:'5', name:'5 مل', color:'var(--s5)' }, { key:'10', name:'10 مل', color:'var(--s10)' }, { key:'30', name:'30 مل', color:'var(--s30)' }];
   const SIZE_NAME = { '5':'5 مل', '10':'10 مل', '30':'30 مل' };
   const SUGGEST_COST = { '5': 0.24, '10': 0.34, '30': 0.83 };   // تكلفة الحبة المقترحة
+  const PARTNERS = [{ name: 'أحمد', share: 0.5 }, { name: 'راما', share: 0.5 }];   // تقسيم الربح 50/50
   const USHER_FEE = 20;                                          // أجرة الـ usher لكل حجز
   let editUsherFee = USHER_FEE;
   const $ = id => document.getElementById(id);
@@ -782,7 +794,8 @@
     if (late) al += `<button type="button" class="alert" data-goto="list" data-filter="late"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>${late} ${late === 1 ? 'عرس صار ولسا' : 'أعراس صاروا ولسا'} «مؤكد»، سكّرهم</button>`;
     $('alerts').innerHTML = al;
     const mE = runningSum(month), yE = runningSum(year);
-    $('heroStat').innerHTML = `<span>صافي ربح ${MONTHS[now.getMonth()]}</span><b class="num">${fmt(mP - mE)} د.أ</b><small>${mN} ${mN === 1 ? 'حجز' : 'حجوزات'}${mE ? ` · مصاريف ${fmt(mE)}` : ''}</small>`;
+    const mNet = mP - mE;
+    $('heroStat').innerHTML = `<span>صافي ربح ${MONTHS[now.getMonth()]}</span><b class="num">${fmt(mNet)} د.أ</b><small>${mN} ${mN === 1 ? 'حجز' : 'حجوزات'}${mE ? ` · مصاريف ${fmt(mE)}` : ''}</small><small style="display:block;margin-top:6px">${PARTNERS.map(p => `${esc(p.name)}: <b class="num" style="color:var(--bg)">${fmt(mNet * p.share)}</b>`).join(' · ')}</small>`;
     $('stats').innerHTML = `
       <div class="card stat"><span>صافي ${year}</span><b class="num">${fmt(yP - yE)}</b></div>
       <div class="card stat"><span>أعراس جاية</span><b class="num">${up}</b></div>
@@ -1254,6 +1267,10 @@
       ${ush ? `<div class="fin-row"><span>أجور الـ usher</span><b class="num neg">− ${fmt(ush)}</b></div>` : ''}
       <div class="fin-row"><span>مصاريف تشغيلية</span><b class="num neg">− ${fmt(run)}</b></div>
       <div class="fin-row total"><span>صافي الربح</span><b class="num ${net < 0 ? 'neg' : 'pos'}">${fmt(net)} د.أ</b></div>`;
+    $('finSplit').innerHTML = `<h3>حصة كل شريك · ${label}</h3>` + PARTNERS.map(p => `
+      <div class="who-row"><span class="nm"><span class="av">${esc(p.name.charAt(0))}</span><span>${esc(p.name)}<small>${Math.round(p.share * 100)}%</small></span></span>
+      <b class="num ${net < 0 ? 'neg' : ''}">${fmt(net * p.share)} د.أ</b></div>`).join('') +
+      `<div class="foot">من صافي الربح بعد التوزيعات والـ usher والمصاريف التشغيلية.</div>`;
     $('finCap').innerHTML = capitalHTML(false);
     const list = expenses.filter(e => e.kind === finKind && (finKind === 'startup' || !prefix || (e.spent_on || '').startsWith(prefix)))
       .sort((a, b) => (b.spent_on || '').localeCompare(a.spent_on || '') || b.id - a.id);

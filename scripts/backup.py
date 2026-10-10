@@ -121,6 +121,7 @@ caption = (f"🗂 <b>نسخة احتياطية — Ambere</b>\n{stamp}\n\n"
            f"المصاريف: {len(expenses)}\n"
            f"صافي الربح (بعد المصاريف التشغيلية): {net_profit:,.2f} د.أ\n"
            f"رأس المال: {startup_total:,.2f} — رجع منه {max(0.0, min(net_profit, startup_total)):,.2f}\n"
+           f"حصة كل شريك (50%): {net_profit / 2:,.2f} د.أ\n"
            f"متبقي على العملاء: {total_owed:,.2f} د.أ")
 
 
