@@ -1180,7 +1180,28 @@
         <p><b>نصيحة:</b> استخدم هالروابط بدل الرابط العادي، عشان تعرف بالزبط كل زائر من وين إجا. واتساب ما بيبيّن حاله لحاله، فرابطه مهم.</p>
         ${links.map(([l, u]) => `<div class="copyrow"><code>${esc(u)}</code><button type="button" class="btn" data-copy="${esc(u)}">نسخ</button></div><div class="help" style="margin:2px 2px 6px">${l}</div>`).join('')}
       </div>
-      <p class="who">زياراتك إنت وشريكك على هالأجهزة ما بتنحسب.</p>`;
+      <p class="who">زياراتك إنت وشريكك على هالأجهزة ما بتنحسب.</p>
+      <div class="card box" style="margin-top:18px">
+        <h3>تصفير الإحصائيات</h3>
+        <p class="help" style="margin:0 0 12px">بيحذف كل الزيارات وبيبلّش العدّ من الصفر. الحجوزات وطلبات العملاء ما بتنحذف.${d.reset_at ? `<br>آخر تصفير: <b>${new Date(d.reset_at).toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</b>` : ''}</p>
+        <button type="button" class="danger" data-reset style="margin:0">تصفير إحصائيات الزيارات</button>
+      </div>`;
+  }
+
+  async function resetStats(btn){
+    const word = prompt('هالخطوة بتحذف كل إحصائيات الزيارات ومش ممكن ترجع.\nالحجوزات والطلبات ما بتنلمس.\n\nللتأكيد اكتب: تصفير');
+    if (word === null) return;
+    if (word.trim() !== 'تصفير') { toast('ما انصفّر إشي — الكلمة مش مطابقة', true); return; }
+    btn.disabled = true; btn.textContent = 'جاري التصفير…';
+    const { data, error } = await sb.rpc('reset_site_stats');
+    btn.disabled = false; btn.textContent = 'تصفير إحصائيات الزيارات';
+    if (error) {
+      toast(/function|does not exist|schema cache/i.test(error.message || '') ? 'لازم تشغّل ملف supabase-v8-reset-stats.sql أول.' : dbError(error), true);
+      return;
+    }
+    statsCache = {};
+    toast(`انصفّرت الإحصائيات ✓ (انحذف ${data || 0} حدث)`);
+    await Promise.all([loadStats(statDays), loadHomeVisits()]);
   }
 
   /* ---------- FINANCE ---------- */
@@ -1442,6 +1463,7 @@
     });
     $('statChips').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) loadStats(Number(b.dataset.f)); });
     $('statsBody').addEventListener('click', async e => {
+      const rs = e.target.closest('[data-reset]'); if (rs) { resetStats(rs); return; }
       const b = e.target.closest('[data-copy]'); if (!b) return;
       try { await navigator.clipboard.writeText(b.dataset.copy); toast('انسخ الرابط ✓'); }
       catch (er) { prompt('انسخ الرابط:', b.dataset.copy); }
