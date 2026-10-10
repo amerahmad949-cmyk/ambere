@@ -53,9 +53,11 @@ def calc(b):
     off = b.get("status") == "cancelled"
     cost = sum(num(i.get("qty")) * (num(i.get("cost")) + num(i.get("card"))) for i in items)
     charged, paid = num(b.get("charged")), num(b.get("paid"))
+    usher = num(b.get("usher_fee")) if b.get("usher") else 0.0
     return {
         "cost": 0 if off else cost,
-        "profit": 0 if off else charged - cost,
+        "usher": 0 if off else usher,
+        "profit": 0 if off else charged - cost - usher,
         "remaining": 0 if off else max(0.0, charged - paid),
         "q": {s: sum(num(i.get("qty")) for i in items if str(i.get("size")) == s) for s in ("5", "10", "30")},
     }
@@ -80,9 +82,9 @@ for b in bookings:
     total_owed += c["remaining"]
     b_rows.append([
         b.get("id"), b.get("wedding_date"), b.get("client"), b.get("phone") or "", b.get("venue") or "",
-        STATUS.get(b.get("status"), b.get("status")), "نعم" if b.get("booth") else "لا",
+        STATUS.get(b.get("status"), b.get("status")), "نعم" if b.get("booth") else "لا", "نعم" if b.get("usher") else "لا",
         int(c["q"]["5"]), int(c["q"]["10"]), int(c["q"]["30"]),
-        f'{c["cost"]:.2f}', f'{num(b.get("charged")):.2f}', f'{c["profit"]:.2f}',
+        f'{c["cost"]:.2f}', f'{c["usher"]:.2f}', f'{num(b.get("charged")):.2f}', f'{c["profit"]:.2f}',
         f'{num(b.get("paid")):.2f}', f'{c["remaining"]:.2f}', b.get("notes") or ""])
 
 r_rows = []
@@ -103,8 +105,8 @@ stamp = datetime.now(jo).strftime("%Y-%m-%d")
 zbuf = io.BytesIO()
 with zipfile.ZipFile(zbuf, "w", zipfile.ZIP_DEFLATED) as z:
     z.writestr(f"ambere-bookings-{stamp}.csv", csv_bytes(
-        ["رقم", "التاريخ", "العميل", "الهاتف", "القاعة", "الحالة", "بوث", "حبات 5مل", "حبات 10مل", "حبات 30مل",
-         "التكلفة", "المبلغ", "الربح", "المدفوع", "المتبقي", "ملاحظات"], b_rows))
+        ["رقم", "التاريخ", "العميل", "الهاتف", "القاعة", "الحالة", "بوث", "usher", "حبات 5مل", "حبات 10مل", "حبات 30مل",
+         "التكلفة", "أجرة usher", "المبلغ", "الربح", "المدفوع", "المتبقي", "ملاحظات"], b_rows))
     z.writestr(f"ambere-requests-{stamp}.csv", csv_bytes(
         ["رقم", "وصل", "الاسم", "الهاتف", "تاريخ العرس", "المكان", "بوث", "التوزيعات", "الحالة", "ملاحظات"], r_rows))
     z.writestr(f"ambere-expenses-{stamp}.csv", csv_bytes(

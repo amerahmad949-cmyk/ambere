@@ -582,10 +582,16 @@
           <button type="button" data-v="cancelled" aria-pressed="false">ملغي</button>
         </div>
         <label>بوث تعطير وتبخير؟</label>
-        <div class="seg" id="segBooth">
+        <div class="seg gap" id="segBooth">
           <button type="button" data-v="yes" aria-pressed="true">نعم</button>
           <button type="button" data-v="no" aria-pressed="false">لا</button>
         </div>
+        <label>في usher؟</label>
+        <div class="seg" id="segUsher">
+          <button type="button" data-v="no" aria-pressed="true">لا</button>
+          <button type="button" data-v="yes" aria-pressed="false">نعم</button>
+        </div>
+        <p class="help" id="usherHelp" hidden></p>
       </section>
 
       <section class="card fs">
@@ -663,6 +669,9 @@
   const MSHORT = ['ك٢','شباط','آذار','نيسان','أيار','حزيران','تموز','آب','أيلول','ت١','ت٢','ك١'];
   const SIZES = [{ key:'5', name:'5 مل', color:'var(--s5)' }, { key:'10', name:'10 مل', color:'var(--s10)' }, { key:'30', name:'30 مل', color:'var(--s30)' }];
   const SIZE_NAME = { '5':'5 مل', '10':'10 مل', '30':'30 مل' };
+  const SUGGEST_COST = { '5': 0.24, '10': 0.34, '30': 0.83 };   // تكلفة الحبة المقترحة
+  const USHER_FEE = 20;                                          // أجرة الـ usher لكل حجز
+  let editUsherFee = USHER_FEE;
   const $ = id => document.getElementById(id);
 
   let sb = null, bookings = [], requests = [];
@@ -704,7 +713,9 @@
     else if (b.booth && pieces) service = 'بوث + توزيعات';
     else if (b.booth) service = 'بوث فقط';
     else if (pieces) service = 'توزيعات فقط';
-    return { cost: off ? 0 : cost, pieces, profit: off ? 0 : charged - cost, remaining: off ? 0 : Math.max(0, charged - paid), service, charged, paid };
+    const usher = b.usher ? n(b.usher_fee) : 0;
+    if (!off && b.usher) service += ' · usher';
+    return { cost: off ? 0 : cost, usher: off ? 0 : usher, pieces, profit: off ? 0 : charged - cost - usher, remaining: off ? 0 : Math.max(0, charged - paid), service, charged, paid };
   }
 
   /* ---------- navigation ---------- */
@@ -892,7 +903,7 @@
           <div class="grid">
             <div><label>العدد</label><input class="inp" inputmode="numeric" dir="ltr" data-k="${s.key}" data-f="qty" placeholder="0"></div>
             <div class="piece-only"><label>سعر بيع الحبة</label><input class="inp" inputmode="decimal" dir="ltr" data-k="${s.key}" data-f="price" placeholder="1.00"></div>
-            <div><label>تكلفة الحبة</label><input class="inp" inputmode="decimal" dir="ltr" data-k="${s.key}" data-f="cost" placeholder="0.33"><div class="hint"></div></div>
+            <div><label>تكلفة الحبة <small style="color:var(--muted);font-weight:400">(مقترح ${Math.round(SUGGEST_COST[s.key] * 100)} قرش)</small></label><input class="inp" inputmode="decimal" dir="ltr" data-k="${s.key}" data-f="cost" placeholder="${SUGGEST_COST[s.key]}"><div class="hint"></div></div>
             <div><label>تكلفة الكرت</label><input class="inp" inputmode="decimal" dir="ltr" data-k="${s.key}" data-f="card" placeholder="0.08"><div class="hint"></div></div>
           </div>
           <div class="calc"><span>التكلفة الكلية (شامل الكرت)</span><b id="tot${s.key}" class="num">0 د.أ</b></div>
@@ -911,8 +922,9 @@
   }
   const field = (k, f) => document.querySelector(`#sizes input[data-k="${k}"][data-f="${f}"]`);
   function fillDefaults(k){
+    const c = field(k, 'cost'); if (c.value === '' && SUGGEST_COST[k] !== undefined) c.value = SUGGEST_COST[k];
     const d = defaults[k]; if (!d) return;
-    ['price','cost','card'].forEach(f => { const el = field(k, f); if (el.value === '' && d[f] !== undefined && d[f] !== null && d[f] !== '') el.value = d[f]; });
+    ['price','card'].forEach(f => { const el = field(k, f); if (el.value === '' && d[f] !== undefined && d[f] !== null && d[f] !== '') el.value = d[f]; });
   }
   function unitHint(k, f){
     const el = field(k, f), box = el.parentElement.querySelector('.hint');
@@ -965,6 +977,10 @@
       $('sum' + s.key).textContent = q ? `${fmt(q)} حبة · تكلفة ${fmt(t)}` : 'اكبس لإضافة';
       ['cost','card'].forEach(f => unitHint(s.key, f));
     });
+    const uf = getSeg('segUsher') === 'yes' ? editUsherFee : 0;
+    $('usherHelp').hidden = !uf;
+    $('usherHelp').textContent = uf ? `بيتخصم ${fmt(uf)} د.أ أجرة الـ usher من ربح هالحجز.` : '';
+    cost += uf;
     if (isPiece()) {
       const total = value + (getSeg('segBooth') === 'yes' ? n($('fBoothPrice').value) : 0);
       $('fCharged').value = total ? String(Math.round(total * 100) / 100) : '';
@@ -985,7 +1001,7 @@
   function resetForm(){
     editingId = null; fromRequestId = null;
     $('form').reset();
-    setSeg('segStatus','confirmed'); setSeg('segBooth','yes'); setSeg('segMode', store.get('ambereMode','total'));
+    setSeg('segStatus','confirmed'); setSeg('segBooth','yes'); setSeg('segUsher','no'); editUsherFee = USHER_FEE; setSeg('segMode', store.get('ambereMode','total'));
     SIZES.forEach(s => toggleSize(s.key, false));
     $('btnDelete').hidden = true; $('formBanner').hidden = true;
     $('fDate').removeAttribute('max'); $('fDate').removeAttribute('min');
@@ -1016,6 +1032,7 @@
     $('fDate').value = b.wedding_date; $('fClient').value = b.client || '';
     $('fPhone').value = b.phone || ''; $('fVenue').value = b.venue || '';
     setSeg('segStatus', b.status); setSeg('segBooth', b.booth ? 'yes' : 'no'); setSeg('segMode', b.pricing_mode || 'total');
+    setSeg('segUsher', b.usher ? 'yes' : 'no'); editUsherFee = b.usher && n(b.usher_fee) ? n(b.usher_fee) : USHER_FEE;
     $('fBoothPrice').value = b.booth_price ?? '';
     (b.items || []).forEach(i => {
       if (!field(i.size, 'qty')) return;
@@ -1065,7 +1082,8 @@
       phone: clean($('fPhone').value) || null, venue: $('fVenue').value.trim() || null,
       status, booth, pricing_mode: piece ? 'piece' : 'total',
       booth_price: piece && booth ? numOrNull($('fBoothPrice').value) : null,
-      items, charged, paid: paidFull ? charged : n($('fPaid').value), notes: $('fNotes').value.trim() || null
+      items, charged, paid: paidFull ? charged : n($('fPaid').value), notes: $('fNotes').value.trim() || null,
+      usher: getSeg('segUsher') === 'yes', usher_fee: getSeg('segUsher') === 'yes' ? editUsherFee : 0
     };
   }
   function validate(b){
@@ -1089,7 +1107,7 @@
     const q = editingId ? sb.from('bookings').update(b).eq('id', editingId).select().single() : sb.from('bookings').insert(b).select().single();
     const { data, error } = await q;
     btn.disabled = false; btn.textContent = 'حفظ'; $('btnSaveTop').disabled = false;
-    if (error) { toast(dbError(error), true); return; }
+    if (error) { toast(/usher/i.test(error.message || '') ? 'لازم تشغّل ملف supabase-v9-usher.sql أول.' : dbError(error), true); return; }
     b.items.forEach(i => { defaults[i.size] = { price: i.price ?? defaults[i.size]?.price ?? '', cost: i.cost, card: i.card }; });
     if (b.booth_price) defaults.boothPrice = b.booth_price;
     store.set('ambereDefaults', defaults); store.set('ambereMode', b.pricing_mode);
@@ -1226,13 +1244,14 @@
     const today = todayStr(), now = new Date();
     const prefix = finPeriod === 'month' ? today.slice(0, 7) : finPeriod === 'year' ? today.slice(0, 4) : '';
     const label = finPeriod === 'month' ? `${MONTHS[now.getMonth()]} ${now.getFullYear()}` : finPeriod === 'year' ? `سنة ${now.getFullYear()}` : 'من البداية';
-    let rev = 0, cost = 0, cnt = 0;
-    bookings.forEach(b => { if (b.status === 'cancelled' || (prefix && !b.wedding_date.startsWith(prefix))) return; const c = calc(b); rev += c.charged; cost += c.cost; cnt++; });
-    const run = runningSum(prefix), net = rev - cost - run;
+    let rev = 0, cost = 0, ush = 0, cnt = 0;
+    bookings.forEach(b => { if (b.status === 'cancelled' || (prefix && !b.wedding_date.startsWith(prefix))) return; const c = calc(b); rev += c.charged; cost += c.cost; ush += c.usher; cnt++; });
+    const run = runningSum(prefix), net = rev - cost - ush - run;
     $('finSum').innerHTML = `
       <div class="fin-row"><span>${label} · ${cnt} ${cnt === 1 ? 'حجز' : 'حجوزات'}</span><span></span></div>
       <div class="fin-row"><span>إيراد الحجوزات</span><b class="num">${fmt(rev)}</b></div>
       <div class="fin-row"><span>تكلفة التوزيعات</span><b class="num neg">− ${fmt(cost)}</b></div>
+      ${ush ? `<div class="fin-row"><span>أجور الـ usher</span><b class="num neg">− ${fmt(ush)}</b></div>` : ''}
       <div class="fin-row"><span>مصاريف تشغيلية</span><b class="num neg">− ${fmt(run)}</b></div>
       <div class="fin-row total"><span>صافي الربح</span><b class="num ${net < 0 ? 'neg' : 'pos'}">${fmt(net)} د.أ</b></div>`;
     $('finCap').innerHTML = capitalHTML(false);
@@ -1395,10 +1414,10 @@
     if (view === 'req') renderRequests(); if (view === 'home') renderHome();
   }
   function exportCSV(){
-    const head = ['رقم','التاريخ','العميل','الهاتف','القاعة','الحالة','بوث','حبات 5مل','حبات 10مل','حبات 30مل','التكلفة','المبلغ','الربح','المدفوع','المتبقي','ملاحظات'];
+    const head = ['رقم','التاريخ','العميل','الهاتف','القاعة','الحالة','بوث','usher','حبات 5مل','حبات 10مل','حبات 30مل','التكلفة','أجرة usher','المبلغ','الربح','المدفوع','المتبقي','ملاحظات'];
     const rows = [...bookings].sort((a, b) => a.wedding_date.localeCompare(b.wedding_date)).map(b => {
       const c = calc(b), q = k => n((b.items || []).find(i => i.size === k)?.qty);
-      return [b.id, b.wedding_date, b.client, b.phone || '', b.venue || '', STATUS[b.status], b.booth ? 'نعم' : 'لا', q('5'), q('10'), q('30'), c.cost.toFixed(2), c.charged.toFixed(2), c.profit.toFixed(2), c.paid.toFixed(2), c.remaining.toFixed(2), b.notes || ''];
+      return [b.id, b.wedding_date, b.client, b.phone || '', b.venue || '', STATUS[b.status], b.booth ? 'نعم' : 'لا', b.usher ? 'نعم' : 'لا', q('5'), q('10'), q('30'), c.cost.toFixed(2), c.usher.toFixed(2), c.charged.toFixed(2), c.profit.toFixed(2), c.paid.toFixed(2), c.remaining.toFixed(2), b.notes || ''];
     });
     const ex = [[], ['المصاريف'], ['النوع','البند','الفئة','المبلغ','التاريخ','ملاحظات'], ...expenses.map(e => [e.kind === 'startup' ? 'تأسيسي' : 'تشغيلي', e.title, e.category || '', n(e.amount).toFixed(2), e.spent_on || '', e.notes || ''])];
     const csv = [head, ...rows, ...ex].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\r\n');
@@ -1441,7 +1460,7 @@
     }
     sb = window.supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_KEY, { auth: { persistSession: true, autoRefreshToken: true } });
     buildSizes();
-    wireSeg('segStatus'); wireSeg('segBooth', applyMode); wireSeg('segMode', applyMode);
+    wireSeg('segStatus'); wireSeg('segBooth', applyMode); wireSeg('segUsher'); wireSeg('segMode', applyMode);
     ['fCharged','fPaid','fBoothPrice'].forEach(id => $(id).addEventListener('input', recalc));
     $('fDate').addEventListener('input', recalc);
     $('swPaid').addEventListener('click', () => setPaidFull(!paidFull));
