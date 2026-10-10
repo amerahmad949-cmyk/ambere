@@ -18,6 +18,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cormorant+Garamond:wght@500&family=Readex+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../config.js"></script>
+<script>try{if(localStorage.getItem('ambere-admin-lang')==='en'){document.documentElement.lang='en';document.documentElement.dir='ltr';}}catch(e){}</script>
 <style>
   :root{
     --bg:#FAF7F1; --card:#FFFFFF; --cream:#F2E9DC; --champagne:#E6D5BC; --line:#ECE2D4; --line-2:#DDCDB8;
@@ -38,6 +39,14 @@
   a{color:inherit}
   :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
   [hidden]{display:none!important}
+  /* ---------- English (LTR) ---------- */
+  html[lang="en"]{--display:"Cormorant Garamond",Georgia,serif}
+  html[lang="en"] .page-title,html[lang="en"] .form-top h1,html[lang="en"] .sheet h2,html[lang="en"] .cal-head h2{font-weight:500;letter-spacing:-.005em}
+  [dir="ltr"] .brand b,[dir="ltr"] .nums strong{text-align:left}
+  [dir="ltr"] .switch[aria-checked="true"] .sw::after{transform:translateX(18px)}
+  [dir="ltr"] #btnBack svg,[dir="ltr"] #calPrev svg,[dir="ltr"] #calNext svg{transform:scaleX(-1)}
+  .lang-mini{position:absolute;top:14px;inset-inline-end:14px;border:1px solid var(--line-2);background:#fff;border-radius:999px;height:34px;min-width:44px;padding:0 12px;font-weight:600;font-size:14px;color:var(--ink-2)}
+  .login-card{position:relative}
   .num{font-variant-numeric:tabular-nums}
 
   .shell{max-width:640px;margin:0 auto;padding:calc(10px + env(safe-area-inset-top)) 16px calc(var(--tabbar) + 36px + env(safe-area-inset-bottom))}
@@ -46,7 +55,7 @@
   .top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0 18px}
   .brand{display:flex;align-items:center;gap:10px}
   .brand img{width:38px;height:38px;border-radius:10px;border:1px solid var(--line)}
-  .brand b{display:block;font-family:var(--latin);font-weight:500;font-size:24px;line-height:1;direction:ltr;text-align:right}
+  .brand b{display:block;font-family:var(--latin);font-weight:500;font-size:24px;line-height:1;direction:ltr;text-align:start}
   .brand small{display:block;font-size:12px;color:var(--muted)}
   .icon-btn{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;color:var(--ink-2)}
   .icon-btn svg{width:20px;height:20px}
@@ -72,6 +81,7 @@
   .hero-stat span{font-size:13px;color:#D8C7AF}
   .hero-stat b{display:block;font-size:36px;font-weight:600;line-height:1.2;margin:4px 0 2px}
   .hero-stat small{color:#BCA88E;font-size:13px}
+  .hero-stat small b{display:inline;font-size:inherit;line-height:inherit;margin:0}
   .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:20px}
   .stat{padding:14px 12px}
   .stat span{display:block;font-size:12px;color:var(--muted);margin-bottom:2px}
@@ -79,7 +89,7 @@
   .stat.warn b{color:var(--loss)}
 
   .actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}
-  .action{display:flex;align-items:center;gap:12px;padding:14px;border-radius:var(--r-lg);border:1px solid var(--line);background:var(--card);text-align:right;box-shadow:var(--shadow)}
+  .action{display:flex;align-items:center;gap:12px;padding:14px;border-radius:var(--r-lg);border:1px solid var(--line);background:var(--card);text-align:start;box-shadow:var(--shadow)}
   .action i{width:38px;height:38px;flex:none;border-radius:12px;display:grid;place-items:center;background:var(--gold-soft);color:var(--amber)}
   .action i svg{width:19px;height:19px}
   .action b{display:block;font-weight:500;font-size:14.5px}
@@ -88,7 +98,7 @@
   .action.dark i{background:rgba(250,246,239,.12);color:var(--bg)}
   .action.dark small{color:#C8B79F}
 
-  .alert{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;margin-bottom:12px;border-radius:var(--r-md);border:1px solid #EFD3A7;background:var(--amber-soft);color:var(--amber);text-align:right;font-weight:500;font-size:14px}
+  .alert{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;margin-bottom:12px;border-radius:var(--r-md);border:1px solid #EFD3A7;background:var(--amber-soft);color:var(--amber);text-align:start;font-weight:500;font-size:14px}
   .alert svg{width:20px;height:20px;flex:none}
   .alert.red{border-color:#EBC3BE;background:var(--loss-soft);color:var(--loss)}
 
@@ -99,7 +109,7 @@
   /* ---------- booking item ---------- */
   .month{font-size:13px;font-weight:600;color:var(--muted);margin:18px 4px 8px;display:flex;justify-content:space-between}
   .month span:last-child{font-weight:400}
-  .bk{display:grid;grid-template-columns:56px 1fr;gap:12px;padding:12px;margin-bottom:8px;width:100%;text-align:right;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--card);box-shadow:var(--shadow);transition:border-color .2s,transform .2s}
+  .bk{display:grid;grid-template-columns:56px 1fr;gap:12px;padding:12px;margin-bottom:8px;width:100%;text-align:start;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--card);box-shadow:var(--shadow);transition:border-color .2s,transform .2s}
   .bk:active{transform:scale(.99)}
   .bk:hover{border-color:var(--line-2)}
   .bk.cancel{opacity:.55}
@@ -159,10 +169,10 @@
   .grid > *{min-width:0}
   .full{grid-column:1/-1}
   label,.lbl{display:block;font-size:13px;color:var(--ink-2);margin-bottom:6px;font-weight:500}
-  .inp,.search input{display:block;width:100%;min-width:0;height:48px;padding:0 14px;border:1px solid var(--line-2);border-radius:var(--r-md);background:#fff;outline:none;-webkit-appearance:none;appearance:none;text-align:right;transition:border-color .2s,box-shadow .2s}
+  .inp,.search input{display:block;width:100%;min-width:0;height:48px;padding:0 14px;border:1px solid var(--line-2);border-radius:var(--r-md);background:#fff;outline:none;-webkit-appearance:none;appearance:none;text-align:start;transition:border-color .2s,box-shadow .2s}
   textarea.inp{height:auto;min-height:80px;padding:10px 14px;resize:vertical}
   .inp[type="date"]{line-height:46px}
-  .inp[type="date"]::-webkit-date-and-time-value{text-align:right}
+  .inp[type="date"]::-webkit-date-and-time-value{text-align:start}
   .inp[dir="ltr"]{text-align:left}
   .inp:focus,.search input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(168,131,74,.15)}
   .inp[readonly]{background:var(--gold-soft);border-color:#EAD9BD;font-weight:600}
@@ -181,7 +191,7 @@
 
   .size{border:1px solid var(--line);border-radius:var(--r-md);margin-bottom:8px;overflow:hidden;background:#fff}
   .size:last-child{margin-bottom:0}
-  .size-head{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;border:0;background:none;padding:12px 14px;text-align:right}
+  .size-head{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;border:0;background:none;padding:12px 14px;text-align:start}
   .size-name{display:flex;align-items:center;gap:10px;font-weight:600}
   .sdot{width:10px;height:10px;border-radius:50%}
   .size-sum{font-size:13px;color:var(--muted)}
@@ -193,7 +203,7 @@
   .piece-only{display:none}
   .mode-piece .piece-only{display:block}
 
-  .switch{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:12px 14px;border:1px solid var(--line-2);border-radius:var(--r-md);background:#fff;text-align:right}
+  .switch{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:12px 14px;border:1px solid var(--line-2);border-radius:var(--r-md);background:#fff;text-align:start}
   .switch b{display:block;font-weight:500;font-size:14.5px}
   .switch small{display:block;color:var(--muted);font-size:12px}
   .sw{width:46px;height:28px;border-radius:999px;background:var(--line-2);position:relative;flex:none;transition:background .2s}
@@ -209,14 +219,14 @@
   .nums{flex:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;min-width:0}
   .nums div{display:flex;flex-direction:column;min-width:0}
   .nums span{font-size:11px;color:#C8B79F}
-  .nums strong{font-size:17px;font-weight:600;white-space:nowrap;direction:ltr;text-align:right;font-variant-numeric:tabular-nums}
+  .nums strong{font-size:17px;font-weight:600;white-space:nowrap;direction:ltr;text-align:start;font-variant-numeric:tabular-nums}
   #pProfit.pos{color:#8FDDB7} #pProfit.neg{color:#FF9F9A}
   .save{border:0;background:var(--bg);color:var(--ink);font-weight:600;padding:0 20px;height:46px;border-radius:var(--r-md);white-space:nowrap}
   .save:disabled{opacity:.55}
 
   /* ---------- more ---------- */
   .list-menu{overflow:hidden}
-  .list-menu button,.list-menu a{display:flex;align-items:center;gap:12px;width:100%;padding:14px 16px;border:0;background:none;text-align:right;text-decoration:none;font-size:15px;border-bottom:1px solid var(--line)}
+  .list-menu button,.list-menu a{display:flex;align-items:center;gap:12px;width:100%;padding:14px 16px;border:0;background:none;text-align:start;text-decoration:none;font-size:15px;border-bottom:1px solid var(--line)}
   .list-menu > :last-child{border-bottom:0}
   .list-menu svg{width:20px;height:20px;color:var(--muted)}
   .list-menu .red{color:var(--loss)} .list-menu .red svg{color:var(--loss)}
@@ -259,13 +269,13 @@
   .tipbox p{margin:0 0 10px;font-size:13.5px;color:var(--ink-2)}
   .copyrow{display:flex;gap:8px;align-items:center;margin-top:8px}
   .copyrow code{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr;text-align:left;font-size:12px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px}
-  .visits-card{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:14px 16px;margin-bottom:20px;text-align:right}
+  .visits-card{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:14px 16px;margin-bottom:20px;text-align:start}
   .visits-card b{font-size:15px;font-weight:600}
   .visits-card small{display:block;color:var(--muted);font-size:12.5px}
 
   /* ---------- finance ---------- */
   .action.wide{grid-column:1/-1;padding:11px 14px}
-  .cap{padding:16px;margin-bottom:20px;width:100%;text-align:right;display:block;border:1px solid var(--line)}
+  .cap{padding:16px;margin-bottom:20px;width:100%;text-align:start;display:block;border:1px solid var(--line)}
   .cap-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}
   .cap-top b{font-size:15px;font-weight:600}
   .cap-top span{font-size:13px;color:var(--muted)}
@@ -280,7 +290,7 @@
   .fin-row b{font-weight:600}
   .fin-row.total b{font-size:20px}
   .fin-row .neg{color:var(--loss)} .fin-row .pos{color:var(--gain)}
-  .exp{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;margin-bottom:8px;text-align:right;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--card);box-shadow:var(--shadow)}
+  .exp{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;margin-bottom:8px;text-align:start;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--card);box-shadow:var(--shadow)}
   .exp i{width:38px;height:38px;flex:none;border-radius:12px;display:grid;place-items:center;background:var(--cream);font-style:normal;font-size:17px}
   .exp .t{flex:1;min-width:0}
   .exp .t b{display:block;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -338,7 +348,7 @@
   .daypanel h3{font-size:16px;font-weight:600;margin:0 0 4px}
   .daypanel .sub{color:var(--muted);font-size:13px;margin:0 0 12px}
   .day-acts{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
-  .mini-req{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1px dashed #E2C99E;border-radius:var(--r-md);background:var(--amber-soft);margin-bottom:8px;font-size:14px;width:100%;text-align:right;color:var(--amber)}
+  .mini-req{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1px dashed #E2C99E;border-radius:var(--r-md);background:var(--amber-soft);margin-bottom:8px;font-size:14px;width:100%;text-align:start;color:var(--amber)}
   .setting{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px}
   .setting b{display:block;font-weight:500}
   .setting small{display:block;color:var(--muted);font-size:12px}
@@ -359,6 +369,7 @@
 <!-- ================= LOGIN ================= -->
 <div class="login" id="screenLogin" hidden>
   <form class="card login-card" id="loginForm" novalidate>
+    <button type="button" class="lang-mini" id="lgLang" lang="en" aria-label="English">EN</button>
     <img src="../icons/icon-192.png" alt="" width="72" height="72">
     <h1>Ambere</h1>
     <p>لوحة الحجوزات</p>
@@ -551,6 +562,13 @@
       </button>
     </div>
     <div class="sec-h" style="margin-top:22px"><h2>الإعدادات</h2></div>
+    <div class="card setting" style="margin-bottom:10px">
+      <span><b>اللغة</b><small>Language</small></span>
+      <div class="seg" id="segLang" style="min-width:170px">
+        <button type="button" data-v="ar" aria-pressed="true" lang="ar">العربية</button>
+        <button type="button" data-v="en" aria-pressed="false" lang="en">English</button>
+      </div>
+    </div>
     <div class="card setting">
       <span><b>عدد الأعراس المسموح باليوم</b><small>لما يوصل اليوم لهالعدد، صفحة العملاء بتقول «محجوز»</small></span>
       <span class="stepper"><button type="button" id="maxMinus" aria-label="أقل">−</button><span id="maxVal">1</span><button type="button" id="maxPlus" aria-label="أكثر">+</button></span>
@@ -685,6 +703,151 @@
   const USHER_FEE = 20;                                          // أجرة الـ usher لكل حجز
   let editUsherFee = USHER_FEE;
   const $ = id => document.getElementById(id);
+
+  /* ================= i18n: English layer for the admin (Arabic stays the source) ================= */
+  const EN = {"لوحة الحجوزات": "Bookings dashboard", "الرئيسية": "Home", "الحجوزات": "Bookings", "التقويم": "Calendar", "الطلبات": "Requests", "المزيد": "More", "التنقل": "Navigation", "تحديث": "Refresh", "رجوع": "Back", "حفظ": "Save", "إلغاء": "Cancel", "حذف": "Delete", "نسخ": "Copy", "عرض الكل": "View all", "الكل": "All", "الإيميل": "Email", "كلمة السر": "Password", "دخول": "Log in", "جاري الدخول…": "Logging in…", "اكتب الإيميل وكلمة السر.": "Enter your email and password.", "الإيميل أو كلمة السر غلط.": "Wrong email or password.", "هالحساب مش مسموح يدخل.": "This account isn’t allowed to log in.", "أحمد": "Ahmad", "راما": "Rama", "أ": "A", "ر": "R", "حجز جديد": "New booking", "عرس جاي": "Upcoming wedding", "حجز سابق": "Past booking", "عرس صار قبل": "Already happened", "+ مصروف": "+ Expense", "تعبئة عطور، بخور، مواصلات…": "Refills, incense, transport…", "الأعراس الجاية": "Upcoming weddings", "أعراس جاية": "Upcoming", "متبقي ع العملاء": "Owed by clients", "ما في أعراس جاية لسا.": "No upcoming weddings yet.", "خلص؟ سكّره": "Done? Close it", "المبلغ": "Amount", "الربح": "Profit", "متبقي": "Owed", "المتبقي": "Remaining", "التكلفة": "Cost", "مؤكد": "Confirmed", "منفّذ": "Done", "ملغي": "Cancelled", "بوث فقط": "Booth only", "توزيعات فقط": "Favors only", "بوث + توزيعات": "Booth + favors", "بوث": "Booth", "توزيعات": "Favors", "usher": "usher", "مجهول": "Unknown", "ابحث بالاسم، القاعة، أو الهاتف": "Search by name, venue or phone", "الجاية": "Upcoming", "لازم تتسكّر": "Needs closing", "عليهم فلوس": "Owe money", "منفّذة": "Done", "ملغية": "Cancelled", "ما في أعراس جاية.": "No upcoming weddings.", "كل الأعراس اللي صارت متسكّرة ✓": "All past weddings are closed ✓", "ما في حدا عليه فلوس ✓": "Nobody owes money ✓", "ما في حجوزات منفّذة لسا.": "No completed bookings yet.", "ما في حجوزات ملغية.": "No cancelled bookings.", "ما في حجوزات لسا.": "No bookings yet.", "ما في نتائج لهالبحث.": "No results for this search.", "طلبات العملاء": "Customer requests", "جديدة": "New", "صارت حجوزات": "Converted", "مرفوضة": "Rejected", "جديد": "New", "صار حجز": "Booked", "مرفوض": "Rejected", "تحويل لحجز": "Convert to booking", "واتساب": "WhatsApp", "رفض": "Reject", "إرجاع للجديدة": "Move back to new", "فتح الحجز": "Open booking", "التاريخ فات": "Date passed", "وصل هلأ": "Received just now", "رابط صفحة الحجز للعملاء:": "Customer booking page:", "ما في طلبات جديدة. شارك رابط صفحة الحجز على إنستغرام.": "No new requests. Share your booking page link on Instagram.", "ما في طلبات صارت حجوزات لسا.": "No converted requests yet.", "ما في طلبات مرفوضة.": "No rejected requests.", "ما وصل ولا طلب لسا.": "No requests yet.", "ترفض هالطلب؟": "Reject this request?", "انرفض الطلب": "Request rejected", "رجع للطلبات الجديدة": "Moved back to new requests", "الشهر السابق": "Previous month", "الشهر الجاي": "Next month", "هالشهر": "This month", "اليوم": "Today", "سبت": "Sat", "أحد": "Sun", "إثنين": "Mon", "ثلاثاء": "Tue", "أربعاء": "Wed", "خميس": "Thu", "جمعة": "Fri", "طلب جديد": "New request", "مقفل": "Blocked", "اكبس على أي يوم لتشوف تفاصيله": "Tap any day to see its details", "+ حجز بهاليوم": "+ Booking on this day", "قفل اليوم": "Block day", "فتح اليوم": "Unblock day", "فاضي": "Free", "اليوم مليان": "Day is full", "طلب جديد:": "New request:", "عرض ←": "View →", "انفتح اليوم ✓": "Day unblocked ✓", "انقفل اليوم، العملاء ما بيقدروا يحجزوه": "Day blocked, customers can’t request it", "سبب القفل (اختياري)، مثلاً: إجازة": "Reason for blocking (optional), e.g. holiday", "فتح صفحة الحجز للعملاء": "Open customer booking page", "تنزيل نسخة احتياطية (CSV)": "Download backup (CSV)", "تسجيل خروج": "Log out", "زيارات الموقع": "Website visits", "المالية والمصاريف": "Finance & expenses", "الإعدادات": "Settings", "عدد الأعراس المسموح باليوم": "Weddings allowed per day", "لما يوصل اليوم لهالعدد، صفحة العملاء بتقول «محجوز»": "When a day reaches this number, the customer page shows it as booked", "أقل": "Less", "أكثر": "More", "صار مسموح عرس واحد باليوم": "Now 1 wedding allowed per day", "اللغة": "Language", "العرس": "Wedding", "تاريخ العرس *": "Wedding date *", "اسم العميل *": "Client name *", "رقم الهاتف": "Phone number", "القاعة / المكان": "Venue", "مثلاً: ليندا سلمان": "e.g. Linda Salman", "الحالة والخدمة": "Status & service", "الحالة": "Status", "بوث تعطير وتبخير؟": "Perfume & incense booth?", "نعم": "Yes", "لا": "No", "في usher؟": "Usher?", "طريقة التسعير": "Pricing method", "مبلغ إجمالي": "Total amount", "حسب سعر الحبة": "Per piece", "بتكتب كم أخذت على الحجز كامل، وعدد الحبات وتكلفتها، والربح بينحسب لحاله.": "Enter the total you charged, plus quantities and costs, and the profit is calculated automatically.", "بتكتب سعر الحبة لكل حجم وسعر البوث، والمبلغ الإجمالي بينحسب لحاله.": "Enter the price per piece for each size and the booth price, and the total is calculated automatically.", "التوزيعات": "Favors", "اكبس لإضافة": "Tap to add", "العدد": "Quantity", "سعر بيع الحبة": "Selling price per piece", "تكلفة الحبة": "Cost per piece", "تكلفة الكرت": "Card cost", "التكلفة الكلية (شامل الكرت)": "Total cost (incl. card)", "الفلوس": "Money", "سعر البوث (د.أ)": "Booth price (JOD)", "المبلغ الإجمالي اللي أخذته (د.أ) *": "Total amount charged (JOD) *", "المبلغ الإجمالي (محسوب)": "Total amount (calculated)", "مثلاً 300": "e.g. 300", "انقبض المبلغ كامل": "Paid in full", "العميل دفع كل شي": "The client paid everything", "المدفوع لهلأ (عربون)": "Paid so far (deposit)", "ملاحظات": "Notes", "حذف هالحجز نهائياً": "Delete this booking permanently", "إضافة حجز سابق": "Add past booking", "سجّل عرس صار قبل. الحالة «منفّذ» والمبلغ مقبوض كامل، وبتقدر تغيّرهم.": "Record a wedding that already happened. Status is “Done” and it’s marked paid in full, and you can change both.", "عبّي التكاليف والمبلغ اللي اتفقتوا عليه، وبعدين احفظ. الطلب رح يصير «مقبول» لحاله.": "Fill in the costs and the agreed amount, then save. The request will be marked as booked automatically.", "التاريخ فات، رح ينحفظ «منفّذ»": "date has passed, it will be saved as “Done”", "(اليوم مليان)": "(day is full)", "متأكد؟": "sure?", "جاري…": "Saving…", "اختار تاريخ العرس.": "Choose the wedding date.", "اكتب اسم العميل (أو \"مجهول\").": "Enter the client name (or “Unknown”).", "الحجز لازم يكون فيه بوث أو توزيعات.": "A booking needs a booth or favors.", "اكتب سعر البوث أو أسعار الحبات.": "Enter the booth price or the piece prices.", "اكتب المبلغ اللي أخذته.": "Enter the amount you charged.", "المدفوع أكبر من المبلغ.": "Paid is more than the amount.", "انحفظ التعديل ✓": "Changes saved ✓", "انضاف الحجز السابق ✓": "Past booking added ✓", "انحفظ الحجز ✓": "Booking saved ✓", "انحفظ الحجز والطلب صار مقبول ✓": "Booking saved and request marked as booked ✓", "انحذف الحجز": "Booking deleted", "لازم تشغّل ملف supabase-v9-usher.sql أول.": "Run supabase-v9-usher.sql first.", "المالية": "Finance", "هالسنة": "This year", "من البداية": "Since start", "إيراد الحجوزات": "Bookings revenue", "تكلفة التوزيعات": "Favors cost", "أجور الـ usher": "Usher fees", "مصاريف تشغيلية": "Running expenses", "صافي الربح": "Net profit", "تكاليف تأسيسية": "Startup costs", "حصة كل شريك": "Each partner’s share", "من صافي الربح بعد التوزيعات والـ usher والمصاريف التشغيلية.": "From net profit after favors, usher fees and running expenses.", "ترجيع رأس المال": "Capital recovery", "✅ رجع رأس المال كامل": "✅ Capital fully recovered", "رأس المال": "Capital", "رجع": "Recovered", "من": "of", "ضايل": "Left", "د.أ": "JOD", "ربح فوق رأس المال:": "Profit above capital:", "ضيف التكاليف التأسيسية ←": "Add startup costs →", "ما في تكاليف تأسيسية مسجّلة": "No startup costs recorded", "ما في مصاريف تشغيلية بهالفترة.": "No running expenses in this period.", "ما في تكاليف تأسيسية.": "No startup costs.", "+ إضافة": "+ Add", "المجموع": "Total", "تأسيسي": "Startup", "مصروف جديد": "New expense", "تعديل مصروف": "Edit expense", "تشغيلي": "Running", "تأسيسي (مرة وحدة)": "Startup (one-time)", "الفئة": "Category", "البند *": "Item *", "مثلاً: تعبئة عطور التبخير": "e.g. incense perfume refill", "المبلغ (د.أ) *": "Amount (JOD) *", "التاريخ *": "Date *", "التاريخ (اختياري)": "Date (optional)", "تعبئة عطور": "Perfume refill", "بخور وفحم": "Incense & charcoal", "كروت وطباعة": "Cards & printing", "تغليف": "Packaging", "مواصلات": "Transport", "ترويج": "Promotion", "صيانة": "Maintenance", "أخرى": "Other", "اكتب شو البند.": "Enter the item.", "اكتب المبلغ.": "Enter the amount.", "اختار التاريخ.": "Choose the date.", "انضاف المصروف ✓": "Expense added ✓", "انحذف": "Deleted", "لازم تشغّل ملف supabase-v5-expenses.sql أول.": "Run supabase-v5-expenses.sql first.", "طاولة البوث": "Booth table", "العطور المستخدمة للتعطير": "Perfumes used for scenting", "وصلة كهرباء": "Extension cable", "أغراض تزيين البوث (شي إن)": "Booth decorations (Shein)", "كروت عمل": "Business cards", "سلات وشمع": "Baskets & candles", "فرد سيليكون": "Silicone gun", "آخر 7 أيام": "Last 7 days", "آخر 30 يوم": "Last 30 days", "آخر 90 يوم": "Last 90 days", "زوار": "Visitors", "مشاهدات": "Page views", "طلبات حجز": "Booking requests", "نسبة التحويل": "Conversion rate", "الزوار كل يوم": "Visitors per day", "من الزيارة للطلب": "From visit to request", "زاروا الموقع": "Visited the site", "بلّشوا يعبّوا الفورم": "Started the form", "بعثوا طلب حجز": "Sent a request", "كبسوا واتساب": "Tapped WhatsApp", "من وين إجوا": "Where they came from", "الأجهزة": "Devices", "إنستغرام": "Instagram", "تيك توك": "TikTok", "فيسبوك": "Facebook", "سناب": "Snapchat", "جوجل": "Google", "مباشر / رابط منسوخ": "Direct / copied link", "مواقع ثانية": "Other sites", "موبايل": "Mobile", "كمبيوتر": "Desktop", "تابلت": "Tablet", "نصيحة:": "Tip:", "استخدم هالروابط بدل الرابط العادي، عشان تعرف بالزبط كل زائر من وين إجا. واتساب ما بيبيّن حاله لحاله، فرابطه مهم.": "Use these links instead of the plain one, so you know exactly where each visitor came from. WhatsApp doesn’t identify itself, so its link matters.", "إنستغرام (البايو)": "Instagram (bio)", "واتساب (ستوري ورسائل)": "WhatsApp (status & messages)", "زياراتك إنت وشريكك على هالأجهزة ما بتنحسب.": "Your own and your partner’s visits on these devices aren’t counted.", "لسا ما في زيارات.": "No visits yet.", "تصفير الإحصائيات": "Reset statistics", "تصفير إحصائيات الزيارات": "Reset visit statistics", "جاري التصفير…": "Resetting…", "بيحذف كل الزيارات وبيبلّش العدّ من الصفر. الحجوزات وطلبات العملاء ما بتنحذف.": "Deletes all visits and starts counting from zero. Bookings and customer requests are not deleted.", "آخر تصفير:": "Last reset:", "ما انصفّر إشي — الكلمة مش مطابقة": "Nothing was reset — the word didn’t match", "لازم تشغّل ملف supabase-v8-reset-stats.sql أول.": "Run supabase-v8-reset-stats.sql first.", "لازم تشغّل ملف supabase-v7-analytics.sql أول.": "Run supabase-v7-analytics.sql first.", "هالخطوة بتحذف كل إحصائيات الزيارات ومش ممكن ترجع.\nالحجوزات والطلبات ما بتنلمس.\n\nللتأكيد اكتب: تصفير": "This deletes all visit statistics and can’t be undone.\nBookings and requests are not touched.\n\nTo confirm, type: RESET", "انسخ الرابط ✓": "Link copied ✓", "انسخ الرابط:": "Copy the link:", "تحدّثت ✓": "Refreshed ✓", "جاري التحميل…": "Loading…", "حسابك مش مسموح يعدّل على الحجوزات.": "Your account isn’t allowed to edit bookings.", "ما في اتصال بالإنترنت. جرّب كمان مرة.": "No internet connection. Please try again.", "انتهت الجلسة. اطلع وادخل من جديد.": "Session expired. Please log out and log in again.", "صار خطأ.": "Something went wrong.", "لازم تحط SUPABASE_URL و SUPABASE_KEY بملف config.js.": "SUPABASE_URL and SUPABASE_KEY must be set in config.js.", "بكرا": "Tomorrow", "مبارح": "Yesterday", "هلأ": "just now"};
+  const MONTHS_AR = MONTHS.slice(), MSHORT_AR = MSHORT.slice(), MONTHS_EN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], MSHORT_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  let LANG = document.documentElement.lang === 'en' ? 'en' : 'ar';
+  const AR_RE = /[\u0600-\u06FF]/;
+  const trn = s => EN[s] !== undefined ? EN[s] : tr(s);
+  const many = (n, one, more) => Number(n) === 1 ? one : more;
+  const PATTERNS = [
+    [/^([−\-]?\s?[\d.,]+) د\.أ$/, m => `${m[1]} JOD`],
+    [/^= ([\d.,]+) قرش$/, m => `= ${m[1]} qirsh`],
+    [/^\(مقترح ([\d.,]+) قرش\)$/, m => `(suggested ${m[1]} qirsh)`],
+    [/^(\d{2}\/\d{2}\/\d{4}): (\d+) زائر$/, m => `${m[1]}: ${m[2]} ${many(m[2], 'visitor', 'visitors')}`],
+    [/^(\d+) · ربح ([−\-\d.,]+)$/, m => `${m[1]} · profit ${m[2]}`],
+    [/^(\d+) عرس صار ولسا «مؤكد»، سكّرهم$/, m => `${m[1]} wedding already happened but is still “Confirmed”. Close it`],
+    [/^(\d+) أعراس صاروا ولسا «مؤكد»، سكّرهم$/, m => `${m[1]} weddings already happened but are still “Confirmed”. Close them`],
+    [/^([\d.,]+) حبة$/, m => `${m[1]} pcs`],
+    [/^تكلفة ([\d.,]+)$/, m => `cost ${m[1]}`],
+    [/^بعد (\d+) يوم$/, m => `in ${m[1]} ${many(m[1], 'day', 'days')}`],
+    [/^قبل (\d+) يوم$/, m => `${m[1]} ${many(m[1], 'day', 'days')} ago`],
+    [/^قبل (\d+) دقيقة$/, m => `${m[1]} min ago`],
+    [/^قبل (\d+) ساعة$/, m => `${m[1]} h ago`],
+    [/^وصل (.+)$/, m => `Received ${trn(m[1])}`],
+    [/^أهلاً (.+) 👋$/, m => `Hi ${trn(m[1])} 👋`],
+    [/^صباح الخير يا (.+) ☀️$/, m => `Good morning, ${trn(m[1])} ☀️`],
+    [/^مسا الخير يا (.+) 🌙$/, m => `Good evening, ${trn(m[1])} 🌙`],
+    [/^اليوم (\d+)$/, m => `Today ${m[1]}`],
+    [/^طلبات (\d+)$/, m => `Requests ${m[1]}`],
+    [/^تحويل (\d+)%$/, m => `Conversion ${m[1]}%`],
+    [/^انضاف (.+)$/, m => `Added ${m[1]}`],
+    [/^آخر تعديل (.+)$/, m => `last edited ${m[1]}`],
+    [/^تعديل: (.+)$/, m => `Edit: ${m[1]}`],
+    [/^حجز من طلب: (.+)$/, m => `Booking from request: ${m[1]}`],
+    [/^(\d+) حجوزات$/, m => `${m[1]} bookings`],
+    [/^(\d+) حجز$/, m => `${m[1]} ${many(m[1], 'booking', 'bookings')}`],
+    [/^سنة (\d{4})$/, m => `Year ${m[1]}`],
+    [/^صافي (\d{4})$/, m => `Net ${m[1]}`],
+    [/^صافي ربح (.+)$/, m => `Net profit · ${trn(m[1])}`],
+    [/^(\d+) بند$/, m => `${m[1]} ${many(m[1], 'item', 'items')}`],
+    [/^👀 (\d+) زائر بآخر 7 أيام$/, m => `👀 ${m[1]} ${many(m[1], 'visitor', 'visitors')} in the last 7 days`],
+    [/^عندك (\d+) طلب جديد من العملاء$/, m => `You have ${m[1]} new customer request`],
+    [/^عندك (\d+) طلبات جديدة من العملاء$/, m => `You have ${m[1]} new customer requests`],
+    [/^⚠️ هاليوم مقفل(?: \((.*)\))?$/, m => `⚠️ this day is blocked${m[1] ? ` (${m[1]})` : ''}`],
+    [/^⚠️ في حجز ثاني بهاليوم: (.+?)( \(اليوم مليان\))?$/, m => `⚠️ another booking on this day: ${m[1].replace(/، /g, ', ')}${m[2] ? ' (day is full)' : ''}`],
+    [/^⚠️ في (\d+) حجوزات بهاليوم: (.+?)( \(اليوم مليان\))?$/, m => `⚠️ ${m[1]} bookings on this day: ${m[2].replace(/، /g, ', ')}${m[3] ? ' (day is full)' : ''}`],
+    [/^في مكان لـ (\d+) حجز كمان$/, m => `Room for ${m[1]} more ${many(m[1], 'booking', 'bookings')}`],
+    [/^انصفّرت الإحصائيات ✓ \(انحذف (\d+) حدث\)$/, m => `Statistics reset ✓ (${m[1]} records deleted)`],
+    [/^اكتب تكلفة الحبة لحجم (.+)\.$/, m => `Enter the cost per piece for ${trn(m[1])}.`],
+    [/^اكتب سعر بيع الحبة لحجم (.+)\.$/, m => `Enter the selling price per piece for ${trn(m[1])}.`],
+    [/^متأكد بدك تحذف حجز «(.*)» نهائياً؟$/, m => `Delete the booking for “${m[1]}” permanently?`],
+    [/^تحذف «(.*)»؟$/, m => `Delete “${trn(m[1])}”?`],
+    [/^صار مسموح (\d+) أعراس باليوم$/, m => `Now ${m[1]} weddings allowed per day`],
+    [/^ما قدرت أحمّل الطلبات: (.+)$/, m => `Couldn’t load requests: ${trn(m[1])}`],
+    [/^(\d+) مل$/, m => `${m[1]} ml`],
+    [/^حجز من طلب$/, () => 'Booking from request'],
+    [/^بيتخصم ([\d.,]+) د\.أ أجرة الـ usher من ربح هالحجز\.$/, m => `${m[1]} JOD usher fee will be deducted from this booking’s profit.`],
+    [/^(.+):$/, m => { const x = trn(m[1]); return x !== m[1] ? `${x}:` : undefined; }],
+  ];
+  const EMOJI = /^((?:\p{Extended_Pictographic}|[•])\uFE0F?)\s+(.+)$/u;
+  function tr(s){
+    if (!s || !AR_RE.test(s)) return s;
+    const t = s.trim(); if (!t) return s;
+    const lead = s.slice(0, s.indexOf(t)), trail = s.slice(s.indexOf(t) + t.length);
+    const out = (() => {
+      if (EN[t] !== undefined) return EN[t];
+      for (const [re, f] of PATTERNS) { const m = t.match(re); if (m) { const r = f(m); if (r !== undefined) return r; } }
+      if (t.includes(' — ')) return t.split(' — ').map(trn).join(' — ');
+      if (t.includes(' · ')) return t.split(' · ').map(trn).join(' · ');
+      if (t.startsWith('· ')) return '· ' + trn(t.slice(2));
+      const e = t.match(EMOJI); if (e && (EN[e[2]] !== undefined || PATTERNS.some(([re]) => re.test(e[2])))) return e[1] + ' ' + trn(e[2]);
+      if (t.includes('، ')) { const parts = t.split('، '); const tp = parts.map(trn); if (tp.some((x, i) => x !== parts[i])) return tp.join(', '); }
+      return t;
+    })();
+    return lead + out + trail;
+  }
+  const ATTRS = ['placeholder', 'aria-label', 'title', 'alt'];
+  const ORIG_TEXT = [], ORIG_ATTR = [];
+  let translating = false, observer = null;
+  function translateNode(root, remember){
+    if (root.nodeType === 3) {
+      const v = root.nodeValue, t = tr(v);
+      if (t !== v) { if (remember) ORIG_TEXT.push([root, v]); root.nodeValue = t; }
+      return;
+    }
+    if (root.nodeType !== 1 || root.closest('script,style')) return;
+    if (root.matches('input,textarea') === false) {
+      const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); let n;
+      while ((n = w.nextNode())) { if (n.parentElement && !n.parentElement.closest('script,style')) translateNode(n, remember); }
+    }
+    [root, ...root.querySelectorAll('[placeholder],[aria-label],[title],[alt]')].forEach(el => ATTRS.forEach(a => {
+      const v = el.getAttribute && el.getAttribute(a); if (!v) return; const t = tr(v);
+      if (t !== v) { if (remember) ORIG_ATTR.push([el, a, v]); el.setAttribute(a, t); }
+    }));
+  }
+  function startObserver(){
+    if (observer) return;
+    observer = new MutationObserver(list => {
+      if (translating || LANG !== 'en') return;
+      translating = true;
+      for (const m of list) {
+        if (m.type === 'childList') m.addedNodes.forEach(n => translateNode(n, false));
+        else if (m.type === 'characterData') translateNode(m.target, false);
+        else if (m.type === 'attributes') translateNode(m.target, false);
+      }
+      observer.takeRecords(); translating = false;
+    });
+    observer.observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ATTRS });
+  }
+  const _confirm = window.confirm.bind(window), _prompt = window.prompt.bind(window);
+  window.confirm = m => _confirm(LANG === 'en' ? tr(m) : m);
+  window.prompt = (m, d) => _prompt(LANG === 'en' ? tr(m) : m, d);
+  const TITLE_AR = document.title;
+  function rerender(){
+    try {
+      renderBadge();
+      if (view === 'home') { renderHome(); loadHomeVisits(); }
+      if (view === 'list') renderList();
+      if (view === 'cal') renderCal();
+      if (view === 'req') renderRequests();
+      if (view === 'fin') renderFin();
+      if (view === 'stats' && statsCache[statDays]) renderStats(statsCache[statDays]);
+      if (view === 'form') { applyMode(); recalc(); }
+      if ($('expDlg').open) syncExpKind();
+    } catch (e) {}
+  }
+  function applyLang(lang, save){
+    LANG = lang === 'en' ? 'en' : 'ar';
+    const html = document.documentElement; html.lang = LANG; html.dir = LANG === 'en' ? 'ltr' : 'rtl';
+    MONTHS.splice(0, 12, ...(LANG === 'en' ? MONTHS_EN : MONTHS_AR));
+    MSHORT.splice(0, 12, ...(LANG === 'en' ? MSHORT_EN : MSHORT_AR));
+    translating = true;
+    if (LANG === 'en') { translateNode(document.body, true); document.title = 'Ambere — Bookings dashboard'; startObserver(); }
+    else {
+      ORIG_TEXT.forEach(([n, v]) => { if (n.isConnected) n.nodeValue = v; }); ORIG_TEXT.length = 0;
+      ORIG_ATTR.forEach(([el, a, v]) => { if (el.isConnected) el.setAttribute(a, v); }); ORIG_ATTR.length = 0;
+      document.title = TITLE_AR;
+    }
+    if (observer) observer.takeRecords();
+    translating = false;
+    if (save) { try { localStorage.setItem('ambere-admin-lang', LANG); } catch (e) {} }
+    const lg = $('lgLang'); if (lg) { lg.textContent = LANG === 'en' ? 'ع' : 'EN'; lg.lang = LANG === 'en' ? 'ar' : 'en'; lg.setAttribute('aria-label', LANG === 'en' ? 'العربية' : 'English'); }
+    if ($('segLang')) $('segLang').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === LANG));
+    rerender();
+    if (LANG === 'en') { translating = true; translateNode(document.body, false); if (observer) observer.takeRecords(); translating = false; }
+  }
 
   let sb = null, bookings = [], requests = [];
   let filter = 'upcoming', reqFilter = 'new';
@@ -1222,7 +1385,7 @@
   async function resetStats(btn){
     const word = prompt('هالخطوة بتحذف كل إحصائيات الزيارات ومش ممكن ترجع.\nالحجوزات والطلبات ما بتنلمس.\n\nللتأكيد اكتب: تصفير');
     if (word === null) return;
-    if (word.trim() !== 'تصفير') { toast('ما انصفّر إشي — الكلمة مش مطابقة', true); return; }
+    if (!['تصفير', 'reset'].includes(word.trim().toLowerCase())) { toast('ما انصفّر إشي — الكلمة مش مطابقة', true); return; }
     btn.disabled = true; btn.textContent = 'جاري التصفير…';
     const { data, error } = await sb.rpc('reset_site_stats');
     btn.disabled = false; btn.textContent = 'تصفير إحصائيات الزيارات';
@@ -1373,7 +1536,7 @@
   function renderDayPanel(){
     if (!calSel) { $('dayPanel').innerHTML = '<p class="sub" style="text-align:center;color:var(--muted)">اكبس على أي يوم لتشوف تفاصيله</p>'; return; }
     const [y, m, d] = calSel.split('-').map(Number), info = dayInfo(calSel), isBlocked = blocked.has(calSel);
-    const dd = daysUntil(calSel), wd = new Date(y, m - 1, d).toLocaleDateString('ar', { weekday: 'long' });
+    const dd = daysUntil(calSel), wd = new Date(y, m - 1, d).toLocaleDateString(LANG === 'en' ? 'en-GB' : 'ar', { weekday: 'long' });
     const status = isBlocked ? `مقفل${blocked.get(calSel) ? ': ' + esc(blocked.get(calSel)) : ''}` : info.full ? 'اليوم مليان' : info.bks.length ? `في مكان لـ ${maxPerDay - info.bks.filter(b => b.status !== 'cancelled').length} حجز كمان` : 'فاضي';
     $('dayPanel').innerHTML = `
       <h3>${wd} ${d} ${MONTHS[m - 1]}</h3>
@@ -1560,6 +1723,9 @@
       $('lPass').value = ''; enterApp(data.session);
     });
 
+    $('lgLang').addEventListener('click', () => applyLang(LANG === 'en' ? 'ar' : 'en', true));
+    $('segLang').addEventListener('click', e => { const b = e.target.closest('[data-v]'); if (b && b.dataset.v !== LANG) applyLang(b.dataset.v, true); });
+    if (LANG === 'en') applyLang('en', false);
     resetForm();
     sb.auth.getSession().then(({ data }) => { data.session ? enterApp(data.session) : showLogin(); });
   }
