@@ -155,6 +155,65 @@
   .price-close p{margin:0 0 14px;color:var(--ink-2)}
   @media (min-width:640px){ .prices{grid-template-columns:1fr 1fr} }
 
+  /* ---------- pricing calculator ---------- */
+  .calc{display:grid;grid-template-columns:1fr;gap:18px;max-width:1020px;margin:0 auto}
+  .calc-opts,.calc-sum{border-radius:8px}
+  .calc-opts{background:#fff;border:1px solid var(--line);padding:24px 20px}
+  .calc fieldset{border:0;margin:0 0 26px;padding:0;min-width:0}
+  .calc fieldset:last-of-type{margin-bottom:0}
+  .calc legend{font-weight:600;font-size:16px;color:var(--espresso);margin-bottom:4px;padding:0}
+  .calc .fdesc{margin:0 0 14px;color:var(--muted);font-size:14px}
+  .ropts{display:grid;gap:10px}
+  .ropt{position:relative;display:block;cursor:pointer}
+  .ropt input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+  .ropt > span{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid var(--line);border-radius:8px;background:var(--ivory);transition:border-color .25s,box-shadow .25s,background .25s}
+  .ropt b{font-weight:600;white-space:nowrap}
+  .ropt > span > span{display:block;line-height:1.5}
+  .ropt small{color:var(--ink-2);font-size:13.5px}
+  .ropt em{font-style:normal;font-family:var(--latin);font-size:21px;font-weight:600;color:var(--espresso);white-space:nowrap}
+  .ropt input:checked + span{border-color:var(--espresso);box-shadow:0 0 0 1px var(--espresso);background:#fff}
+  .ropt input:focus-visible + span{outline:2px solid var(--gold);outline-offset:2px}
+  .ropts.chips{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .ropts.chips .ropt > span{flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2px;padding:12px 6px}
+  .ropts.chips .ropt em{font-size:18px}
+  .qline{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:16px}
+  .qline label{font-weight:500;font-size:14.5px}
+  .bigstep{display:flex;align-items:center;border:1px solid var(--line);border-radius:999px;background:#fff;direction:ltr}
+  .bigstep button{width:48px;height:48px;border:0;background:none;font-size:22px;color:var(--ink-2);border-radius:50%;cursor:pointer}
+  .bigstep button:hover{background:var(--cream);color:var(--espresso)}
+  .bigstep input{width:84px;height:48px;border:0;background:none;text-align:center;font-size:18px;font-weight:600;outline:none;font-variant-numeric:tabular-nums;-moz-appearance:textfield}
+  .quick{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+  html[dir="rtl"] .quick{justify-content:flex-end}
+  .quick button{border:1px dashed var(--line);background:none;border-radius:999px;padding:5px 12px;font-size:13px;color:var(--ink-2);cursor:pointer}
+  .quick button:hover{border-color:var(--espresso);color:var(--espresso)}
+  .qerr{color:var(--err);font-size:13px;margin:8px 0 0}
+  .qerr:empty{display:none}
+  .calc-sum{background:var(--espresso);color:var(--ivory);padding:24px 20px;display:flex;flex-direction:column}
+  .calc-sum .lbl2{color:#D8C7AF;font-size:13.5px;margin:0}
+  .calc-total{font-family:var(--latin);font-size:clamp(44px,8vw,58px);font-weight:600;line-height:1.05;margin:4px 0 2px;direction:ltr;text-align:start;font-variant-numeric:tabular-nums}
+  html[dir="rtl"] .calc-total{text-align:right}
+  .calc-cur{color:#D8C7AF;font-size:14px;margin:0 0 18px}
+  .brk{margin:0 0 20px;padding:14px 0 0;border-top:1px solid rgba(250,247,241,.16);display:grid;gap:10px}
+  .brk div{display:flex;justify-content:space-between;gap:12px;font-size:14.5px}
+  .brk dt{color:#D8C7AF}
+  .brk dd{margin:0;text-align:end;font-variant-numeric:tabular-nums}
+  .brk .tot{padding-top:10px;border-top:1px solid rgba(250,247,241,.16);font-weight:600;font-size:16px}
+  .brk .tot dt{color:var(--ivory)}
+  .calc-acts{display:grid;gap:10px;margin-top:auto}
+  .calc-acts .btn{width:100%;min-height:50px}
+  .calc-acts .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .btn-ghost-l{background:transparent;color:var(--ivory);border-color:rgba(250,247,241,.35)}
+  .btn-ghost-l:hover{background:rgba(250,247,241,.08);border-color:var(--ivory)}
+  .btn-wa{background:#1F6E47;color:#fff}
+  .btn-wa:hover{background:#185a3a}
+  .calc-note{font-size:12.5px;color:#BCA88E;margin:12px 0 0;text-align:center}
+  .calc-msg{min-height:20px;font-size:13.5px;color:#9EE0BC;text-align:center;margin:8px 0 0}
+  @media (min-width:900px){
+    .calc{grid-template-columns:1.15fr .85fr;gap:24px;align-items:stretch}
+    .calc-opts{padding:32px 30px}
+    .calc-sum{padding:32px 28px;position:sticky;top:calc(var(--nav-h) + 20px);align-self:start}
+  }
+
   /* gallery */
   .gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
   .g{position:relative;margin:0;overflow:hidden;border-radius:4px;background:var(--champagne);cursor:zoom-in;padding:0;border:0;text-align:start}
@@ -516,6 +575,58 @@
           <a class="btn btn-dark" href="#book" data-pick="gifts">بدي أطلب توزيعات <span class="arr" aria-hidden="true">←</span></a>
         </div>
       </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRICE CALCULATOR ================= -->
+<section class="sec alt" id="calc" aria-labelledby="calcTitle">
+  <div class="container">
+    <div class="sec-head center rv">
+      <p class="eyebrow">حاسبة الأسعار</p>
+      <h2 class="h2" id="calcTitle">احسب سعر باقتك</h2>
+      <p class="lead">اختار حجم التوزيعات والعدد الإضافي، واعرف سعر باقتك مباشرة.</p>
+    </div>
+    <div class="calc rv">
+      <div class="calc-opts">
+        <fieldset>
+          <legend>حجم التوزيعات الأساسية</legend>
+          <p class="fdesc">كل باقة فيها البوث + 100 توزيعة مع كروتها.</p>
+          <div class="ropts" id="cBase"></div>
+        </fieldset>
+        <fieldset>
+          <legend>التوزيعات الإضافية</legend>
+          <p class="fdesc">الباقة تشمل 100 توزيعة. أضف العدد الذي تحتاجه حسب حجم العطر.</p>
+          <div class="ropts chips" id="cExtraSize"></div>
+          <div class="qline">
+            <label for="cQty">عدد التوزيعات الإضافية</label>
+            <div class="bigstep">
+              <button type="button" id="cMinus" aria-label="أقل">−</button>
+              <input id="cQty" inputmode="numeric" autocomplete="off" value="0" aria-describedby="cQtyErr">
+              <button type="button" id="cPlus" aria-label="أكثر">+</button>
+            </div>
+          </div>
+          <div class="quick" id="cQuick" dir="ltr"><button type="button" data-add="25">+25</button><button type="button" data-add="50">+50</button><button type="button" data-add="100">+100</button></div>
+          <p class="qerr" id="cQtyErr" role="alert"></p>
+        </fieldset>
+      </div>
+
+      <aside class="calc-sum" aria-label="ملخص الباقة">
+        <p class="lbl2">السعر الإجمالي</p>
+        <p class="calc-total" id="cTotal" aria-live="polite">120.00</p>
+        <p class="calc-cur">دينار أردني</p>
+        <dl class="brk" id="cBreak"></dl>
+        <div class="calc-acts">
+          <a class="btn btn-light" href="#book" id="cBook">احجز هالباقة <span class="arr" aria-hidden="true">←</span></a>
+          <a class="btn btn-wa" id="cWa" href="#" target="_blank" rel="noopener" hidden>استفسر عن الباقة عبر واتساب</a>
+          <div class="row">
+            <button type="button" class="btn btn-ghost-l" id="cCopy">نسخ تفاصيل الباقة</button>
+            <button type="button" class="btn btn-ghost-l" id="cReset">إعادة التعيين</button>
+          </div>
+        </div>
+        <p class="calc-msg" id="cMsg" role="status" aria-live="polite"></p>
+        <p class="calc-note">السعر تقديري، وبنأكّد التفاصيل معكم قبل الحجز.</p>
+      </aside>
     </div>
   </div>
 </section>
@@ -1067,6 +1178,139 @@
     clearDraft(); $('form').reset(); setPick(cBooth, true); setPick(cGifts, false); $('ok-date').textContent = ''; dateState = { day: '', full: false, checked: false };
     $('done').hidden = true; $('form').hidden = false; $('wa').hidden = true; $('name').focus();
   });
+
+  /* ================= PRICE CALCULATOR =================
+     كل الأسعار هون بمكان واحد. لتغيير سعر: عدّل الرقم بس.            */
+  const PRICING = {
+    included: 100,                                   // عدد التوزيعات بالباقة الأساسية
+    base:  { '5': 120, '10': 150, '30': 230 },       // سعر الباقة (البوث + 100 توزيعة) بالدينار
+    extra: { '5': 0.90, '10': 1.00, '30': 2.00 },    // سعر التوزيعة الإضافية الوحدة بالدينار
+    maxExtra: 10000
+  };
+  Object.assign(EN, {
+    "حاسبة الأسعار": "Price calculator", "احسب سعر باقتك": "Calculate Your Package",
+    "اختار حجم التوزيعات والعدد الإضافي، واعرف سعر باقتك مباشرة.": "Choose the favor size and any extra quantity, and see your package price instantly.",
+    "حجم التوزيعات الأساسية": "Base favor size", "كل باقة فيها البوث + 100 توزيعة مع كروتها.": "Every package includes the station + 100 favors with their cards.",
+    "التوزيعات الإضافية": "Additional favors", "الباقة تشمل 100 توزيعة. أضف العدد الذي تحتاجه حسب حجم العطر.": "The package includes 100 favors. Add the extra quantity you need by perfume size.",
+    "عدد التوزيعات الإضافية": "Number of additional favors", "ملخص الباقة": "Package summary",
+    "السعر الإجمالي": "Total price", "دينار أردني": "Jordanian dinars", "احجز هالباقة": "Book This Package",
+    "استفسر عن الباقة عبر واتساب": "Ask About This Package on WhatsApp", "نسخ تفاصيل الباقة": "Copy package details",
+    "إعادة التعيين": "Reset", "أقل": "Fewer", "أكثر": "More", "السعر تقديري، وبنأكّد التفاصيل معكم قبل الحجز.": "This is an estimate. We’ll confirm the details with you before booking."
+  });
+  (function collectCalc(){            // register the calculator's static text for the language switch
+    const root = $('calc');
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => EN[n.nodeValue.trim()] ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT });
+    let n; while ((n = w.nextNode())) if (!I18N_NODES.some(x => x[0] === n)) I18N_NODES.push([n, n.nodeValue]);
+    root.querySelectorAll('[aria-label]').forEach(el => { const v = el.getAttribute('aria-label'); if (EN[v] && !I18N_ATTRS.some(x => x[0] === el && x[1] === 'aria-label')) I18N_ATTRS.push([el, 'aria-label', v]); });
+  })();
+  const toFils = jod => Math.round(Number(jod) * 1000);
+  const money = fils => (fils / 1000).toFixed(2);
+  const short = jod => Number(jod) % 1 === 0 ? String(Number(jod)) : Number(jod).toFixed(2);
+  const C = { base: '5', extraSize: '5', qty: 0 };
+  function parseQty(v){
+    const d = clean(v).replace(/[^\d]/g, '');
+    return d === '' ? 0 : Math.min(PRICING.maxExtra, parseInt(d, 10));
+  }
+  function calcTotals(){
+    const baseF = toFils(PRICING.base[C.base]);
+    const unitF = toFils(PRICING.extra[C.extraSize]);
+    const extraF = C.qty * unitF;
+    return { baseF, unitF, extraF, totalF: baseF + extraF };
+  }
+  const ml = k => LANG === 'en' ? `${k} ml` : `${k} مل`;
+  const jodTxt = x => LANG === 'en' ? `${x} JOD` : `${x} دينار`;
+  function buildCalcOptions(){
+    $('cBase').innerHTML = Object.keys(PRICING.base).map(k => `
+      <label class="ropt"><input type="radio" name="cBase" value="${k}" ${C.base === k ? 'checked' : ''}>
+        <span><span><b>${ml(k)}</b><br><small>${LANG === 'en' ? `Station + ${PRICING.included} favors` : `البوث + ${PRICING.included} توزيعة`}</small></span><em>${jodTxt(short(PRICING.base[k]))}</em></span></label>`).join('');
+    $('cExtraSize').innerHTML = Object.keys(PRICING.extra).map(k => `
+      <label class="ropt"><input type="radio" name="cExtra" value="${k}" ${C.extraSize === k ? 'checked' : ''}>
+        <span><b>${ml(k)}</b><em>${PRICING.extra[k].toFixed(2)}</em><small>${LANG === 'en' ? 'JOD each' : 'دينار للحبة'}</small></span></label>`).join('');
+  }
+  function renderCalc(){
+    const t = calcTotals(), en = LANG === 'en';
+    $('cTotal').textContent = money(t.totalF);
+    $('cQty').value = String(C.qty);
+    $('cMinus').disabled = C.qty <= 0;
+    $('cBreak').innerHTML = `
+      <div><dt>${en ? 'Base package' : 'الباقة الأساسية'}</dt><dd>${en ? `Station + ${PRICING.included} × ${ml(C.base)}` : `البوث + ${PRICING.included} توزيعة ${ml(C.base)}`}</dd></div>
+      <div><dt>${en ? 'Package price' : 'سعر الباقة'}</dt><dd>${jodTxt(money(t.baseF))}</dd></div>
+      <div><dt>${en ? 'Additional favors' : 'التوزيعات الإضافية'}</dt><dd>${C.qty ? (en ? `${C.qty} × ${ml(C.extraSize)} @ ${(t.unitF / 1000).toFixed(2)}` : `${C.qty} حبة ${ml(C.extraSize)}، الحبة بـ ${(t.unitF / 1000).toFixed(2)}`) : (en ? 'None' : 'ما في')}</dd></div>
+      <div><dt>${en ? 'Additional cost' : 'سعر الإضافي'}</dt><dd>${jodTxt(money(t.extraF))}</dd></div>
+      <div class="tot"><dt>${en ? 'Total' : 'الإجمالي'}</dt><dd>${jodTxt(money(t.totalF))}</dd></div>`;
+    if (cfg.WHATSAPP) {
+      const msg = en
+        ? `Hi Amberé, I’d like to ask about this package:\n\n${summaryText()}\n\nIs this date available, and what are the next steps?`
+        : `مرحبا Amberé، حابب أستفسر عن هالباقة:\n\n${summaryText()}\n\nشو التفاصيل والخطوات الجاية؟`;
+      $('cWa').href = `https://wa.me/${encodeURIComponent(cfg.WHATSAPP)}?text=${encodeURIComponent(msg)}`;
+      $('cWa').hidden = false;
+    } else $('cWa').hidden = true;
+  }
+  function summaryText(){
+    const t = calcTotals();
+    if (LANG === 'en') return [
+      'Amberé Fragrance Bar', '',
+      `Base package: station + ${PRICING.included} favors, ${ml(C.base)}`,
+      `Package price: ${money(t.baseF)} JOD`, '',
+      C.qty ? `Additional favors: ${C.qty} pieces, ${ml(C.extraSize)}` : 'Additional favors: none',
+      `Additional favors cost: ${money(t.extraF)} JOD`, '',
+      `Total: ${money(t.totalF)} JOD`].join('\n');
+    return [
+      'Amberé Fragrance Bar', '',
+      `الباقة الأساسية: البوث + ${PRICING.included} توزيعة ${ml(C.base)}`,
+      `سعر الباقة: ${money(t.baseF)} دينار`, '',
+      C.qty ? `التوزيعات الإضافية: ${C.qty} حبة، حجم ${ml(C.extraSize)}` : 'التوزيعات الإضافية: ما في',
+      `سعر التوزيعات الإضافية: ${money(t.extraF)} دينار`, '',
+      `الإجمالي: ${money(t.totalF)} دينار أردني`].join('\n');
+  }
+  let calcMsgT;
+  function calcMsg(txt){ $('cMsg').textContent = txt; clearTimeout(calcMsgT); calcMsgT = setTimeout(() => $('cMsg').textContent = '', 3000); }
+  function setQty(v){
+    const raw = clean(String(v));
+    if (/[^\d]/.test(raw.replace(/^-/, '')) || /^-/.test(raw)) $('cQtyErr').textContent = LANG === 'en' ? 'Please enter a whole number of 0 or more.' : 'اكتب رقم صحيح من 0 وطالع.';
+    else if (parseInt(raw || '0', 10) > PRICING.maxExtra) $('cQtyErr').textContent = LANG === 'en' ? `Maximum is ${PRICING.maxExtra}. For larger orders, contact us.` : `الحد الأقصى ${PRICING.maxExtra}. للكميات الأكبر تواصل معنا.`;
+    else $('cQtyErr').textContent = '';
+    C.qty = Math.max(0, parseQty(raw.replace(/^-.*/, '0')));
+    renderCalc();
+  }
+  $('cBase').addEventListener('change', e => { if (e.target.name === 'cBase') { C.base = e.target.value; renderCalc(); } });
+  $('cExtraSize').addEventListener('change', e => { if (e.target.name === 'cExtra') { C.extraSize = e.target.value; renderCalc(); } });
+  $('cMinus').addEventListener('click', () => setQty(Math.max(0, C.qty - 10)));
+  $('cPlus').addEventListener('click', () => setQty(C.qty + 10));
+  $('cQuick').addEventListener('click', e => { const b = e.target.closest('[data-add]'); if (b) setQty(C.qty + Number(b.dataset.add)); });
+  $('cQty').addEventListener('input', e => {
+    const raw = clean(e.target.value);
+    if (/^\s*-/.test(raw)) { C.qty = 0; $('cQtyErr').textContent = LANG === 'en' ? 'Negative numbers aren’t allowed.' : 'ما بنقبل أرقام بالسالب.'; renderCalc(); return; }
+    const n = parseQty(raw);
+    C.qty = n; $('cQtyErr').textContent = /[^\d]/.test(raw) ? (LANG === 'en' ? 'Numbers only, please.' : 'أرقام بس لو سمحت.') : (n >= PRICING.maxExtra && raw.length > 4 ? (LANG === 'en' ? `Maximum is ${PRICING.maxExtra}.` : `الحد الأقصى ${PRICING.maxExtra}.`) : '');
+    const t = calcTotals(); $('cTotal').textContent = money(t.totalF); renderCalcPartial();
+  });
+  function renderCalcPartial(){ const pos = $('cQty').selectionStart; const v = $('cQty').value; renderCalc(); if ($('cQty').value === v && document.activeElement === $('cQty')) try { $('cQty').setSelectionRange(pos, pos); } catch (e) {} }
+  $('cQty').addEventListener('blur', () => { $('cQty').value = String(C.qty); });
+  $('cQty').addEventListener('keydown', e => { if (e.key === 'ArrowUp') { e.preventDefault(); setQty(C.qty + 1); } if (e.key === 'ArrowDown') { e.preventDefault(); setQty(Math.max(0, C.qty - 1)); } });
+  $('cReset').addEventListener('click', () => { C.base = '5'; C.extraSize = '5'; C.qty = 0; $('cQtyErr').textContent = ''; buildCalcOptions(); renderCalc(); calcMsg(LANG === 'en' ? 'Calculator reset' : 'رجعت الحاسبة للبداية'); });
+  $('cCopy').addEventListener('click', async () => {
+    const txt = summaryText();
+    try { await navigator.clipboard.writeText(txt); calcMsg(LANG === 'en' ? '✓ Package details copied' : '✓ انسخت تفاصيل الباقة'); }
+    catch (e) {
+      const ta = Object.assign(document.createElement('textarea'), { value: txt }); ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (er) {} ta.remove();
+      calcMsg(ok ? (LANG === 'en' ? '✓ Package details copied' : '✓ انسخت تفاصيل الباقة') : (LANG === 'en' ? 'Couldn’t copy automatically' : 'ما زبط النسخ التلقائي'));
+    }
+  });
+  // "Book this package": fills the EXISTING booking form (no automatic submission)
+  $('cBook').addEventListener('click', () => {
+    setPick(cBooth, true); setPick(cGifts, true);
+    const q = { '5': 0, '10': 0, '30': 0 };
+    q[C.base] += PRICING.included; q[C.extraSize] += C.qty;
+    ['5', '10', '30'].forEach(k => { $('q' + k).value = q[k] ? String(q[k]) : ''; });
+    const line = (LANG === 'en' ? 'Calculator package: ' : 'باقة من الحاسبة: ') + summaryText().split('\n').filter(Boolean).slice(1).join(' | ');
+    const notes = $('notes'); notes.value = notes.value.replace(/^(باقة من الحاسبة|Calculator package): .*\n?/m, '').trim();
+    notes.value = line + (notes.value ? '\n' + notes.value : '');
+    saveDraft();
+  });
+  buildCalcOptions(); renderCalc();
+  langHooks.push(() => { buildCalcOptions(); renderCalc(); $('cQtyErr').textContent = ''; $('cMsg').textContent = ''; });
 
   /* ---------- language switch ---------- */
   langHooks.push(() => {
