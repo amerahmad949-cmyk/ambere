@@ -26,6 +26,7 @@
 <link rel="preload" as="image" href="images/work/station-ambere-counter-960.webp" imagesrcset="images/work/station-ambere-counter-480.webp 480w, images/work/station-ambere-counter-960.webp 960w" imagesizes="(min-width: 900px) 46vw, 100vw">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
+<script src="pricing.js"></script>
 <script>document.documentElement.classList.add('js');
 (function(){try{var q=new URLSearchParams(location.search).get('lang');var l=(q==='en'||q==='ar')?q:localStorage.getItem('ambere-lang');if(l==='en'){document.documentElement.lang='en';document.documentElement.dir='ltr';}}catch(e){}})();</script>
 <style>
@@ -1179,14 +1180,9 @@
     $('done').hidden = true; $('form').hidden = false; $('wa').hidden = true; $('name').focus();
   });
 
-  /* ================= PRICE CALCULATOR =================
-     كل الأسعار هون بمكان واحد. لتغيير سعر: عدّل الرقم بس.            */
-  const PRICING = {
-    included: 100,                                   // عدد التوزيعات بالباقة الأساسية
-    base:  { '5': 120, '10': 150, '30': 230 },       // سعر الباقة (البوث + 100 توزيعة) بالدينار
-    extra: { '5': 0.90, '10': 1.00, '30': 2.00 },    // سعر التوزيعة الإضافية الوحدة بالدينار
-    maxExtra: 10000
-  };
+  /* ================= PRICE CALCULATOR ================= */
+  // الأسعار بتنقرا من pricing.js (نفس الملف بتستخدمه لوحة الإدارة). هدول قيم احتياطية بس.
+  const PRICING = Object.assign({ included: 100, base: { '5': 120, '10': 150, '30': 230 }, extra: { '5': 0.90, '10': 1.00, '30': 2.00 }, maxExtra: 10000 }, window.AMBERE_PRICING || {});
   Object.assign(EN, {
     "حاسبة الأسعار": "Price calculator", "احسب سعر باقتك": "Calculate Your Package",
     "اختار حجم التوزيعات والعدد الإضافي، واعرف سعر باقتك مباشرة.": "Choose the favor size and any extra quantity, and see your package price instantly.",
