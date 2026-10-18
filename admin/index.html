@@ -8,7 +8,8 @@
 <link rel="icon" type="image/png" href="../icons/favicon-32.png">
 <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#FAF7F1">
+<meta name="theme-color" content="#F4F2EE" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E1014" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Ambere">
@@ -19,18 +20,40 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../config.js"></script>
 <script src="../pricing.js"></script>
-<script>try{if(localStorage.getItem('ambere-admin-lang')==='en'){document.documentElement.lang='en';document.documentElement.dir='ltr';}}catch(e){}</script>
+<script>try{if(localStorage.getItem('ambere-admin-lang')==='en'){document.documentElement.lang='en';document.documentElement.dir='ltr';}var t=localStorage.getItem('ambere-admin-theme')||'auto';var d=t==='dark'||(t==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.dataset.theme=d?'dark':'light';}catch(e){}</script>
 <style>
   :root{
-    --bg:#FAF7F1; --card:#FFFFFF; --cream:#F2E9DC; --champagne:#E6D5BC; --line:#ECE2D4; --line-2:#DDCDB8;
-    --ink:#35251F; --ink-2:#5A4C40; --muted:#8A7B6D; --gold:#B89A65; --gold-soft:#F6EDDF;
-    --gain:#2F6B4F; --gain-soft:#E4F0E8; --loss:#A23A34; --loss-soft:#F8E6E3;
-    --blue:#2F5878; --blue-soft:#E3ECF4; --amber:#8A5A16; --amber-soft:#F8EAD5;
-    --s5:#2F5878; --s10:#2F6B4F; --s30:#8A5A16;
+    /* «Sand & Ink» — light */
+    --bg:#F4F2EE; --card:#FFFFFF; --cream:#EEEAE3; --champagne:#E2DCD1; --line:#E6E1D8; --line-2:#D6CFC3;
+    --ink:#1D2129; --ink-2:#4A505C; --muted:#7A808B; --gold:#B9853A; --gold-soft:#F6EBDA;
+    --gain:#1F8A5B; --gain-soft:#E1F3EA; --loss:#D1495B; --loss-soft:#FBE7EA;
+    --blue:#3767C8; --blue-soft:#E6EDFB; --amber:#B26B12; --amber-soft:#FCEFD9;
+    --s5:#3767C8; --s10:#1F8A5B; --s30:#B26B12;
+    --primary:#1D2129; --on-primary:#FFFFFF; --primary-soft:rgba(255,255,255,.14);
+    --hero-bg:linear-gradient(140deg,#232838 0%,#1A1E29 100%); --hero-fg:#FFFFFF; --hero-muted:#AEB4C0; --hero-gain:#7FE3B6; --hero-loss:#FF9C93; --hero-line:rgba(255,255,255,.12);
+    --input-bg:#FFFFFF; --seg-on:#FFFFFF; --sub:#FAF9F6; --bar-bg:rgba(255,255,255,.96); --top-bg:rgba(244,242,238,.96);
+    --warn-line:#EED7AE; --loss-line:#F2C2C9; --stripe-a:#ECE7DE; --stripe-b:#F7F5F1;
+    --sh:29,33,41;
     --r-xl:22px; --r-lg:16px; --r-md:12px; --r-sm:8px;
     --display:"Amiri",Georgia,serif; --latin:"Cormorant Garamond",Georgia,serif; --sans:"Readex Pro",Tahoma,Arial,sans-serif;
-    --shadow:0 1px 2px rgba(42,31,24,.04),0 8px 24px -16px rgba(42,31,24,.22);
+    --shadow:0 1px 2px rgba(var(--sh),.05),0 10px 26px -18px rgba(var(--sh),.28);
     --tabbar:64px;
+    color-scheme:light;
+  }
+  /* «Midnight Champagne» — dark */
+  html[data-theme="dark"]{
+    --bg:#0E1014; --card:#171A21; --cream:#1F232C; --champagne:#2B303B; --line:#252A34; --line-2:#333946;
+    --ink:#EEEBE5; --ink-2:#C4C7CE; --muted:#8C929D; --gold:#E0BC80; --gold-soft:#2A2419;
+    --gain:#5FD39F; --gain-soft:#132820; --loss:#FF7B72; --loss-soft:#2E1817;
+    --blue:#88AAFF; --blue-soft:#17203A; --amber:#F2B866; --amber-soft:#2B2214;
+    --s5:#88AAFF; --s10:#5FD39F; --s30:#F2B866;
+    --primary:#E0BC80; --on-primary:#15171C; --primary-soft:rgba(21,23,28,.14);
+    --hero-bg:linear-gradient(140deg,#232A3B 0%,#171B25 100%); --hero-fg:#F5F1EA; --hero-muted:#A2AABA; --hero-gain:#6BE0AC; --hero-loss:#FF8E86; --hero-line:rgba(255,255,255,.10);
+    --input-bg:#12151B; --seg-on:#2A2F3A; --sub:#13161C; --bar-bg:rgba(20,23,29,.96); --top-bg:rgba(14,16,20,.94);
+    --warn-line:#4A3A20; --loss-line:#5A2A27; --stripe-a:#1F232C; --stripe-b:#14171D;
+    --sh:0,0,0;
+    --shadow:0 1px 2px rgba(0,0,0,.35),0 12px 30px -18px rgba(0,0,0,.7);
+    color-scheme:dark;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55;-webkit-text-size-adjust:100%}
@@ -46,7 +69,7 @@
   [dir="ltr"] .brand b,[dir="ltr"] .nums strong{text-align:left}
   [dir="ltr"] .switch[aria-checked="true"] .sw::after{transform:translateX(18px)}
   [dir="ltr"] #btnBack svg,[dir="ltr"] #calPrev svg,[dir="ltr"] #calNext svg{transform:scaleX(-1)}
-  .lang-mini{position:absolute;top:14px;inset-inline-end:14px;border:1px solid var(--line-2);background:#fff;border-radius:999px;height:34px;min-width:44px;padding:0 12px;font-weight:600;font-size:14px;color:var(--ink-2)}
+  .lang-mini{position:absolute;top:14px;inset-inline-end:14px;border:1px solid var(--line-2);background:var(--card);border-radius:999px;height:34px;min-width:44px;padding:0 12px;font-weight:600;font-size:14px;color:var(--ink-2)}
   .login-card{position:relative}
   .num{font-variant-numeric:tabular-nums}
 
@@ -64,7 +87,7 @@
   .page-sub{color:var(--muted);margin:0 0 18px;font-size:14px}
 
   /* ---------- tab bar ---------- */
-  .tabbar{position:fixed;inset:auto 0 0 0;z-index:30;background:rgba(255,255,255,.98);border-top:1px solid var(--line);padding:6px 10px calc(6px + env(safe-area-inset-bottom))}
+  .tabbar{position:fixed;inset:auto 0 0 0;z-index:30;background:var(--bar-bg);border-top:1px solid var(--line);padding:6px 10px calc(6px + env(safe-area-inset-bottom))}
   .tabbar-in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;height:var(--tabbar)}
   .tab{border:0;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--muted);font-size:12px;font-weight:500;border-radius:var(--r-md);position:relative}
   .tab svg{width:22px;height:22px}
@@ -72,16 +95,16 @@
   .tab[aria-current="page"]::before{content:"";position:absolute;top:2px;width:22px;height:2px;border-radius:2px;background:var(--gold)}
   .tab .dot{position:absolute;top:6px;inset-inline-end:calc(50% - 20px);min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--loss);color:#fff;font-size:11px;line-height:18px;text-align:center}
   .tab.add{color:var(--ink)}
-  .tab.add .plus{width:40px;height:40px;border-radius:14px;background:var(--ink);color:var(--bg);display:grid;place-items:center}
+  .tab.add .plus{width:40px;height:40px;border-radius:14px;background:var(--primary);color:var(--on-primary);display:grid;place-items:center}
   .tab.add .plus svg{width:20px;height:20px}
 
   /* ---------- cards & stats ---------- */
   .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow)}
-  .hero-stat{background:var(--ink);color:var(--bg);border-radius:var(--r-xl);padding:20px 20px 18px;margin-bottom:12px;position:relative;overflow:hidden}
-  .hero-stat::after{content:"";position:absolute;inset:auto -40px -60px auto;width:180px;height:180px;border-radius:50%;border:1px solid rgba(230,213,188,.18)}
-  .hero-stat span{font-size:13px;color:#D8C7AF}
+  .hero-stat{background:var(--hero-bg);color:var(--hero-fg);border-radius:var(--r-xl);padding:20px 20px 18px;margin-bottom:12px;position:relative;overflow:hidden}
+  .hero-stat::after{content:"";position:absolute;inset:auto -40px -60px auto;width:180px;height:180px;border-radius:50%;border:1px solid var(--hero-line)}
+  .hero-stat span{font-size:13px;color:var(--hero-muted)}
   .hero-stat b{display:block;font-size:36px;font-weight:600;line-height:1.2;margin:4px 0 2px}
-  .hero-stat small{color:#BCA88E;font-size:13px}
+  .hero-stat small{color:var(--hero-muted);font-size:13px}
   .hero-stat small b{display:inline;font-size:inherit;line-height:inherit;margin:0}
   .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:20px}
   .stat{padding:14px 12px}
@@ -95,13 +118,13 @@
   .action i svg{width:19px;height:19px}
   .action b{display:block;font-weight:500;font-size:14.5px}
   .action small{display:block;color:var(--muted);font-size:12px}
-  .action.dark{background:var(--ink);border-color:var(--ink);color:var(--bg)}
-  .action.dark i{background:rgba(250,246,239,.12);color:var(--bg)}
-  .action.dark small{color:#C8B79F}
+  .action.dark{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+  .action.dark i{background:var(--primary-soft);color:var(--on-primary)}
+  .action.dark small{color:var(--on-primary);opacity:.72}
 
-  .alert{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;margin-bottom:12px;border-radius:var(--r-md);border:1px solid #EFD3A7;background:var(--amber-soft);color:var(--amber);text-align:start;font-weight:500;font-size:14px}
+  .alert{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;margin-bottom:12px;border-radius:var(--r-md);border:1px solid var(--warn-line);background:var(--amber-soft);color:var(--amber);text-align:start;font-weight:500;font-size:14px}
   .alert svg{width:20px;height:20px;flex:none}
-  .alert.red{border-color:#EBC3BE;background:var(--loss-soft);color:var(--loss)}
+  .alert.red{border-color:var(--loss-line);background:var(--loss-soft);color:var(--loss)}
 
   .sec-h{display:flex;align-items:center;justify-content:space-between;margin:6px 0 10px}
   .sec-h h2{font-size:16px;font-weight:600;margin:0}
@@ -117,7 +140,7 @@
   .date{border-radius:12px;background:var(--cream);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 0;line-height:1.1}
   .date b{font-size:22px;font-weight:600}
   .date small{font-size:11px;color:var(--ink-2)}
-  .date.today{background:var(--ink);color:var(--bg)} .date.today small{color:#D8C7AF}
+  .date.today{background:var(--primary);color:var(--on-primary)} .date.today small{color:inherit;opacity:.75}
   .bk-main{min-width:0}
   .bk-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
   .bk-name{font-weight:600;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -128,11 +151,11 @@
   .pill{font-size:11.5px;padding:3px 9px;border-radius:999px;font-weight:500;white-space:nowrap;flex:none}
   .pill.confirmed{background:var(--blue-soft);color:var(--blue)}
   .pill.done{background:var(--gain-soft);color:var(--gain)}
-  .pill.cancelled{background:#EEE9E3;color:#7D7268}
+  .pill.cancelled{background:var(--cream);color:var(--muted)}
   .pill.late{background:var(--amber-soft);color:var(--amber)}
   .pill.new{background:var(--amber-soft);color:var(--amber)}
   .pill.accepted{background:var(--gain-soft);color:var(--gain)}
-  .pill.rejected{background:#EEE9E3;color:#7D7268}
+  .pill.rejected{background:var(--cream);color:var(--muted)}
 
   /* ---------- toolbar ---------- */
   .search{position:relative;margin-bottom:10px}
@@ -141,7 +164,7 @@
   .chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin:0 -16px 6px;padding-inline:16px;scrollbar-width:none}
   .chips::-webkit-scrollbar{display:none}
   .chip{flex:none;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:7px 14px;font-size:13.5px;white-space:nowrap}
-  .chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+  .chip[aria-pressed="true"]{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
   .chip .c{opacity:.7;margin-inline-start:4px}
   .empty{text-align:center;color:var(--muted);padding:44px 16px}
   .empty svg{width:40px;height:40px;color:var(--champagne);margin-bottom:8px}
@@ -151,18 +174,18 @@
   .rq{padding:14px;margin-bottom:10px}
   .rq-acts{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:42px;padding:0 16px;border-radius:var(--r-md);border:1px solid var(--line-2);background:var(--card);font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap}
-  .btn.primary{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+  .btn.primary{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
   .btn.wa{background:#1F6E47;border-color:#1F6E47;color:#fff}
   .btn.ghost{border-color:transparent;color:var(--muted)}
   .btn svg{width:17px;height:17px}
   .rq-note{margin-top:10px;padding:10px 12px;border-radius:var(--r-sm);background:var(--bg);font-size:14px;white-space:pre-wrap}
 
   /* ---------- form ---------- */
-  .form-top{position:sticky;top:0;z-index:20;margin:0 -16px 14px;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;background:rgba(250,247,241,.97);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+  .form-top{position:sticky;top:0;z-index:20;margin:0 -16px 14px;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;background:var(--top-bg);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
   .form-top h1{flex:1;font-family:var(--display);font-size:22px;margin:0;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .form-top .btn{height:38px}
   .view-form .shell{padding-top:0}
-  .banner{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:var(--r-md);margin-bottom:14px;font-size:14px;background:var(--gold-soft);border:1px solid #EAD9BD;color:var(--amber)}
+  .banner{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:var(--r-md);margin-bottom:14px;font-size:14px;background:var(--gold-soft);border:1px solid var(--warn-line);color:var(--amber)}
   .banner svg{width:18px;height:18px;flex:none;margin-top:2px}
   .fs{padding:16px;margin-bottom:12px}
   .fs h2{font-size:14px;font-weight:600;color:var(--muted);margin:0 0 12px}
@@ -170,33 +193,33 @@
   .grid > *{min-width:0}
   .full{grid-column:1/-1}
   label,.lbl{display:block;font-size:13px;color:var(--ink-2);margin-bottom:6px;font-weight:500}
-  .inp,.search input{display:block;width:100%;min-width:0;height:48px;padding:0 14px;border:1px solid var(--line-2);border-radius:var(--r-md);background:#fff;outline:none;-webkit-appearance:none;appearance:none;text-align:start;transition:border-color .2s,box-shadow .2s}
+  .inp,.search input{display:block;width:100%;min-width:0;height:48px;padding:0 14px;border:1px solid var(--line-2);border-radius:var(--r-md);background:var(--input-bg);outline:none;-webkit-appearance:none;appearance:none;text-align:start;transition:border-color .2s,box-shadow .2s}
   textarea.inp{height:auto;min-height:80px;padding:10px 14px;resize:vertical}
   .inp[type="date"]{line-height:46px}
   .inp[type="date"]::-webkit-date-and-time-value{text-align:start}
   .inp[dir="ltr"]{text-align:left}
-  .inp:focus,.search input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(168,131,74,.15)}
-  .inp[readonly]{background:var(--gold-soft);border-color:#EAD9BD;font-weight:600}
-  .inp[aria-invalid="true"]{border-color:var(--loss);background:#FFF9F8}
+  .inp:focus,.search input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(185,133,58,.22)}
+  .inp[readonly]{background:var(--gold-soft);border-color:var(--warn-line);font-weight:600}
+  .inp[aria-invalid="true"]{border-color:var(--loss);background:var(--loss-soft)}
   .hint{font-size:12px;color:var(--muted);margin-top:4px;min-height:16px}
   .hint.warn{color:var(--loss);font-weight:500}
 
   .seg{display:flex;gap:4px;padding:4px;border-radius:var(--r-md);background:var(--cream)}
   .seg button{flex:1;min-width:0;border:0;background:transparent;border-radius:9px;padding:9px 4px;font-size:14px;font-weight:500;color:var(--ink-2)}
-  .seg button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(42,31,24,.12)}
+  .seg button[aria-pressed="true"]{background:var(--seg-on);color:var(--ink);box-shadow:0 1px 3px rgba(var(--sh),.12)}
   .seg.status button[data-v="confirmed"][aria-pressed="true"]{color:var(--blue)}
   .seg.status button[data-v="done"][aria-pressed="true"]{color:var(--gain)}
-  .seg.status button[data-v="cancelled"][aria-pressed="true"]{color:#7D7268}
+  .seg.status button[data-v="cancelled"][aria-pressed="true"]{color:var(--muted)}
   .gap{margin-bottom:14px}
   .help{font-size:12.5px;color:var(--muted);margin:8px 2px 0}
 
-  .size{border:1px solid var(--line);border-radius:var(--r-md);margin-bottom:8px;overflow:hidden;background:#fff}
+  .size{border:1px solid var(--line);border-radius:var(--r-md);margin-bottom:8px;overflow:hidden;background:var(--card)}
   .size:last-child{margin-bottom:0}
   .size-head{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;border:0;background:none;padding:12px 14px;text-align:start}
   .size-name{display:flex;align-items:center;gap:10px;font-weight:600}
   .sdot{width:10px;height:10px;border-radius:50%}
   .size-sum{font-size:13px;color:var(--muted)}
-  .size-body{display:none;padding:2px 14px 14px;border-top:1px solid var(--line);background:#FDFBF8}
+  .size-body{display:none;padding:2px 14px 14px;border-top:1px solid var(--line);background:var(--sub)}
   .size.open .size-body{display:block}
   .size-body .grid{margin-top:12px}
   .calc{display:flex;justify-content:space-between;margin-top:12px;padding:10px 12px;border-radius:var(--r-sm);background:var(--cream);font-size:13.5px}
@@ -204,7 +227,7 @@
   .piece-only{display:none}
   .mode-piece .piece-only{display:block}
 
-  .switch{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:12px 14px;border:1px solid var(--line-2);border-radius:var(--r-md);background:#fff;text-align:start}
+  .switch{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:12px 14px;border:1px solid var(--line-2);border-radius:var(--r-md);background:var(--card);text-align:start}
   .switch b{display:block;font-weight:500;font-size:14.5px}
   .switch small{display:block;color:var(--muted);font-size:12px}
   .sw{width:46px;height:28px;border-radius:999px;background:var(--line-2);position:relative;flex:none;transition:background .2s}
@@ -212,17 +235,17 @@
   .switch[aria-checked="true"] .sw{background:var(--gain)}
   .switch[aria-checked="true"] .sw::after{transform:translateX(-18px)}
 
-  .danger{width:100%;height:48px;border:1px solid #EBC3BE;background:#fff;color:var(--loss);border-radius:var(--r-md);font-weight:500;margin:4px 0 14px}
+  .danger{width:100%;height:48px;border:1px solid var(--loss-line);background:var(--card);color:var(--loss);border-radius:var(--r-md);font-weight:500;margin:4px 0 14px}
 
-  .sumbar{position:fixed;inset:auto 0 0 0;z-index:30;background:var(--ink);color:var(--bg);padding:12px 16px calc(12px + env(safe-area-inset-bottom));transition:transform .2s}
+  .sumbar{position:fixed;inset:auto 0 0 0;z-index:30;background:var(--hero-bg);color:var(--hero-fg);padding:12px 16px calc(12px + env(safe-area-inset-bottom));transition:transform .2s}
   .sumbar.away{transform:translateY(110%)}
   .sumbar-in{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:12px}
   .nums{flex:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;min-width:0}
   .nums div{display:flex;flex-direction:column;min-width:0}
-  .nums span{font-size:11px;color:#C8B79F}
+  .nums span{font-size:11px;color:var(--hero-muted)}
   .nums strong{font-size:17px;font-weight:600;white-space:nowrap;direction:ltr;text-align:start;font-variant-numeric:tabular-nums}
-  #pProfit.pos{color:#8FDDB7} #pProfit.neg{color:#FF9F9A}
-  .save{border:0;background:var(--bg);color:var(--ink);font-weight:600;padding:0 20px;height:46px;border-radius:var(--r-md);white-space:nowrap}
+  #pProfit.pos{color:var(--hero-gain)} #pProfit.neg{color:var(--hero-loss)}
+  .save{border:0;background:var(--primary);color:var(--on-primary);font-weight:600;padding:0 20px;height:46px;border-radius:var(--r-md);white-space:nowrap}
   .save:disabled{opacity:.55}
 
   /* ---------- more ---------- */
@@ -240,11 +263,11 @@
   .login-card h1{text-align:center;font-family:var(--latin);font-weight:500;font-size:36px;margin:0;line-height:1;direction:ltr}
   .login-card p{text-align:center;color:var(--muted);margin:6px 0 22px}
   .login-card .field{margin-bottom:12px}
-  .primary-lg{width:100%;height:50px;border:0;border-radius:var(--r-md);background:var(--ink);color:var(--bg);font-weight:600}
+  .primary-lg{width:100%;height:50px;border:0;border-radius:var(--r-md);background:var(--primary);color:var(--on-primary);font-weight:600}
   .primary-lg:disabled{opacity:.6}
   .err{color:var(--loss);font-size:14px;text-align:center;min-height:22px;margin-top:10px}
 
-  .toast{position:fixed;top:calc(14px + env(safe-area-inset-top));left:50%;z-index:60;transform:translate(-50%,-160%);visibility:hidden;opacity:0;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:var(--r-md);max-width:90vw;text-align:center;transition:transform .25s,opacity .25s;box-shadow:0 12px 30px -12px rgba(0,0,0,.4)}
+  .toast{position:fixed;top:calc(14px + env(safe-area-inset-top));left:50%;z-index:60;transform:translate(-50%,-160%);visibility:hidden;opacity:0;background:var(--primary);color:var(--on-primary);padding:12px 18px;border-radius:var(--r-md);max-width:90vw;text-align:center;transition:transform .25s,opacity .25s;box-shadow:0 12px 30px -12px rgba(0,0,0,.4)}
   .toast.show{transform:translate(-50%,0);visibility:visible;opacity:1}
   .toast.err{background:var(--loss)}
 
@@ -256,7 +279,7 @@
   .bars{display:flex;align-items:flex-end;gap:2px;height:120px;direction:ltr}
   .bars span{flex:1;min-width:2px;background:var(--champagne);border-radius:3px 3px 0 0;position:relative}
   .bars span.today{background:var(--gold)}
-  .bars span:hover{background:var(--ink)}
+  .bars span:hover{background:var(--primary)}
   .bars-x{display:flex;justify-content:space-between;direction:ltr;font-size:11px;color:var(--muted);margin-top:6px}
   .box{padding:14px;margin-bottom:12px}
   .hrow{margin-bottom:10px}
@@ -264,12 +287,12 @@
   .hrow .l{display:flex;justify-content:space-between;font-size:14px;margin-bottom:5px}
   .hrow .l b{font-weight:600;font-variant-numeric:tabular-nums}
   .hbar{height:8px;border-radius:999px;background:var(--cream);overflow:hidden;display:flex}
-  .hbar i{display:block;flex:none;height:100%;border-radius:999px;background:var(--ink)}
+  .hbar i{display:block;flex:none;height:100%;border-radius:999px;background:var(--primary)}
   .funnel .hbar i{background:var(--gold)}
-  .tipbox{padding:14px;margin-bottom:12px;background:var(--gold-soft);border-color:#EAD9BD}
+  .tipbox{padding:14px;margin-bottom:12px;background:var(--gold-soft);border-color:var(--warn-line)}
   .tipbox p{margin:0 0 10px;font-size:13.5px;color:var(--ink-2)}
   .copyrow{display:flex;gap:8px;align-items:center;margin-top:8px}
-  .copyrow code{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr;text-align:left;font-size:12px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+  .copyrow code{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr;text-align:left;font-size:12px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
   .visits-card{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:14px 16px;margin-bottom:20px;text-align:start}
   .visits-card b{font-size:15px;font-weight:600}
   .visits-card small{display:block;color:var(--muted);font-size:12.5px}
@@ -281,7 +304,7 @@
   .cap-top b{font-size:15px;font-weight:600}
   .cap-top span{font-size:13px;color:var(--muted)}
   .bar{height:10px;border-radius:999px;background:var(--cream);overflow:hidden;display:flex;justify-content:flex-start}
-  .bar i{display:block;flex:none;height:100%;border-radius:999px;background:linear-gradient(270deg,var(--gold),#C9A66B);transition:width .6s}
+  .bar i{display:block;flex:none;height:100%;border-radius:999px;background:linear-gradient(270deg,var(--gold),var(--gold));transition:width .6s}
   .bar.done i{background:var(--gain)}
   .cap-foot{display:flex;justify-content:space-between;gap:10px;margin-top:8px;font-size:13px;color:var(--ink-2)}
   .fin-sum{padding:4px 16px;margin-bottom:12px}
@@ -298,12 +321,58 @@
   .exp .t small{display:block;color:var(--muted);font-size:12.5px}
   .exp .a{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
   /* ---------- profit calculator ---------- */
-  .pc-res{background:var(--ink);color:var(--bg);border-radius:var(--r-xl);padding:20px;margin-bottom:12px}
-  .pc-res span{font-size:13px;color:#D8C7AF}
+  .pc-top{position:sticky;top:calc(env(safe-area-inset-top) + 6px);z-index:15;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 8px;padding:6px 0;background:var(--bg)}
+  .pc-tile{border-radius:var(--r-lg);padding:14px 14px 12px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);min-width:0}
+  .pc-tile.profit{background:var(--hero-bg);border-color:transparent;color:var(--hero-fg)}
+  .pc-tl{display:block;font-size:13px;color:var(--muted);font-weight:500}
+  .pc-tile.profit .pc-tl{color:var(--hero-muted)}
+  .pc-big{display:block;font-size:clamp(28px,8.5vw,36px);font-weight:700;line-height:1.15;margin:4px 0 2px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pc-tile.profit .pc-big{color:var(--hero-gain)}
+  .pc-tile.profit .pc-big.neg{color:var(--hero-loss)}
+  .pc-tile small{display:block;font-size:12.5px;color:var(--muted)}
+  .pc-tile.profit small{color:var(--hero-muted)}
+  .pc-share{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin:2px 0 14px;font-size:13.5px;color:var(--ink-2)}
+  .pc-share b{color:var(--ink);font-weight:600}
+  .pc-step{padding:16px;margin-bottom:12px}
+  .pc-step h2{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:600;margin:0 0 14px;color:var(--ink)}
+  .pc-step h2 small{font-size:12.5px;color:var(--muted);font-weight:400}
+  .pc-n{width:26px;height:26px;border-radius:50%;background:var(--gold-soft);color:var(--gold);display:grid;place-items:center;font-size:13px;font-weight:700;flex:none}
+  .pc-opts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .pc-opt{display:flex;flex-direction:column;align-items:center;gap:2px;padding:14px 6px 12px;border:1.5px solid var(--line-2);border-radius:var(--r-md);background:var(--input-bg);color:var(--ink);text-align:center;transition:border-color .2s,background .2s,transform .15s}
+  .pc-opt:active{transform:scale(.97)}
+  .pc-opt .sz{font-size:15px;font-weight:600}
+  .pc-opt .pr{font-size:24px;font-weight:700;line-height:1.2;font-variant-numeric:tabular-nums}
+  .pc-opt .pr small{font-size:12px;font-weight:500;color:var(--muted);margin-inline-start:3px}
+  .pc-opt .ds{font-size:11.5px;color:var(--muted)}
+  .pc-opts.small .pc-opt .pr{font-size:21px}
+  .pc-opt[aria-pressed="true"]{border-color:var(--gold);background:var(--gold-soft);box-shadow:0 0 0 1px var(--gold)}
+  .pc-qlabel{margin:18px 0 8px;font-size:14px;font-weight:600;color:var(--ink)}
+  .pc-qbox{display:flex;align-items:center;gap:10px;direction:ltr}
+  .pc-qbox input{flex:1;min-width:0;height:64px;border:1.5px solid var(--line-2);border-radius:var(--r-lg);background:var(--input-bg);color:var(--ink);text-align:center;font-size:32px;font-weight:700;font-variant-numeric:tabular-nums;outline:none;-webkit-appearance:none}
+  .pc-qbox input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(185,133,58,.22)}
+  .pc-round{width:56px;height:56px;flex:none;border-radius:50%;border:1.5px solid var(--line-2);background:var(--card);color:var(--ink);font-size:26px;line-height:1}
+  .pc-round:disabled{opacity:.35}
+  .pc-qhint{margin:10px 2px 6px;font-size:12.5px;color:var(--muted)}
+  .pc-chips{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .pc-chips button{height:42px;border-radius:999px;border:1px solid var(--line-2);background:var(--card);color:var(--ink);font-size:15px;font-weight:600}
+  .pc-chips .clr{color:var(--muted);font-weight:500;font-size:14px}
+  .pc-extra-line{margin:12px 2px 0;font-size:13.5px;color:var(--ink-2);min-height:20px}
+  .pc-extra-line b{color:var(--ink)}
+  .pc-details{padding:0 16px;margin-bottom:12px}
+  .pc-details summary{list-style:none;cursor:pointer;padding:14px 0;font-weight:600;font-size:14.5px;display:flex;justify-content:space-between;align-items:center}
+  .pc-details summary::-webkit-details-marker{display:none}
+  .pc-details summary::after{content:"＋";color:var(--muted);font-weight:400}
+  .pc-details[open] summary::after{content:"−"}
+  .pc-details #pcBreak{padding-bottom:12px}
+  .pc-acts{display:grid;grid-template-columns:2fr 1fr;gap:8px;margin:4px 0 10px}
+  .pc-acts .btn{height:50px;font-size:15px}
+  [dir="ltr"] #pcToBooking{direction:ltr}
+  .pc-res{background:var(--hero-bg);color:var(--hero-fg);border-radius:var(--r-xl);padding:20px;margin-bottom:12px}
+  .pc-res span{font-size:13px;color:var(--hero-muted)}
   .pc-res .big{display:block;font-size:38px;font-weight:600;line-height:1.15;margin:4px 0;font-variant-numeric:tabular-nums}
-  .pc-res .big.neg{color:#FF9F9A}
-  .pc-res .sub{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13.5px;color:#D8C7AF}
-  .pc-res .sub b{color:var(--bg);font-weight:600}
+  .pc-res .big.neg{color:var(--hero-loss)}
+  .pc-res .sub{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13.5px;color:var(--hero-muted)}
+  .pc-res .sub b{color:var(--hero-fg);font-weight:600}
   .pc-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
   .pc-row:last-child{border-bottom:0}
   .pc-row span{color:var(--ink-2)} .pc-row small{display:block;color:var(--muted);font-size:12px}
@@ -330,17 +399,17 @@
   .tot-line{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin:4px 4px 10px}
   /* sheet dialog */
   .sheet{border:0;padding:0;margin:auto auto 0;width:100%;max-width:560px;max-height:92vh;border-radius:22px 22px 0 0;background:var(--bg);color:var(--ink)}
-  .sheet::backdrop{background:rgba(42,31,24,.45)}
+  .sheet::backdrop{background:rgba(var(--sh),.45)}
   .sheet form{padding:18px 16px calc(16px + env(safe-area-inset-bottom))}
   .sheet .grab{width:40px;height:4px;border-radius:4px;background:var(--line-2);margin:0 auto 14px}
   .sheet h2{font-family:var(--display);font-size:22px;margin:0 0 14px}
   .sheet .field{margin-bottom:12px}
   .cats{display:flex;flex-wrap:wrap;gap:6px}
-  .cats button{border:1px solid var(--line-2);background:#fff;border-radius:999px;padding:6px 12px;font-size:13.5px}
-  .cats button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+  .cats button{border:1px solid var(--line-2);background:var(--card);border-radius:999px;padding:6px 12px;font-size:13.5px}
+  .cats button[aria-pressed="true"]{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
   .sheet-acts{display:flex;gap:8px;margin-top:16px}
   .sheet-acts .btn{flex:1;height:48px}
-  .sheet-acts .del{flex:0 0 auto;color:var(--loss);border-color:#EBC3BE}
+  .sheet-acts .del{flex:0 0 auto;color:var(--loss);border-color:var(--loss-line)}
   @media (min-width:600px){.sheet{margin:auto;border-radius:22px}}
 
   /* ---------- calendar ---------- */
@@ -355,8 +424,8 @@
   .day.past{color:var(--muted)}
   .day.today{border-color:var(--gold)}
   .day.isfull{background:var(--cream)}
-  .day.blocked{background:repeating-linear-gradient(135deg,#F1E9DE 0 5px,#FAF6EF 5px 10px);color:var(--muted)}
-  .day.sel{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .day.blocked{background:repeating-linear-gradient(135deg,var(--stripe-a) 0 5px,var(--stripe-b) 5px 10px);color:var(--muted)}
+  .day.sel{background:var(--primary);color:var(--on-primary);border-color:var(--primary)}
   .day .dots{display:flex;gap:2px;flex-wrap:wrap;justify-content:center;max-width:30px}
   .day .dots i{width:6px;height:6px;border-radius:50%;background:var(--blue)}
   .day .dots i.done{background:var(--gain)} .day .dots i.req{background:transparent;box-shadow:inset 0 0 0 1.5px var(--amber)}
@@ -364,12 +433,12 @@
   .legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--muted);margin:12px 4px 0}
   .legend span{display:inline-flex;align-items:center;gap:6px}
   .legend i{width:8px;height:8px;border-radius:50%;display:inline-block}
-  .legend .lb{width:14px;height:10px;border-radius:3px;background:repeating-linear-gradient(135deg,#E6DACA 0 3px,#FAF6EF 3px 6px)}
+  .legend .lb{width:14px;height:10px;border-radius:3px;background:repeating-linear-gradient(135deg,var(--line-2) 0 3px,var(--stripe-b) 3px 6px)}
   .daypanel{margin-top:16px}
   .daypanel h3{font-size:16px;font-weight:600;margin:0 0 4px}
   .daypanel .sub{color:var(--muted);font-size:13px;margin:0 0 12px}
   .day-acts{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
-  .mini-req{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1px dashed #E2C99E;border-radius:var(--r-md);background:var(--amber-soft);margin-bottom:8px;font-size:14px;width:100%;text-align:start;color:var(--amber)}
+  .mini-req{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1px dashed var(--warn-line);border-radius:var(--r-md);background:var(--amber-soft);margin-bottom:8px;font-size:14px;width:100%;text-align:start;color:var(--amber)}
   .setting{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px}
   .setting b{display:block;font-weight:500}
   .setting small{display:block;color:var(--muted);font-size:12px}
@@ -496,7 +565,7 @@
   <div class="shell" id="vPcalc" data-view hidden>
     <div class="top">
       <h1 class="page-title" style="margin:0">حاسبة الربح</h1>
-      <button class="btn" type="button" id="pcSetBtn" aria-expanded="false">التكاليف</button>
+      <button class="btn" type="button" id="pcSetBtn" aria-expanded="false">⚙️ التكاليف</button>
     </div>
 
     <section class="card fs pc-set" id="pcSet" hidden>
@@ -520,31 +589,61 @@
       <p class="help" id="pcUnits"></p>
     </section>
 
-    <section class="card fs">
-      <h2>الباقة</h2>
-      <label>حجم التوزيعات الأساسية (البوث + 100)</label>
-      <div class="seg gap" id="pcBase"></div>
-      <label>حجم التوزيعات الإضافية</label>
-      <div class="seg" id="pcExtra"></div>
-      <div class="pc-qty">
-        <label for="pcQty" style="margin:0">عدد التوزيعات الإضافية</label>
-        <span class="stepper"><button type="button" id="pcMinus" aria-label="أقل">−</button><input id="pcQty" inputmode="numeric" value="0" aria-label="عدد التوزيعات الإضافية"><button type="button" id="pcPlus" aria-label="أكثر">+</button></span>
+    <div class="pc-top" id="pcTop" aria-live="polite">
+      <div class="pc-tile">
+        <span class="pc-tl">السعر على العميل</span>
+        <b class="pc-big" id="pcPriceBig">0</b>
+        <small id="pcPriceSub"></small>
       </div>
-      <div class="pc-quick" id="pcQuick" dir="ltr"><button type="button" data-add="25">+25</button><button type="button" data-add="50">+50</button><button type="button" data-add="100">+100</button></div>
-      <label style="margin-top:14px">في usher؟</label>
-      <div class="seg gap" id="pcUsher"><button type="button" data-v="no" aria-pressed="true">لا</button><button type="button" data-v="yes" aria-pressed="false">نعم</button></div>
-      <label for="pcPrice">سعر متفق عليه (اختياري)</label>
-      <input class="inp" id="pcPrice" inputmode="decimal" dir="ltr">
-      <div class="hint">إذا عملت خصم أو سعر خاص، اكتبه هون. إذا فاضي بنحسب حسب الأسعار.</div>
+      <div class="pc-tile profit">
+        <span class="pc-tl">ربحك</span>
+        <b class="pc-big" id="pcProfitBig">0</b>
+        <small id="pcProfitSub"></small>
+      </div>
+    </div>
+    <p class="pc-share" id="pcShare"></p>
+
+    <section class="card pc-step">
+      <h2><span class="pc-n">1</span>اختار الباقة</h2>
+      <div class="pc-opts" id="pcBase"></div>
     </section>
 
-    <div class="pc-res" id="pcRes"></div>
-    <section class="card fs" id="pcBreak"></section>
-    <div class="rq-acts" style="margin-bottom:10px">
-      <button type="button" class="btn primary" id="pcToBooking" style="flex:1">تحويل لحجز</button>
+    <section class="card pc-step">
+      <h2><span class="pc-n">2</span>توزيعات إضافية <small>اختياري</small></h2>
+      <div class="pc-opts small" id="pcExtra"></div>
+      <label class="pc-qlabel" for="pcQty">كم حبة إضافية؟</label>
+      <div class="pc-qbox">
+        <button type="button" class="pc-round" id="pcMinus" aria-label="أقل">−</button>
+        <input id="pcQty" inputmode="numeric" autocomplete="off" value="0" aria-label="عدد التوزيعات الإضافية">
+        <button type="button" class="pc-round" id="pcPlus" aria-label="أكثر">+</button>
+      </div>
+      <p class="pc-qhint">اكتب أي رقم، أو زيد بسرعة:</p>
+      <div class="pc-chips" id="pcQuick" dir="ltr">
+        <button type="button" data-add="25">+25</button><button type="button" data-add="50">+50</button><button type="button" data-add="100">+100</button><button type="button" data-add="clear" class="clr">مسح</button>
+      </div>
+      <p class="pc-extra-line" id="pcExtraLine"></p>
+    </section>
+
+    <section class="card pc-step">
+      <h2><span class="pc-n">3</span>تفاصيل الحجز</h2>
+      <button type="button" class="switch" id="pcUsherSw" role="switch" aria-checked="false">
+        <span><b>في usher؟</b><small id="pcUsherSub">بينخصم أجرته من الربح</small></span><span class="sw"></span>
+      </button>
+      <label for="pcPrice" style="margin-top:14px">سعر متفق عليه <small style="color:var(--muted);font-weight:400">(اختياري)</small></label>
+      <input class="inp" id="pcPrice" inputmode="decimal" dir="ltr">
+      <div class="hint">إذا عملت خصم أو سعر خاص، اكتبه هون.</div>
+    </section>
+
+    <details class="card pc-details">
+      <summary>تفاصيل الحساب</summary>
+      <div id="pcBreak"></div>
+    </details>
+
+    <div class="pc-acts">
+      <button type="button" class="btn primary" id="pcToBooking">تحويل لحجز ←</button>
       <button type="button" class="btn" id="pcReset">إعادة التعيين</button>
     </div>
-    <p class="help">الربح هون للحجز لحاله، قبل المصاريف التشغيلية العامة (البنزين، التعبئة…).</p>
+    <p class="help" style="text-align:center">الربح هون للحجز لحاله، قبل المصاريف التشغيلية العامة.</p>
   </div>
 
   <!-- ---------- FINANCE ---------- -->
@@ -646,6 +745,14 @@
       </button>
     </div>
     <div class="sec-h" style="margin-top:22px"><h2>الإعدادات</h2></div>
+    <div class="card setting" style="margin-bottom:10px">
+      <span><b>المظهر</b><small>فاتح أو داكن</small></span>
+      <div class="seg" id="segTheme" style="min-width:200px">
+        <button type="button" data-v="auto" aria-pressed="true">تلقائي</button>
+        <button type="button" data-v="light" aria-pressed="false">فاتح</button>
+        <button type="button" data-v="dark" aria-pressed="false">داكن</button>
+      </div>
+    </div>
     <div class="card setting" style="margin-bottom:10px">
       <span><b>اللغة</b><small>Language</small></span>
       <div class="seg" id="segLang" style="min-width:170px">
@@ -791,7 +898,11 @@
   /* ================= i18n: English layer for the admin (Arabic stays the source) ================= */
   const EN = {"لوحة الحجوزات": "Bookings dashboard", "الرئيسية": "Home", "الحجوزات": "Bookings", "التقويم": "Calendar", "الطلبات": "Requests", "المزيد": "More", "التنقل": "Navigation", "تحديث": "Refresh", "رجوع": "Back", "حفظ": "Save", "إلغاء": "Cancel", "حذف": "Delete", "نسخ": "Copy", "عرض الكل": "View all", "الكل": "All", "الإيميل": "Email", "كلمة السر": "Password", "دخول": "Log in", "جاري الدخول…": "Logging in…", "اكتب الإيميل وكلمة السر.": "Enter your email and password.", "الإيميل أو كلمة السر غلط.": "Wrong email or password.", "هالحساب مش مسموح يدخل.": "This account isn’t allowed to log in.", "أحمد": "Ahmad", "راما": "Rama", "أ": "A", "ر": "R", "حجز جديد": "New booking", "عرس جاي": "Upcoming wedding", "حجز سابق": "Past booking", "عرس صار قبل": "Already happened", "+ مصروف": "+ Expense", "تعبئة عطور، بخور، مواصلات…": "Refills, incense, transport…", "الأعراس الجاية": "Upcoming weddings", "أعراس جاية": "Upcoming", "متبقي ع العملاء": "Owed by clients", "ما في أعراس جاية لسا.": "No upcoming weddings yet.", "خلص؟ سكّره": "Done? Close it", "المبلغ": "Amount", "الربح": "Profit", "متبقي": "Owed", "المتبقي": "Remaining", "التكلفة": "Cost", "مؤكد": "Confirmed", "منفّذ": "Done", "ملغي": "Cancelled", "بوث فقط": "Booth only", "توزيعات فقط": "Favors only", "بوث + توزيعات": "Booth + favors", "بوث": "Booth", "توزيعات": "Favors", "usher": "usher", "مجهول": "Unknown", "ابحث بالاسم، القاعة، أو الهاتف": "Search by name, venue or phone", "الجاية": "Upcoming", "لازم تتسكّر": "Needs closing", "عليهم فلوس": "Owe money", "منفّذة": "Done", "ملغية": "Cancelled", "ما في أعراس جاية.": "No upcoming weddings.", "كل الأعراس اللي صارت متسكّرة ✓": "All past weddings are closed ✓", "ما في حدا عليه فلوس ✓": "Nobody owes money ✓", "ما في حجوزات منفّذة لسا.": "No completed bookings yet.", "ما في حجوزات ملغية.": "No cancelled bookings.", "ما في حجوزات لسا.": "No bookings yet.", "ما في نتائج لهالبحث.": "No results for this search.", "طلبات العملاء": "Customer requests", "جديدة": "New", "صارت حجوزات": "Converted", "مرفوضة": "Rejected", "جديد": "New", "صار حجز": "Booked", "مرفوض": "Rejected", "تحويل لحجز": "Convert to booking", "واتساب": "WhatsApp", "رفض": "Reject", "إرجاع للجديدة": "Move back to new", "فتح الحجز": "Open booking", "التاريخ فات": "Date passed", "وصل هلأ": "Received just now", "رابط صفحة الحجز للعملاء:": "Customer booking page:", "ما في طلبات جديدة. شارك رابط صفحة الحجز على إنستغرام.": "No new requests. Share your booking page link on Instagram.", "ما في طلبات صارت حجوزات لسا.": "No converted requests yet.", "ما في طلبات مرفوضة.": "No rejected requests.", "ما وصل ولا طلب لسا.": "No requests yet.", "ترفض هالطلب؟": "Reject this request?", "انرفض الطلب": "Request rejected", "رجع للطلبات الجديدة": "Moved back to new requests", "الشهر السابق": "Previous month", "الشهر الجاي": "Next month", "هالشهر": "This month", "اليوم": "Today", "سبت": "Sat", "أحد": "Sun", "إثنين": "Mon", "ثلاثاء": "Tue", "أربعاء": "Wed", "خميس": "Thu", "جمعة": "Fri", "طلب جديد": "New request", "مقفل": "Blocked", "اكبس على أي يوم لتشوف تفاصيله": "Tap any day to see its details", "+ حجز بهاليوم": "+ Booking on this day", "قفل اليوم": "Block day", "فتح اليوم": "Unblock day", "فاضي": "Free", "اليوم مليان": "Day is full", "طلب جديد:": "New request:", "عرض ←": "View →", "انفتح اليوم ✓": "Day unblocked ✓", "انقفل اليوم، العملاء ما بيقدروا يحجزوه": "Day blocked, customers can’t request it", "سبب القفل (اختياري)، مثلاً: إجازة": "Reason for blocking (optional), e.g. holiday", "فتح صفحة الحجز للعملاء": "Open customer booking page", "تنزيل نسخة احتياطية (CSV)": "Download backup (CSV)", "تسجيل خروج": "Log out", "زيارات الموقع": "Website visits", "المالية والمصاريف": "Finance & expenses", "الإعدادات": "Settings", "عدد الأعراس المسموح باليوم": "Weddings allowed per day", "لما يوصل اليوم لهالعدد، صفحة العملاء بتقول «محجوز»": "When a day reaches this number, the customer page shows it as booked", "أقل": "Less", "أكثر": "More", "صار مسموح عرس واحد باليوم": "Now 1 wedding allowed per day", "اللغة": "Language", "العرس": "Wedding", "تاريخ العرس *": "Wedding date *", "اسم العميل *": "Client name *", "رقم الهاتف": "Phone number", "القاعة / المكان": "Venue", "مثلاً: ليندا سلمان": "e.g. Linda Salman", "الحالة والخدمة": "Status & service", "الحالة": "Status", "بوث تعطير وتبخير؟": "Perfume & incense booth?", "نعم": "Yes", "لا": "No", "في usher؟": "Usher?", "طريقة التسعير": "Pricing method", "مبلغ إجمالي": "Total amount", "حسب سعر الحبة": "Per piece", "بتكتب كم أخذت على الحجز كامل، وعدد الحبات وتكلفتها، والربح بينحسب لحاله.": "Enter the total you charged, plus quantities and costs, and the profit is calculated automatically.", "بتكتب سعر الحبة لكل حجم وسعر البوث، والمبلغ الإجمالي بينحسب لحاله.": "Enter the price per piece for each size and the booth price, and the total is calculated automatically.", "التوزيعات": "Favors", "اكبس لإضافة": "Tap to add", "العدد": "Quantity", "سعر بيع الحبة": "Selling price per piece", "تكلفة الحبة": "Cost per piece", "تكلفة الكرت": "Card cost", "التكلفة الكلية (شامل الكرت)": "Total cost (incl. card)", "الفلوس": "Money", "سعر البوث (د.أ)": "Booth price (JOD)", "المبلغ الإجمالي اللي أخذته (د.أ) *": "Total amount charged (JOD) *", "المبلغ الإجمالي (محسوب)": "Total amount (calculated)", "مثلاً 300": "e.g. 300", "انقبض المبلغ كامل": "Paid in full", "العميل دفع كل شي": "The client paid everything", "المدفوع لهلأ (عربون)": "Paid so far (deposit)", "ملاحظات": "Notes", "حذف هالحجز نهائياً": "Delete this booking permanently", "إضافة حجز سابق": "Add past booking", "سجّل عرس صار قبل. الحالة «منفّذ» والمبلغ مقبوض كامل، وبتقدر تغيّرهم.": "Record a wedding that already happened. Status is “Done” and it’s marked paid in full, and you can change both.", "عبّي التكاليف والمبلغ اللي اتفقتوا عليه، وبعدين احفظ. الطلب رح يصير «مقبول» لحاله.": "Fill in the costs and the agreed amount, then save. The request will be marked as booked automatically.", "التاريخ فات، رح ينحفظ «منفّذ»": "date has passed, it will be saved as “Done”", "(اليوم مليان)": "(day is full)", "متأكد؟": "sure?", "جاري…": "Saving…", "اختار تاريخ العرس.": "Choose the wedding date.", "اكتب اسم العميل (أو \"مجهول\").": "Enter the client name (or “Unknown”).", "الحجز لازم يكون فيه بوث أو توزيعات.": "A booking needs a booth or favors.", "اكتب سعر البوث أو أسعار الحبات.": "Enter the booth price or the piece prices.", "اكتب المبلغ اللي أخذته.": "Enter the amount you charged.", "المدفوع أكبر من المبلغ.": "Paid is more than the amount.", "انحفظ التعديل ✓": "Changes saved ✓", "انضاف الحجز السابق ✓": "Past booking added ✓", "انحفظ الحجز ✓": "Booking saved ✓", "انحفظ الحجز والطلب صار مقبول ✓": "Booking saved and request marked as booked ✓", "انحذف الحجز": "Booking deleted", "لازم تشغّل ملف supabase-v9-usher.sql أول.": "Run supabase-v9-usher.sql first.", "المالية": "Finance", "هالسنة": "This year", "من البداية": "Since start", "إيراد الحجوزات": "Bookings revenue", "تكلفة التوزيعات": "Favors cost", "أجور الـ usher": "Usher fees", "مصاريف تشغيلية": "Running expenses", "صافي الربح": "Net profit", "تكاليف تأسيسية": "Startup costs", "حصة كل شريك": "Each partner’s share", "من صافي الربح بعد التوزيعات والـ usher والمصاريف التشغيلية.": "From net profit after favors, usher fees and running expenses.", "ترجيع رأس المال": "Capital recovery", "✅ رجع رأس المال كامل": "✅ Capital fully recovered", "رأس المال": "Capital", "رجع": "Recovered", "من": "of", "ضايل": "Left", "د.أ": "JOD", "ربح فوق رأس المال:": "Profit above capital:", "ضيف التكاليف التأسيسية ←": "Add startup costs →", "ما في تكاليف تأسيسية مسجّلة": "No startup costs recorded", "ما في مصاريف تشغيلية بهالفترة.": "No running expenses in this period.", "ما في تكاليف تأسيسية.": "No startup costs.", "+ إضافة": "+ Add", "المجموع": "Total", "تأسيسي": "Startup", "مصروف جديد": "New expense", "تعديل مصروف": "Edit expense", "تشغيلي": "Running", "تأسيسي (مرة وحدة)": "Startup (one-time)", "الفئة": "Category", "البند *": "Item *", "مثلاً: تعبئة عطور التبخير": "e.g. incense perfume refill", "المبلغ (د.أ) *": "Amount (JOD) *", "التاريخ *": "Date *", "التاريخ (اختياري)": "Date (optional)", "تعبئة عطور": "Perfume refill", "بخور وفحم": "Incense & charcoal", "كروت وطباعة": "Cards & printing", "تغليف": "Packaging", "مواصلات": "Transport", "ترويج": "Promotion", "صيانة": "Maintenance", "أخرى": "Other", "اكتب شو البند.": "Enter the item.", "اكتب المبلغ.": "Enter the amount.", "اختار التاريخ.": "Choose the date.", "انضاف المصروف ✓": "Expense added ✓", "انحذف": "Deleted", "لازم تشغّل ملف supabase-v5-expenses.sql أول.": "Run supabase-v5-expenses.sql first.", "طاولة البوث": "Booth table", "العطور المستخدمة للتعطير": "Perfumes used for scenting", "وصلة كهرباء": "Extension cable", "أغراض تزيين البوث (شي إن)": "Booth decorations (Shein)", "كروت عمل": "Business cards", "سلات وشمع": "Baskets & candles", "فرد سيليكون": "Silicone gun", "آخر 7 أيام": "Last 7 days", "آخر 30 يوم": "Last 30 days", "آخر 90 يوم": "Last 90 days", "زوار": "Visitors", "مشاهدات": "Page views", "طلبات حجز": "Booking requests", "نسبة التحويل": "Conversion rate", "الزوار كل يوم": "Visitors per day", "من الزيارة للطلب": "From visit to request", "زاروا الموقع": "Visited the site", "بلّشوا يعبّوا الفورم": "Started the form", "بعثوا طلب حجز": "Sent a request", "كبسوا واتساب": "Tapped WhatsApp", "من وين إجوا": "Where they came from", "الأجهزة": "Devices", "إنستغرام": "Instagram", "تيك توك": "TikTok", "فيسبوك": "Facebook", "سناب": "Snapchat", "جوجل": "Google", "مباشر / رابط منسوخ": "Direct / copied link", "مواقع ثانية": "Other sites", "موبايل": "Mobile", "كمبيوتر": "Desktop", "تابلت": "Tablet", "نصيحة:": "Tip:", "استخدم هالروابط بدل الرابط العادي، عشان تعرف بالزبط كل زائر من وين إجا. واتساب ما بيبيّن حاله لحاله، فرابطه مهم.": "Use these links instead of the plain one, so you know exactly where each visitor came from. WhatsApp doesn’t identify itself, so its link matters.", "إنستغرام (البايو)": "Instagram (bio)", "واتساب (ستوري ورسائل)": "WhatsApp (status & messages)", "زياراتك إنت وشريكك على هالأجهزة ما بتنحسب.": "Your own and your partner’s visits on these devices aren’t counted.", "لسا ما في زيارات.": "No visits yet.", "تصفير الإحصائيات": "Reset statistics", "تصفير إحصائيات الزيارات": "Reset visit statistics", "جاري التصفير…": "Resetting…", "بيحذف كل الزيارات وبيبلّش العدّ من الصفر. الحجوزات وطلبات العملاء ما بتنحذف.": "Deletes all visits and starts counting from zero. Bookings and customer requests are not deleted.", "آخر تصفير:": "Last reset:", "ما انصفّر إشي — الكلمة مش مطابقة": "Nothing was reset — the word didn’t match", "لازم تشغّل ملف supabase-v8-reset-stats.sql أول.": "Run supabase-v8-reset-stats.sql first.", "لازم تشغّل ملف supabase-v7-analytics.sql أول.": "Run supabase-v7-analytics.sql first.", "هالخطوة بتحذف كل إحصائيات الزيارات ومش ممكن ترجع.\nالحجوزات والطلبات ما بتنلمس.\n\nللتأكيد اكتب: تصفير": "This deletes all visit statistics and can’t be undone.\nBookings and requests are not touched.\n\nTo confirm, type: RESET", "انسخ الرابط ✓": "Link copied ✓", "انسخ الرابط:": "Copy the link:", "تحدّثت ✓": "Refreshed ✓", "جاري التحميل…": "Loading…", "حسابك مش مسموح يعدّل على الحجوزات.": "Your account isn’t allowed to edit bookings.", "ما في اتصال بالإنترنت. جرّب كمان مرة.": "No internet connection. Please try again.", "انتهت الجلسة. اطلع وادخل من جديد.": "Session expired. Please log out and log in again.", "صار خطأ.": "Something went wrong.", "لازم تحط SUPABASE_URL و SUPABASE_KEY بملف config.js.": "SUPABASE_URL and SUPABASE_KEY must be set in config.js.", "بكرا": "Tomorrow", "مبارح": "Yesterday", "هلأ": "just now"};
   Object.assign(EN, {
-    "حاسبة الربح":"Profit calculator","إعادة التعيين":"Reset","تحويل لحجز":"Convert to booking","احسب ربح أي باقة":"Profit for any package","التكاليف":"Costs","تكاليف المواد":"Material costs",
+    "حاسبة الربح":"Profit calculator","المظهر":"Appearance","فاتح أو داكن":"Light or dark","تلقائي":"Auto","فاتح":"Light","داكن":"Dark",
+    "⚙️ التكاليف":"⚙️ Costs","السعر على العميل":"Customer price","ربحك":"Your profit","اختار الباقة":"Choose the package","توزيعات إضافية":"Extra favors","اختياري":"optional",
+    "كم حبة إضافية؟":"How many extra pieces?","اكتب أي رقم، أو زيد بسرعة:":"Type any number, or add quickly:","مسح":"Clear","تفاصيل الحجز":"Booking details",
+    "بينخصم أجرته من الربح":"Their fee is deducted from profit","سعر متفق عليه":"Agreed price","(اختياري)":"(optional)","إذا عملت خصم أو سعر خاص، اكتبه هون.":"If you gave a discount or special price, enter it here.",
+    "تفاصيل الحساب":"Calculation details","تحويل لحجز ←":"Convert to booking →","الربح هون للحجز لحاله، قبل المصاريف التشغيلية العامة.":"Profit for this booking alone, before general running expenses.","إعادة التعيين":"Reset","تحويل لحجز":"Convert to booking","احسب ربح أي باقة":"Profit for any package","التكاليف":"Costs","تكاليف المواد":"Material costs",
     "زيت العطر (للمل)":"Perfume oil (per ml)","كحول العطور (لليتر)":"Perfume alcohol (per liter)","نسبة الزيت بخلطة 5 و10 مل (%)":"Oil share in the 5 & 10 ml mix (%)",
     "الباقي كحول. مثلاً 25 = ربع زيت وثلاث أرباع كحول.":"The rest is alcohol. e.g. 25 = one quarter oil, three quarters alcohol.",
     "قنينة 5 مل":"5 ml bottle","قنينة 10 مل":"10 ml bottle","قنينة 30 مل (معبّاية جاهزة)":"30 ml bottle (comes pre-filled)",
@@ -1523,20 +1634,29 @@
     return { qty, lines, pieces, favors, delivery, usher, listPrice, agreed, revenue, cost, profit, margin: revenue ? profit / revenue : 0 };
   }
   function pcSegs(){
-    const en = LANG === 'en', ml = k => en ? `${k} ml` : `${k} مل`;
-    $('pcBase').innerHTML = Object.keys(PRICING.base).map(k => `<button type="button" data-v="${k}" aria-pressed="${PC.base === k}">${ml(k)} · ${fmt(PRICING.base[k])}</button>`).join('');
-    $('pcExtra').innerHTML = Object.keys(PRICING.extra).map(k => `<button type="button" data-v="${k}" aria-pressed="${PC.extra === k}">${ml(k)} · ${n(PRICING.extra[k]).toFixed(2)}</button>`).join('');
-    setSeg('pcUsher', PC.usher ? 'yes' : 'no');
+    const en = LANG === 'en', ml = k => en ? `${k} ml` : `${k} مل`, J = en ? 'JOD' : 'د.أ';
+    $('pcBase').innerHTML = Object.keys(PRICING.base).map(k => `<button type="button" class="pc-opt" data-v="${k}" aria-pressed="${PC.base === k}">
+      <span class="sz">${ml(k)}</span><span class="pr">${fmt(PRICING.base[k])}<small>${J}</small></span><span class="ds">${en ? `booth + ${PRICING.included}` : `البوث + ${PRICING.included}`}</span></button>`).join('');
+    $('pcExtra').innerHTML = Object.keys(PRICING.extra).map(k => `<button type="button" class="pc-opt" data-v="${k}" aria-pressed="${PC.extra === k}">
+      <span class="sz">${ml(k)}</span><span class="pr">${n(PRICING.extra[k]).toFixed(2)}</span><span class="ds">${en ? 'JOD each' : 'د.أ للحبة'}</span></button>`).join('');
+    $('pcUsherSw').setAttribute('aria-checked', PC.usher);
+    $('pcUsherSub').textContent = en ? `${fmt(n(COSTS.ush))} JOD is deducted from profit` : `بينخصم ${fmt(n(COSTS.ush))} د.أ من الربح`;
   }
-  function renderPcalc(){
+  function renderPcalc(keepInput){
     pcSegs();
     const r = pcCompute(), en = LANG === 'en', ml = k => en ? `${k} ml` : `${k} مل`, J = en ? 'JOD' : 'د.أ';
-    $('pcQty').value = String(PC.qty); $('pcMinus').disabled = PC.qty <= 0;
-    $('pcPrice').placeholder = (en ? 'List price ' : 'حسب الأسعار ') + fmt(r.listPrice);
-    $('pcRes').innerHTML = `<span>${en ? 'Booking profit' : 'ربح الحجز'}</span>
-      <b class="big ${r.profit < 0 ? 'neg' : ''}">${fmt(r.profit)} ${J}</b>
-      <div class="sub"><span>${en ? 'Margin' : 'نسبة الربح'} <b>${Math.round(r.margin * 100)}%</b></span>
-      ${PARTNERS.map(p => `<span>${esc(en ? (EN[p.name] || p.name) : p.name)} <b>${fmt(r.profit * p.share)}</b></span>`).join('')}</div>`;
+    if (!keepInput) $('pcQty').value = String(PC.qty);
+    $('pcMinus').disabled = PC.qty <= 0;
+    $('pcPrice').placeholder = (en ? 'List price: ' : 'حسب الأسعار: ') + fmt(r.listPrice);
+    $('pcPriceBig').textContent = `${fmt(r.revenue)} ${J}`;
+    $('pcPriceSub').textContent = r.agreed !== null ? (en ? 'agreed price' : 'سعر متفق عليه') : (en ? `${r.pieces} pieces` : `${r.pieces} حبة`);
+    $('pcProfitBig').textContent = `${fmt(r.profit)} ${J}`;
+    $('pcProfitBig').classList.toggle('neg', r.profit < 0);
+    $('pcProfitSub').textContent = en ? `margin ${Math.round(r.margin * 100)}% · cost ${fmt(r.cost)}` : `نسبة الربح ${Math.round(r.margin * 100)}% · التكلفة ${fmt(r.cost)}`;
+    $('pcShare').innerHTML = PARTNERS.map(p => `<span>${esc(en ? (EN[p.name] || p.name) : p.name)}: <b>${fmt(r.profit * p.share)} ${J}</b></span>`).join('');
+    $('pcExtraLine').innerHTML = PC.qty
+      ? (en ? `Extras: <b>${PC.qty} × ${ml(PC.extra)}</b> = <b>${fmt(PC.qty * n(PRICING.extra[PC.extra]))} JOD</b>` : `الإضافي: <b>${PC.qty} حبة ${ml(PC.extra)}</b> = <b>${fmt(PC.qty * n(PRICING.extra[PC.extra]))} د.أ</b>`)
+      : (en ? 'No extra favors' : 'ما في توزيعات إضافية');
     const sizeLine = l => `<div class="pc-row"><span>${l.qty} × ${ml(l.size)}<small>${en ? 'each' : 'الحبة'} ${f3(l.each)} = ${l.size === '30' ? (en ? 'pre-filled bottle' : 'قنينة جاهزة') + ' ' + f3(l.u.bottle) : (en ? 'mix' : 'خلطة') + ' ' + f3(l.u.liquid) + ' + ' + (en ? 'bottle' : 'قنينة') + ' ' + f3(l.u.bottle)} + ${en ? 'card' : 'كرت'} ${f3(l.u.card)}</small></span><b>${fmt(l.total)}</b></div>`;
     $('pcBreak').innerHTML = `
       <p class="pc-h">${en ? 'Revenue' : 'الإيراد'}</p>
@@ -1556,6 +1676,7 @@
       : `تكلفة الحبة شامل الكرت: 5 مل ${f3(u5.liquid + u5.bottle + u5.card)} · 10 مل ${f3(u10.liquid + u10.bottle + u10.card)} · 30 مل ${f3(u30.bottle + u30.card)}`;
   }
   function pcQty(v){ PC.qty = Math.max(0, Math.min(PRICING.maxExtra, Math.round(n(v)))); renderPcalc(); }
+  const pcSetQtyFromInput = () => { const d = clean($('pcQty').value).replace(/[^\d]/g, ''); PC.qty = Math.min(PRICING.maxExtra, d ? parseInt(d, 10) : 0); renderPcalc(true); };
   function fillCostInputs(){ COST_FIELDS.forEach(k => $('k_' + k).value = COSTS[k]); }
   async function loadCosts(){
     try {
@@ -1875,18 +1996,19 @@
     $('expList').addEventListener('click', e => { const b = e.target.closest('[data-expedit]'); if (b) openExp(Number(b.dataset.expedit)); });
     $('pcBase').addEventListener('click', e => { const b = e.target.closest('[data-v]'); if (b) { PC.base = b.dataset.v; renderPcalc(); } });
     $('pcExtra').addEventListener('click', e => { const b = e.target.closest('[data-v]'); if (b) { PC.extra = b.dataset.v; renderPcalc(); } });
-    $('pcUsher').addEventListener('click', e => { const b = e.target.closest('[data-v]'); if (b) { PC.usher = b.dataset.v === 'yes'; renderPcalc(); } });
-    $('pcMinus').addEventListener('click', () => pcQty(PC.qty - 10));
-    $('pcPlus').addEventListener('click', () => pcQty(PC.qty + 10));
-    $('pcQuick').addEventListener('click', e => { const b = e.target.closest('[data-add]'); if (b) pcQty(PC.qty + Number(b.dataset.add)); });
-    $('pcQty').addEventListener('input', e => { PC.qty = Math.max(0, Math.min(PRICING.maxExtra, parseInt(clean(e.target.value) || '0', 10) || 0)); const v = e.target.value; renderPcalc(); if (document.activeElement === $('pcQty')) $('pcQty').value = v.replace(/[^\d٠-٩]/g, ''); });
+    $('pcUsherSw').addEventListener('click', () => { PC.usher = !PC.usher; renderPcalc(); });
+    $('pcMinus').addEventListener('click', () => pcQty(PC.qty - 1));
+    $('pcPlus').addEventListener('click', () => pcQty(PC.qty + 1));
+    $('pcQuick').addEventListener('click', e => { const b = e.target.closest('[data-add]'); if (!b) return; pcQty(b.dataset.add === 'clear' ? 0 : PC.qty + Number(b.dataset.add)); });
+    $('pcQty').addEventListener('input', pcSetQtyFromInput);
+    $('pcQty').addEventListener('focus', () => { if ($('pcQty').value === '0') $('pcQty').value = ''; });
     $('pcQty').addEventListener('blur', () => { $('pcQty').value = String(PC.qty); });
-    $('pcPrice').addEventListener('input', renderPcalc);
+    $('pcPrice').addEventListener('input', () => renderPcalc());
     COST_FIELDS.forEach(k => $('k_' + k).addEventListener('input', () => { const t = {}; COST_FIELDS.forEach(x => t[x] = filled($('k_' + x).value) ? n($('k_' + x).value) : COSTS[x]); Object.assign(COSTS, t); renderPcalc(); }));
     $('pcSetBtn').addEventListener('click', () => { const open = $('pcSet').hidden; $('pcSet').hidden = !open; $('pcSetBtn').setAttribute('aria-expanded', open); if (open) fillCostInputs(); });
     $('pcSave').addEventListener('click', saveCosts);
     $('pcDefaults').addEventListener('click', () => { COSTS = Object.assign({}, COST_DEFAULTS); fillCostInputs(); renderPcalc(); toast(LANG === 'en' ? 'Default values restored. Tap Save to keep them.' : 'رجعت القيم الافتراضية. اكبس حفظ عشان تنحفظ.'); });
-    $('pcReset').addEventListener('click', () => { Object.assign(PC, { base: '5', extra: '5', qty: 0, usher: false }); $('pcPrice').value = ''; renderPcalc(); });
+    $('pcReset').addEventListener('click', () => { Object.assign(PC, { base: '5', extra: '5', qty: 0, usher: false }); $('pcPrice').value = ''; renderPcalc(); window.scrollTo({ top: 0 }); });
     $('pcToBooking').addEventListener('click', pcToBooking);
     $('maxMinus').addEventListener('click', () => setMaxPerDay(maxPerDay - 1));
     $('maxPlus').addEventListener('click', () => setMaxPerDay(maxPerDay + 1));
@@ -1931,6 +2053,17 @@
       $('lPass').value = ''; enterApp(data.session);
     });
 
+    // theme: auto (follows the phone) / light / dark — per device
+    const themeMQ = window.matchMedia('(prefers-color-scheme: dark)');
+    const getThemePref = () => { try { return localStorage.getItem('ambere-admin-theme') || 'auto'; } catch (e) { return 'auto'; } };
+    function applyTheme(){
+      const p = getThemePref(), dark = p === 'dark' || (p === 'auto' && themeMQ.matches);
+      document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      $('segTheme').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === p));
+    }
+    $('segTheme').addEventListener('click', e => { const b = e.target.closest('[data-v]'); if (!b) return; try { localStorage.setItem('ambere-admin-theme', b.dataset.v); } catch (er) {} applyTheme(); });
+    if (themeMQ.addEventListener) themeMQ.addEventListener('change', applyTheme); else if (themeMQ.addListener) themeMQ.addListener(applyTheme);
+    applyTheme();
     $('lgLang').addEventListener('click', () => applyLang(LANG === 'en' ? 'ar' : 'en', true));
     $('segLang').addEventListener('click', e => { const b = e.target.closest('[data-v]'); if (b && b.dataset.v !== LANG) applyLang(b.dataset.v, true); });
     if (LANG === 'en') applyLang('en', false);
