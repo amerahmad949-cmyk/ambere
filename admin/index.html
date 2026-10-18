@@ -702,7 +702,7 @@
     </details>
 
     <details class="card pc-details" id="pcBookBox">
-      <summary>بيانات الحجز وعرض السعر</summary>
+      <summary>بيانات الحجز والإيصال</summary>
       <div class="grid">
         <div class="full"><label for="pbName">اسم العميل</label><input class="inp" id="pbName"></div>
         <div><label for="pbPhone">رقم الهاتف</label><input class="inp" id="pbPhone" type="tel" inputmode="tel" dir="ltr" placeholder="07..."></div>
@@ -710,15 +710,20 @@
           <select class="inp" id="pbType"><option value="عرس">عرس</option><option value="خطوبة">خطوبة</option><option value="تخرج">تخرج</option><option value="حفلة">حفلة</option><option value="مناسبة ثانية">مناسبة ثانية</option></select></div>
         <div><label for="pbDate">تاريخ المناسبة</label><input class="inp" id="pbDate" type="date"></div>
         <div><label for="pbVenue">المكان</label><input class="inp" id="pbVenue"></div>
-        <div><label for="pbDep">العربون المدفوع (د.أ)</label><input class="inp" id="pbDep" inputmode="decimal" dir="ltr" placeholder="0"></div>
-        <div><label>المتبقي</label><div class="pc-remain" id="pbRemain">0</div></div>
-        <div class="full"><label for="pbNotes">ملاحظات داخلية</label><textarea class="inp" id="pbNotes" placeholder="ما بتطلع بعرض السعر"></textarea></div>
+        <div class="full">
+          <button type="button" class="switch" id="pbDepSw" role="switch" aria-checked="false">
+            <span><b>في عربون مدفوع؟</b><small id="pbDepSub">ما في عربون</small></span><span class="sw"></span>
+          </button>
+        </div>
+        <div id="pbDepWrap" hidden><label for="pbDep">مبلغ العربون (د.أ)</label><input class="inp" id="pbDep" inputmode="decimal" dir="ltr" value="20"></div>
+        <div><label>المبلغ المتبقي</label><div class="pc-remain" id="pbRemain">0</div></div>
+        <div class="full"><label for="pbNotes">ملاحظات داخلية</label><textarea class="inp" id="pbNotes" placeholder="ما بتطلع بالإيصال"></textarea></div>
       </div>
     </details>
 
     <div class="pc-acts">
       <button type="button" class="btn primary" id="pcToBooking">تحويل لحجز</button>
-      <button type="button" class="btn" id="pcQuote">إنشاء عرض سعر</button>
+      <button type="button" class="btn" id="pcQuote">إنشاء إيصال حجز</button>
     </div>
     <button type="button" class="btn ghost pc-reset" id="pcReset">إعادة التعيين</button>
   </div>
@@ -996,7 +1001,8 @@
     "تقسيم الربح بين الشركاء":"Partner profit split","نسبة أحمد %":"Ahmad’s share %","نسبة التقسيم":"Split ratio","الحصص بتنحسب من الربح بعد كل التكاليف، مش من سعر العميل.":"Shares are calculated from profit after all costs, not from the customer price.",
     "حفظ كتقسيم افتراضي":"Save as default split","بيانات الحجز وعرض السعر":"Booking details & quote","اسم العميل":"Client name","نوع المناسبة":"Event type","تاريخ المناسبة":"Event date","المكان":"Venue",
     "عرس":"Wedding","خطوبة":"Engagement","تخرج":"Graduation","حفلة":"Party","مناسبة ثانية":"Other event","العربون المدفوع (د.أ)":"Deposit paid (JOD)","ملاحظات داخلية":"Internal notes","ما بتطلع بعرض السعر":"Not shown on the quote",
-    "إنشاء عرض سعر":"Create quote","طباعة":"Print","جاري تجهيز PDF…":"Preparing PDF…","إغلاق":"Close","PDF / طباعة":"PDF / Print","الباقة الأساسية":"Base package","حجم التوزيعات الإضافية":"Additional favor size","المظهر":"Appearance","فاتح أو داكن":"Light or dark","تلقائي":"Auto","فاتح":"Light","داكن":"Dark",
+    "إنشاء عرض سعر":"Create quote","إنشاء إيصال حجز":"Create booking receipt","بيانات الحجز والإيصال":"Booking & receipt details","في عربون مدفوع؟":"Deposit paid?",
+    "ما في عربون":"No deposit","مبلغ العربون (د.أ)":"Deposit amount (JOD)","المبلغ المتبقي":"Remaining","ما بتطلع بالإيصال":"Not shown on the receipt","طباعة":"Print","جاري تجهيز PDF…":"Preparing PDF…","إغلاق":"Close","PDF / طباعة":"PDF / Print","الباقة الأساسية":"Base package","حجم التوزيعات الإضافية":"Additional favor size","المظهر":"Appearance","فاتح أو داكن":"Light or dark","تلقائي":"Auto","فاتح":"Light","داكن":"Dark",
     "⚙️ التكاليف":"⚙️ Costs","السعر على العميل":"Customer price","ربحك":"Your profit","اختار الباقة":"Choose the package","توزيعات إضافية":"Extra favors","اختياري":"optional",
     "كم حبة إضافية؟":"How many extra pieces?","اكتب أي رقم، أو زيد بسرعة:":"Type any number, or add quickly:","مسح":"Clear","تفاصيل الحجز":"Booking details",
     "بينخصم أجرته من الربح":"Their fee is deducted from profit","سعر متفق عليه":"Agreed price","(اختياري)":"(optional)","إذا عملت خصم أو سعر خاص، اكتبه هون.":"If you gave a discount or special price, enter it here.",
@@ -1714,7 +1720,8 @@
   const COST_DEFAULTS = { oil: 0.06, alc: 3, conc: 25, b5: 0.075, b10: 0.0833, b30: 0.83, c510: 8, c30: 5, del: 2, ush: 20 };
   let COSTS = Object.assign({}, COST_DEFAULTS);
 
-  const PC = { base: '5', extra: '5', qty: 0, usher: false, extras: [] };
+  const PC = { base: '5', extra: '5', qty: 0, usher: false, extras: [], depOn: false };
+  const DEFAULT_DEPOSIT = 20;   // العربون الافتراضي بالدينار
   const COST_FIELDS = ['oil', 'alc', 'conc', 'b5', 'b10', 'b30', 'c510', 'c30', 'del', 'ush'];
   let pendingCalcSig = null; const savedCalcSigs = new Set();
   const f3 = x => (Math.round(x * 1000) / 1000).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 3 });
@@ -1759,7 +1766,7 @@
     const margin = finalF > 0 ? profitF / finalF : null;
     const pctA = Math.min(100, Math.max(0, n(PARTNERS[0].share * 100)));
     const aF = Math.round(profitF * pctA / 100), bF = profitF - aF;   // المجموع دايماً = الربح
-    const dep = pcNum('pbDep'); let depF = dep !== null ? toF(Math.max(0, dep)) : 0;
+    const dep = PC.depOn ? (pcNum('pbDep') !== null ? pcNum('pbDep') : DEFAULT_DEPOSIT) : 0; let depF = toF(Math.max(0, dep));
     if (depF > finalF) warns.push(en ? 'The deposit is more than the final price.' : 'العربون أكبر من السعر النهائي.');
     if (profitF < 0) warns.push(en ? 'Costs are higher than the price, so this booking loses money.' : 'التكاليف أكبر من السعر، هالحجز خسران.');
     return { qty, pieces, lines, costF, overheadF, baseF, extraUnitF, extrasF, listF, discF, agreed, finalF, profitF, margin, pctA, aF, bF, depF, remainF: finalF - depF, warns };
@@ -1819,6 +1826,8 @@
     $('pcPctRange').value = r.pctA;
     $('pcPctB').textContent = en ? `Rama: ${100 - r.pctA}% · Ahmad ${JF(r.aF)} · Rama ${JF(r.bF)}` : `راما: ${100 - r.pctA}% · أحمد ${JF(r.aF)} · راما ${JF(r.bF)}`;
     $('pbRemain').textContent = mt(r.remainF);
+    $('pbDepSw').setAttribute('aria-checked', PC.depOn); $('pbDepWrap').hidden = !PC.depOn;
+    $('pbDepSub').textContent = PC.depOn ? (en ? `Deposit paid: ${mt(r.depF)}` : `انقبض عربون ${mt(r.depF)}`) : (en ? 'No deposit' : 'ما في عربون');
   }
   function pcQty(v){ PC.qty = Math.max(0, Math.min(PRICING.maxExtra, Math.round(n(v)))); renderPcalc(); }
   const pcSetQtyFromInput = () => { const d = clean($('pcQty').value).replace(/[^\d]/g, ''); PC.qty = Math.min(PRICING.maxExtra, d ? parseInt(d, 10) : 0); renderPcalc(true); };
@@ -1849,7 +1858,7 @@
     if (error) return toast(dbError(error), true);
     toast(LANG === 'en' ? `Default split saved: ${a} / ${100 - a} ✓` : `انحفظ التقسيم الافتراضي: ${a} / ${100 - a} ✓`);
   }
-  function calcSig(){ return JSON.stringify([PC.base, PC.extra, PC.qty, PC.usher, PC.extras, $('pcPrice').value, $('pcDisc').value, $('pbName').value, $('pbDate').value, $('pbDep').value]); }
+  function calcSig(){ return JSON.stringify([PC.base, PC.extra, PC.qty, PC.usher, PC.extras, PC.depOn, $('pcPrice').value, $('pcDisc').value, $('pbName').value, $('pbDate').value, $('pbDep').value]); }
   function pcToBooking(){
     const r = pcCompute(), en = LANG === 'en', sig = calcSig();
     if (r.finalF <= 0) { toast(en ? 'The final price must be more than zero.' : 'السعر النهائي لازم يكون أكبر من صفر.', true); return; }
@@ -1896,32 +1905,38 @@
     if (r.discF) rows.push([en ? 'Discount' : 'خصم', '', '− ' + JF(r.discF)]);
     return { r, rows, en, name: $('pbName').value.trim(), type: $('pbType').value, date: $('pbDate').value, venue: $('pbVenue').value.trim() };
   }
+  let receiptNo = '';
+  function newReceiptNo(){ const d = new Date(); return `AMB-${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}-${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}`; }
   function quoteText(){
-    const q = quoteData(), en = q.en, L = [];
-    L.push('Amberé — Perfume Station', en ? 'Price quote' : 'عرض سعر', '');
+    const q = quoteData(), en = q.en, r = q.r, L = [];
+    L.push('Amberé — Perfume Station', `${en ? 'Booking receipt' : 'إيصال حجز'} · ${showDate(todayStr())}`, `${en ? 'Receipt no.' : 'رقم الإيصال'}: ${receiptNo}`, '');
     if (q.name) L.push(`${en ? 'Client' : 'العميل'}: ${q.name}`);
     L.push(`${en ? 'Event' : 'المناسبة'}: ${q.type}${q.date ? ' · ' + showDate(q.date) : ''}${q.venue ? ' · ' + q.venue : ''}`, '');
     q.rows.forEach(rw => L.push(`• ${rw[0]}${rw[1] && rw[1] !== '1' ? ` × ${rw[1]}` : ''}: ${rw[2]}`));
-    L.push('', `${en ? 'Total' : 'الإجمالي'}: ${mt(q.r.finalF)}`);
-    if (q.r.depF) L.push(`${en ? 'Deposit paid' : 'العربون المدفوع'}: ${mt(q.r.depF)}`, `${en ? 'Remaining' : 'المتبقي'}: ${mt(q.r.remainF)}`);
-    L.push('', `${en ? 'Quote date' : 'تاريخ العرض'}: ${showDate(todayStr())}`);
+    L.push('', `${en ? 'Total' : 'الإجمالي'}: ${mt(r.finalF)}`);
+    L.push(r.depF ? `${en ? 'Deposit paid' : 'العربون المدفوع'}: ${mt(r.depF)}` : (en ? 'Deposit: not paid' : 'العربون: غير مدفوع'));
+    L.push(`${en ? 'Remaining' : 'المبلغ المتبقي'}: ${mt(r.remainF)}`);
     return L.join('\n');
   }
   function openQuote(){
     const q = quoteData(), en = q.en, r = q.r;
     if (r.finalF <= 0) { toast(en ? 'The final price must be more than zero.' : 'السعر النهائي لازم يكون أكبر من صفر.', true); return; }
-    const contact = [CFG.WHATSAPP ? `WhatsApp: +${esc(CFG.WHATSAPP)}` : '', CFG.INSTAGRAM ? esc(CFG.INSTAGRAM.replace(/^https?:\/\//, '')) : '', esc(new URL('../', location.href).host)].filter(Boolean).join(' · ');
+    if (r.depF > r.finalF) { toast(en ? 'The deposit is more than the final price.' : 'العربون أكبر من السعر النهائي.', true); return; }
+    receiptNo = newReceiptNo();
+    const contact = [CFG.WHATSAPP ? `WhatsApp: +${esc(CFG.WHATSAPP)}` : '', CFG.INSTAGRAM ? esc(CFG.INSTAGRAM.replace(/^https?:\/\/(www\.)?/, '')) : ''].filter(Boolean).join(' · ');
+    const paid = r.depF > 0;
     $('quotePaper').setAttribute('dir', en ? 'ltr' : 'rtl');
     $('quotePaper').innerHTML = `
       <div class="qh"><div class="qbrand">Amberé<small>PERFUME STATION</small></div>
-        <div class="qmeta"><h3 id="qTitle">${en ? 'Price quote' : 'عرض سعر'}</h3>${en ? 'Date' : 'التاريخ'}: ${showDate(todayStr())}</div></div>
-      <div>${q.name ? `<b>${en ? 'Client' : 'العميل'}:</b> ${esc(q.name)}<br>` : ''}<b>${en ? 'Event' : 'المناسبة'}:</b> ${esc(q.type)}${q.date ? ` · ${showDate(q.date)}` : ''}${q.venue ? ` · ${esc(q.venue)}` : ''}</div>
+        <div class="qmeta"><h3 id="qTitle">${en ? 'Booking receipt' : 'إيصال حجز'}</h3>${en ? 'Date' : 'التاريخ'}: ${showDate(todayStr())}<br>${en ? 'Receipt no.' : 'رقم الإيصال'}: <span dir="ltr">${receiptNo}</span></div></div>
+      <div>${q.name ? `<b>${en ? 'Client' : 'العميل'}:</b> ${esc(q.name)}<br>` : ''}${$('pbPhone').value.trim() ? `<b>${en ? 'Phone' : 'الهاتف'}:</b> <span dir="ltr">${esc($('pbPhone').value.trim())}</span><br>` : ''}<b>${en ? 'Event' : 'المناسبة'}:</b> ${esc(q.type)}${q.date ? ` · ${showDate(q.date)}` : ''}${q.venue ? ` · ${esc(q.venue)}` : ''}</div>
       <table><thead><tr><th>${en ? 'Item' : 'البند'}</th><th class="n">${en ? 'Qty' : 'العدد'}</th><th class="n">${en ? 'Amount (JOD)' : 'المبلغ (د.أ)'}</th></tr></thead>
         <tbody>${q.rows.map(rw => `<tr><td>${esc(rw[0])}</td><td class="n">${esc(rw[1])}</td><td class="n">${esc(rw[2])}</td></tr>`).join('')}
         ${r.agreed !== null ? `<tr><td colspan="2">${en ? 'Agreed package price' : 'سعر الباقة المتفق عليه'}</td><td class="n">${JF(r.finalF)}</td></tr>` : ''}
         <tr class="qtot"><td colspan="2">${en ? 'Total' : 'الإجمالي'}</td><td class="n">${mt(r.finalF)}</td></tr>
-        ${r.depF ? `<tr><td colspan="2">${en ? 'Deposit paid' : 'العربون المدفوع'}</td><td class="n">${JF(r.depF)}</td></tr><tr><td colspan="2"><b>${en ? 'Remaining' : 'المتبقي'}</b></td><td class="n"><b>${JF(r.remainF)}</b></td></tr>` : ''}</tbody></table>
-      <div class="qfoot">${en ? 'This quote is valid subject to date availability. The booking is confirmed after the deposit.' : 'العرض حسب توفر التاريخ، والحجز بيتأكد بعد دفع العربون.'}${contact ? `<br>${contact}` : ''}</div>`;
+        <tr><td colspan="2">${en ? 'Deposit' : 'العربون'}</td><td class="n">${paid ? `${en ? 'Paid' : 'مدفوع'} · ${JF(r.depF)}` : (en ? 'Not paid' : 'غير مدفوع')}</td></tr>
+        <tr><td colspan="2"><b>${en ? 'Remaining' : 'المبلغ المتبقي'}</b></td><td class="n"><b>${mt(r.remainF)}</b></td></tr></tbody></table>
+      <div class="qfoot">${en ? 'Thank you for choosing Amberé.' : 'شكراً لاختياركم Amberé.'}${contact ? `<br><span dir="ltr">${contact}</span>` : ''}</div>`;
     const phone = $('pbPhone').value.trim(), wn = phone ? waNumber(phone) : '';
     $('qWa').href = `https://wa.me/${wn}?text=${encodeURIComponent(quoteText())}`;
     if (typeof $('quoteDlg').showModal === 'function') $('quoteDlg').showModal(); else $('quoteDlg').setAttribute('open', '');
@@ -1972,8 +1987,8 @@
           pdf.addImage(part.toDataURL('image/jpeg', 0.92), 'JPEG', m, m, w, part.height * w / canvas.width);
         }
       }
-      const nm = ($('pbName').value.trim() || 'quote').replace(/[\\/:*?"<>|]+/g, '').slice(0, 40);
-      quotePdfName = `Ambere-${LANG === 'en' ? 'Quote' : 'عرض-سعر'}-${nm}-${todayStr()}.pdf`.replace(/\s+/g, '-');
+      const nm = ($('pbName').value.trim() || (LANG === 'en' ? 'client' : 'عميل')).replace(/[\\/:*?"<>|]+/g, '').slice(0, 40);
+      quotePdfName = `Ambere-${LANG === 'en' ? 'Receipt' : 'إيصال-حجز'}-${nm}-${todayStr()}.pdf`.replace(/\s+/g, '-');
       quotePdf = pdf.output('blob');
       setPdfBtn('ready');
     } catch (e) { if (gen === quoteGen) setPdfBtn('error'); }
@@ -1983,7 +1998,7 @@
     if (!quotePdf) { buildQuotePdf(); return; }
     const file = new File([quotePdf], quotePdfName, { type: 'application/pdf' });
     try {
-      if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: en ? 'Price quote' : 'عرض سعر' }); return; }
+      if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: en ? 'Booking receipt' : 'إيصال حجز' }); return; }
     } catch (e) { if (e && e.name === 'AbortError') return; }
     // fallback (computer / older browsers): download the file
     const url = URL.createObjectURL(quotePdf);
@@ -2306,16 +2321,17 @@
     $('pcSplitSave').addEventListener('click', saveSplit);
     $('pcReset').addEventListener('click', () => {
       if (!confirm(LANG === 'en' ? 'Reset the calculator? Everything you entered here will be cleared.' : 'ترجّع الحاسبة للبداية؟ كل اللي كتبته هون رح ينمسح.')) return;
-      Object.assign(PC, { base: '5', extra: '5', qty: 0, usher: false, extras: [] });
-      ['pcPrice', 'pcDisc', 'pbName', 'pbPhone', 'pbDate', 'pbVenue', 'pbDep', 'pbNotes'].forEach(id => $(id).value = ''); $('pbType').selectedIndex = 0;
+      Object.assign(PC, { base: '5', extra: '5', qty: 0, usher: false, extras: [], depOn: false });
+      ['pcPrice', 'pcDisc', 'pbName', 'pbPhone', 'pbDate', 'pbVenue', 'pbNotes'].forEach(id => $(id).value = ''); $('pbDep').value = DEFAULT_DEPOSIT; $('pbType').selectedIndex = 0;
       renderExtras(); renderPcalc(); window.scrollTo({ top: 0 });
     });
+    $('pbDepSw').addEventListener('click', () => { PC.depOn = !PC.depOn; if (PC.depOn && !filled($('pbDep').value)) $('pbDep').value = DEFAULT_DEPOSIT; renderPcalc(); if (PC.depOn) $('pbDep').focus(); });
     $('pcToBooking').addEventListener('click', pcToBooking);
     $('pcQuote').addEventListener('click', openQuote);
     $('qClose').addEventListener('click', () => $('quoteDlg').close());
     $('qPrint').addEventListener('click', () => window.print());
     $('qPdf').addEventListener('click', shareQuotePdf);
-    $('qCopy').addEventListener('click', async () => { try { await navigator.clipboard.writeText(quoteText()); toast(LANG === 'en' ? 'Quote copied ✓' : 'انسخ عرض السعر ✓'); } catch (e) { prompt(LANG === 'en' ? 'Copy the quote:' : 'انسخ العرض:', quoteText()); } });
+    $('qCopy').addEventListener('click', async () => { try { await navigator.clipboard.writeText(quoteText()); toast(LANG === 'en' ? 'Receipt copied ✓' : 'انسخ الإيصال ✓'); } catch (e) { prompt(LANG === 'en' ? 'Copy the receipt:' : 'انسخ الإيصال:', quoteText()); } });
     $('quoteDlg').addEventListener('click', e => { if (e.target === $('quoteDlg')) $('quoteDlg').close(); });
     watchSummary();
     $('maxMinus').addEventListener('click', () => setMaxPerDay(maxPerDay - 1));
