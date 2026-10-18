@@ -404,6 +404,8 @@
   .quote-paper h3{margin:0;font-size:18px}
   .quote-paper .qmeta{font-size:12.5px;color:#4A505C;text-align:end}
   .quote-paper table{width:100%;border-collapse:collapse;margin:12px 0}
+  .quote-paper .qinfo td{border-bottom:1px dashed #E6E1D8;padding:7px 8px}
+  .quote-paper .qinfo td:first-child{color:#7A808B;width:38%}
   .quote-paper th,.quote-paper td{padding:9px 8px;border-bottom:1px solid #E6E1D8;text-align:start}
   .quote-paper th{font-size:12px;color:#7A808B;font-weight:600}
   .quote-paper td.n,.quote-paper th.n{text-align:end;white-space:nowrap}
@@ -711,6 +713,11 @@
         <div><label for="pbDate">تاريخ المناسبة</label><input class="inp" id="pbDate" type="date"></div>
         <div><label for="pbVenue">المكان</label><input class="inp" id="pbVenue"></div>
         <div class="full">
+          <button type="button" class="switch" id="pbBoothSw" role="switch" aria-checked="true">
+            <span><b>شامل بوث التعطير والتبخير؟</b><small id="pbBoothSub">نعم، البوث مشمول</small></span><span class="sw"></span>
+          </button>
+        </div>
+        <div class="full">
           <button type="button" class="switch" id="pbDepSw" role="switch" aria-checked="false">
             <span><b>في عربون مدفوع؟</b><small id="pbDepSub">ما في عربون</small></span><span class="sw"></span>
           </button>
@@ -1001,7 +1008,7 @@
     "تقسيم الربح بين الشركاء":"Partner profit split","نسبة أحمد %":"Ahmad’s share %","نسبة التقسيم":"Split ratio","الحصص بتنحسب من الربح بعد كل التكاليف، مش من سعر العميل.":"Shares are calculated from profit after all costs, not from the customer price.",
     "حفظ كتقسيم افتراضي":"Save as default split","بيانات الحجز وعرض السعر":"Booking details & quote","اسم العميل":"Client name","نوع المناسبة":"Event type","تاريخ المناسبة":"Event date","المكان":"Venue",
     "عرس":"Wedding","خطوبة":"Engagement","تخرج":"Graduation","حفلة":"Party","مناسبة ثانية":"Other event","العربون المدفوع (د.أ)":"Deposit paid (JOD)","ملاحظات داخلية":"Internal notes","ما بتطلع بعرض السعر":"Not shown on the quote",
-    "إنشاء عرض سعر":"Create quote","إنشاء إيصال حجز":"Create booking receipt","بيانات الحجز والإيصال":"Booking & receipt details","في عربون مدفوع؟":"Deposit paid?",
+    "إنشاء عرض سعر":"Create quote","إنشاء إيصال حجز":"Create booking receipt","شامل بوث التعطير والتبخير؟":"Includes the perfume & incense station?","نعم، البوث مشمول":"Yes, the station is included","بيانات الحجز والإيصال":"Booking & receipt details","في عربون مدفوع؟":"Deposit paid?",
     "ما في عربون":"No deposit","مبلغ العربون (د.أ)":"Deposit amount (JOD)","المبلغ المتبقي":"Remaining","ما بتطلع بالإيصال":"Not shown on the receipt","طباعة":"Print","جاري تجهيز PDF…":"Preparing PDF…","إغلاق":"Close","PDF / طباعة":"PDF / Print","الباقة الأساسية":"Base package","حجم التوزيعات الإضافية":"Additional favor size","المظهر":"Appearance","فاتح أو داكن":"Light or dark","تلقائي":"Auto","فاتح":"Light","داكن":"Dark",
     "⚙️ التكاليف":"⚙️ Costs","السعر على العميل":"Customer price","ربحك":"Your profit","اختار الباقة":"Choose the package","توزيعات إضافية":"Extra favors","اختياري":"optional",
     "كم حبة إضافية؟":"How many extra pieces?","اكتب أي رقم، أو زيد بسرعة:":"Type any number, or add quickly:","مسح":"Clear","تفاصيل الحجز":"Booking details",
@@ -1720,7 +1727,7 @@
   const COST_DEFAULTS = { oil: 0.06, alc: 3, conc: 25, b5: 0.075, b10: 0.0833, b30: 0.83, c510: 8, c30: 5, del: 2, ush: 20 };
   let COSTS = Object.assign({}, COST_DEFAULTS);
 
-  const PC = { base: '5', extra: '5', qty: 0, usher: false, extras: [], depOn: false };
+  const PC = { base: '5', extra: '5', qty: 0, usher: false, extras: [], depOn: false, booth: true };
   const DEFAULT_DEPOSIT = 20;   // العربون الافتراضي بالدينار
   const COST_FIELDS = ['oil', 'alc', 'conc', 'b5', 'b10', 'b30', 'c510', 'c30', 'del', 'ush'];
   let pendingCalcSig = null; const savedCalcSigs = new Set();
@@ -1826,6 +1833,8 @@
     $('pcPctRange').value = r.pctA;
     $('pcPctB').textContent = en ? `Rama: ${100 - r.pctA}% · Ahmad ${JF(r.aF)} · Rama ${JF(r.bF)}` : `راما: ${100 - r.pctA}% · أحمد ${JF(r.aF)} · راما ${JF(r.bF)}`;
     $('pbRemain').textContent = mt(r.remainF);
+    $('pbBoothSw').setAttribute('aria-checked', PC.booth);
+    $('pbBoothSub').textContent = PC.booth ? (en ? 'Yes, the station is included' : 'نعم، البوث مشمول') : (en ? 'Favors only, no station' : 'توزيعات بس، بدون بوث');
     $('pbDepSw').setAttribute('aria-checked', PC.depOn); $('pbDepWrap').hidden = !PC.depOn;
     $('pbDepSub').textContent = PC.depOn ? (en ? `Deposit paid: ${mt(r.depF)}` : `انقبض عربون ${mt(r.depF)}`) : (en ? 'No deposit' : 'ما في عربون');
   }
@@ -1858,7 +1867,7 @@
     if (error) return toast(dbError(error), true);
     toast(LANG === 'en' ? `Default split saved: ${a} / ${100 - a} ✓` : `انحفظ التقسيم الافتراضي: ${a} / ${100 - a} ✓`);
   }
-  function calcSig(){ return JSON.stringify([PC.base, PC.extra, PC.qty, PC.usher, PC.extras, PC.depOn, $('pcPrice').value, $('pcDisc').value, $('pbName').value, $('pbDate').value, $('pbDep').value]); }
+  function calcSig(){ return JSON.stringify([PC.base, PC.extra, PC.qty, PC.usher, PC.extras, PC.depOn, PC.booth, $('pcPrice').value, $('pcDisc').value, $('pbName').value, $('pbDate').value, $('pbDep').value]); }
   function pcToBooking(){
     const r = pcCompute(), en = LANG === 'en', sig = calcSig();
     if (r.finalF <= 0) { toast(en ? 'The final price must be more than zero.' : 'السعر النهائي لازم يكون أكبر من صفر.', true); return; }
@@ -1866,7 +1875,7 @@
     if (savedCalcSigs.has(sig) && !confirm(en ? 'This exact calculation was already saved as a booking. Create another booking anyway?' : 'هالحساب نفسه انحفظ كحجز قبل شوي. بدك تعمل حجز ثاني؟')) return;
     openNew('new');
     pendingCalcSig = sig;
-    setSeg('segBooth', 'yes'); setSeg('segMode', 'total');
+    setSeg('segBooth', PC.booth ? 'yes' : 'no'); setSeg('segMode', 'total');
     const overheadEach = r.pieces ? r.overheadF / 1000 / r.pieces : 0;   // التوصيل والمصاريف الإضافية موزعة على الكروت عشان ربح الحجز = ربح الحاسبة
     ['5', '10', '30'].forEach(sz => {
       if (!r.qty[sz]) return;
@@ -1897,46 +1906,55 @@
     recalc();
     toast(en ? 'Check the details, then tap Save' : 'راجع التفاصيل وبعدين اكبس حفظ');
   }
-  /* ---------- customer quote (no costs, profit or internal notes) ---------- */
-  function quoteData(){
-    const r = pcCompute(), en = LANG === 'en', ml = k => en ? `${k} ml` : `${k} مل`;
-    const rows = [[en ? `Perfume station + ${PRICING.included} favors ${ml(PC.base)} with cards` : `بوث التعطير + ${PRICING.included} توزيعة ${ml(PC.base)} مع الكروت`, '1', JF(r.baseF)]];
-    if (PC.qty) rows.push([en ? `Additional favors ${ml(PC.extra)}` : `توزيعات إضافية ${ml(PC.extra)}`, String(PC.qty), JF(r.extrasF)]);
-    if (r.discF) rows.push([en ? 'Discount' : 'خصم', '', '− ' + JF(r.discF)]);
-    return { r, rows, en, name: $('pbName').value.trim(), type: $('pbType').value, date: $('pbDate').value, venue: $('pbVenue').value.trim() };
-  }
+  /* ---------- booking receipt — always in English (no costs, profit or internal notes) ---------- */
+  const EV_EN = { 'عرس': 'Wedding', 'خطوبة': 'Engagement', 'تخرج': 'Graduation', 'حفلة': 'Party', 'مناسبة ثانية': 'Event' };
   let receiptNo = '';
   function newReceiptNo(){ const d = new Date(); return `AMB-${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}-${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}`; }
+  function quoteData(){
+    const r = pcCompute();
+    const favors = ['5', '10', '30'].filter(k => r.qty[k] > 0).map(k => ({ size: `${k} ml`, qty: r.qty[k] }));   // sizes + quantities only
+    return { r, favors, name: $('pbName').value.trim(), phone: $('pbPhone').value.trim(), type: EV_EN[$('pbType').value] || 'Event',
+             date: $('pbDate').value, venue: $('pbVenue').value.trim(), booth: PC.booth };
+  }
+  const jod = f => `${JF(f)} JOD`;
   function quoteText(){
-    const q = quoteData(), en = q.en, r = q.r, L = [];
-    L.push('Amberé — Perfume Station', `${en ? 'Booking receipt' : 'إيصال حجز'} · ${showDate(todayStr())}`, `${en ? 'Receipt no.' : 'رقم الإيصال'}: ${receiptNo}`, '');
-    if (q.name) L.push(`${en ? 'Client' : 'العميل'}: ${q.name}`);
-    L.push(`${en ? 'Event' : 'المناسبة'}: ${q.type}${q.date ? ' · ' + showDate(q.date) : ''}${q.venue ? ' · ' + q.venue : ''}`, '');
-    q.rows.forEach(rw => L.push(`• ${rw[0]}${rw[1] && rw[1] !== '1' ? ` × ${rw[1]}` : ''}: ${rw[2]}`));
-    L.push('', `${en ? 'Total' : 'الإجمالي'}: ${mt(r.finalF)}`);
-    L.push(r.depF ? `${en ? 'Deposit paid' : 'العربون المدفوع'}: ${mt(r.depF)}` : (en ? 'Deposit: not paid' : 'العربون: غير مدفوع'));
-    L.push(`${en ? 'Remaining' : 'المبلغ المتبقي'}: ${mt(r.remainF)}`);
+    const q = quoteData(), r = q.r, L = [];
+    L.push('Amberé — Perfume Station', `Booking Receipt · ${showDate(todayStr())}`, `Receipt No. ${receiptNo}`, '');
+    if (q.name) L.push(`Client: ${q.name}`);
+    if (q.phone) L.push(`Phone: ${q.phone}`);
+    L.push(`Event: ${q.type}${q.date ? ' · ' + showDate(q.date) : ''}${q.venue ? ' · ' + q.venue : ''}`, '');
+    L.push('Perfume favors:'); q.favors.forEach(f => L.push(`• ${f.size} × ${f.qty} pieces`));
+    L.push(`Perfume & incense station: ${q.booth ? 'Included' : 'Not included'}`, '');
+    L.push(`Total amount: ${jod(r.finalF)}`, `Deposit: ${r.depF ? 'Paid · ' + jod(r.depF) : 'Not paid'}`, `Remaining balance: ${jod(r.remainF)}`);
     return L.join('\n');
   }
   function openQuote(){
-    const q = quoteData(), en = q.en, r = q.r;
+    const q = quoteData(), r = q.r, en = LANG === 'en';
     if (r.finalF <= 0) { toast(en ? 'The final price must be more than zero.' : 'السعر النهائي لازم يكون أكبر من صفر.', true); return; }
     if (r.depF > r.finalF) { toast(en ? 'The deposit is more than the final price.' : 'العربون أكبر من السعر النهائي.', true); return; }
     receiptNo = newReceiptNo();
-    const contact = [CFG.WHATSAPP ? `WhatsApp: +${esc(CFG.WHATSAPP)}` : '', CFG.INSTAGRAM ? esc(CFG.INSTAGRAM.replace(/^https?:\/\/(www\.)?/, '')) : ''].filter(Boolean).join(' · ');
-    const paid = r.depF > 0;
-    $('quotePaper').setAttribute('dir', en ? 'ltr' : 'rtl');
+    const contact = [CFG.WHATSAPP ? `WhatsApp: +${esc(CFG.WHATSAPP)}` : '', CFG.INSTAGRAM ? 'Instagram: ' + esc(CFG.INSTAGRAM.replace(/^https?:\/\/(www\.)?/, '').replace(/^instagram\.com\//, '@')) : ''].filter(Boolean).join('  ·  ');
+    const row = (k, v, b) => `<tr><td>${b ? '<b>' + k + '</b>' : k}</td><td class="n">${b ? '<b>' + v + '</b>' : v}</td></tr>`;
+    $('quotePaper').setAttribute('dir', 'ltr'); $('quotePaper').setAttribute('lang', 'en');
     $('quotePaper').innerHTML = `
       <div class="qh"><div class="qbrand">Amberé<small>PERFUME STATION</small></div>
-        <div class="qmeta"><h3 id="qTitle">${en ? 'Booking receipt' : 'إيصال حجز'}</h3>${en ? 'Date' : 'التاريخ'}: ${showDate(todayStr())}<br>${en ? 'Receipt no.' : 'رقم الإيصال'}: <span dir="ltr">${receiptNo}</span></div></div>
-      <div>${q.name ? `<b>${en ? 'Client' : 'العميل'}:</b> ${esc(q.name)}<br>` : ''}${$('pbPhone').value.trim() ? `<b>${en ? 'Phone' : 'الهاتف'}:</b> <span dir="ltr">${esc($('pbPhone').value.trim())}</span><br>` : ''}<b>${en ? 'Event' : 'المناسبة'}:</b> ${esc(q.type)}${q.date ? ` · ${showDate(q.date)}` : ''}${q.venue ? ` · ${esc(q.venue)}` : ''}</div>
-      <table><thead><tr><th>${en ? 'Item' : 'البند'}</th><th class="n">${en ? 'Qty' : 'العدد'}</th><th class="n">${en ? 'Amount (JOD)' : 'المبلغ (د.أ)'}</th></tr></thead>
-        <tbody>${q.rows.map(rw => `<tr><td>${esc(rw[0])}</td><td class="n">${esc(rw[1])}</td><td class="n">${esc(rw[2])}</td></tr>`).join('')}
-        ${r.agreed !== null ? `<tr><td colspan="2">${en ? 'Agreed package price' : 'سعر الباقة المتفق عليه'}</td><td class="n">${JF(r.finalF)}</td></tr>` : ''}
-        <tr class="qtot"><td colspan="2">${en ? 'Total' : 'الإجمالي'}</td><td class="n">${mt(r.finalF)}</td></tr>
-        <tr><td colspan="2">${en ? 'Deposit' : 'العربون'}</td><td class="n">${paid ? `${en ? 'Paid' : 'مدفوع'} · ${JF(r.depF)}` : (en ? 'Not paid' : 'غير مدفوع')}</td></tr>
-        <tr><td colspan="2"><b>${en ? 'Remaining' : 'المبلغ المتبقي'}</b></td><td class="n"><b>${mt(r.remainF)}</b></td></tr></tbody></table>
-      <div class="qfoot">${en ? 'Thank you for choosing Amberé.' : 'شكراً لاختياركم Amberé.'}${contact ? `<br><span dir="ltr">${contact}</span>` : ''}</div>`;
+        <div class="qmeta"><h3 id="qTitle">Booking Receipt</h3>Date: ${showDate(todayStr())}<br>Receipt No. ${receiptNo}</div></div>
+      <table class="qinfo"><tbody>
+        ${q.name ? row('Client', esc(q.name)) : ''}
+        ${q.phone ? row('Phone', `<span dir="ltr">${esc(q.phone)}</span>`) : ''}
+        ${row('Event', esc(q.type))}
+        ${q.date ? row('Event date', showDate(q.date)) : ''}
+        ${q.venue ? row('Venue', esc(q.venue)) : ''}
+      </tbody></table>
+      <table><thead><tr><th>Perfume favors (size)</th><th class="n">Quantity</th></tr></thead>
+        <tbody>${q.favors.map(f => `<tr><td>${f.size}</td><td class="n">${f.qty} pcs</td></tr>`).join('')}
+        <tr><td>Perfume &amp; incense station</td><td class="n"><b>${q.booth ? 'Included ✓' : 'Not included'}</b></td></tr></tbody></table>
+      <table><tbody>
+        <tr class="qtot"><td>Total amount</td><td class="n">${jod(r.finalF)}</td></tr>
+        ${row('Deposit', r.depF ? `Paid · ${jod(r.depF)}` : 'Not paid')}
+        ${row('Remaining balance', jod(r.remainF), true)}
+      </tbody></table>
+      <div class="qfoot">Thank you for choosing Amberé.${contact ? `<br>${contact}` : ''}</div>`;
     const phone = $('pbPhone').value.trim(), wn = phone ? waNumber(phone) : '';
     $('qWa').href = `https://wa.me/${wn}?text=${encodeURIComponent(quoteText())}`;
     if (typeof $('quoteDlg').showModal === 'function') $('quoteDlg').showModal(); else $('quoteDlg').setAttribute('open', '');
@@ -1987,8 +2005,8 @@
           pdf.addImage(part.toDataURL('image/jpeg', 0.92), 'JPEG', m, m, w, part.height * w / canvas.width);
         }
       }
-      const nm = ($('pbName').value.trim() || (LANG === 'en' ? 'client' : 'عميل')).replace(/[\\/:*?"<>|]+/g, '').slice(0, 40);
-      quotePdfName = `Ambere-${LANG === 'en' ? 'Receipt' : 'إيصال-حجز'}-${nm}-${todayStr()}.pdf`.replace(/\s+/g, '-');
+      const nm = ($('pbName').value.trim() || 'client').replace(/[\\/:*?"<>|]+/g, '').slice(0, 40);
+      quotePdfName = `Ambere-Booking-Receipt-${nm}-${todayStr()}.pdf`.replace(/\s+/g, '-');
       quotePdf = pdf.output('blob');
       setPdfBtn('ready');
     } catch (e) { if (gen === quoteGen) setPdfBtn('error'); }
@@ -1998,7 +2016,7 @@
     if (!quotePdf) { buildQuotePdf(); return; }
     const file = new File([quotePdf], quotePdfName, { type: 'application/pdf' });
     try {
-      if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: en ? 'Booking receipt' : 'إيصال حجز' }); return; }
+      if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'Booking Receipt' }); return; }
     } catch (e) { if (e && e.name === 'AbortError') return; }
     // fallback (computer / older browsers): download the file
     const url = URL.createObjectURL(quotePdf);
@@ -2321,10 +2339,11 @@
     $('pcSplitSave').addEventListener('click', saveSplit);
     $('pcReset').addEventListener('click', () => {
       if (!confirm(LANG === 'en' ? 'Reset the calculator? Everything you entered here will be cleared.' : 'ترجّع الحاسبة للبداية؟ كل اللي كتبته هون رح ينمسح.')) return;
-      Object.assign(PC, { base: '5', extra: '5', qty: 0, usher: false, extras: [], depOn: false });
+      Object.assign(PC, { base: '5', extra: '5', qty: 0, usher: false, extras: [], depOn: false, booth: true });
       ['pcPrice', 'pcDisc', 'pbName', 'pbPhone', 'pbDate', 'pbVenue', 'pbNotes'].forEach(id => $(id).value = ''); $('pbDep').value = DEFAULT_DEPOSIT; $('pbType').selectedIndex = 0;
       renderExtras(); renderPcalc(); window.scrollTo({ top: 0 });
     });
+    $('pbBoothSw').addEventListener('click', () => { PC.booth = !PC.booth; renderPcalc(); });
     $('pbDepSw').addEventListener('click', () => { PC.depOn = !PC.depOn; if (PC.depOn && !filled($('pbDep').value)) $('pbDep').value = DEFAULT_DEPOSIT; renderPcalc(); if (PC.depOn) $('pbDep').focus(); });
     $('pcToBooking').addEventListener('click', pcToBooking);
     $('pcQuote').addEventListener('click', openQuote);
