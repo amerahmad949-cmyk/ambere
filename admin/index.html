@@ -730,7 +730,8 @@
         <button type="button" class="btn" id="qClose">إغلاق</button>
         <button type="button" class="btn" id="qCopy">نسخ</button>
         <a class="btn wa" id="qWa" href="#" target="_blank" rel="noopener">واتساب</a>
-        <button type="button" class="btn primary" id="qPrint">PDF / طباعة</button>
+        <button type="button" class="btn primary" id="qPdf" disabled>جاري تجهيز PDF…</button>
+        <button type="button" class="btn" id="qPrint" hidden>طباعة</button>
       </div>
     </div>
   </dialog>
@@ -995,7 +996,7 @@
     "تقسيم الربح بين الشركاء":"Partner profit split","نسبة أحمد %":"Ahmad’s share %","نسبة التقسيم":"Split ratio","الحصص بتنحسب من الربح بعد كل التكاليف، مش من سعر العميل.":"Shares are calculated from profit after all costs, not from the customer price.",
     "حفظ كتقسيم افتراضي":"Save as default split","بيانات الحجز وعرض السعر":"Booking details & quote","اسم العميل":"Client name","نوع المناسبة":"Event type","تاريخ المناسبة":"Event date","المكان":"Venue",
     "عرس":"Wedding","خطوبة":"Engagement","تخرج":"Graduation","حفلة":"Party","مناسبة ثانية":"Other event","العربون المدفوع (د.أ)":"Deposit paid (JOD)","ملاحظات داخلية":"Internal notes","ما بتطلع بعرض السعر":"Not shown on the quote",
-    "إنشاء عرض سعر":"Create quote","إغلاق":"Close","PDF / طباعة":"PDF / Print","الباقة الأساسية":"Base package","حجم التوزيعات الإضافية":"Additional favor size","المظهر":"Appearance","فاتح أو داكن":"Light or dark","تلقائي":"Auto","فاتح":"Light","داكن":"Dark",
+    "إنشاء عرض سعر":"Create quote","طباعة":"Print","جاري تجهيز PDF…":"Preparing PDF…","إغلاق":"Close","PDF / طباعة":"PDF / Print","الباقة الأساسية":"Base package","حجم التوزيعات الإضافية":"Additional favor size","المظهر":"Appearance","فاتح أو داكن":"Light or dark","تلقائي":"Auto","فاتح":"Light","داكن":"Dark",
     "⚙️ التكاليف":"⚙️ Costs","السعر على العميل":"Customer price","ربحك":"Your profit","اختار الباقة":"Choose the package","توزيعات إضافية":"Extra favors","اختياري":"optional",
     "كم حبة إضافية؟":"How many extra pieces?","اكتب أي رقم، أو زيد بسرعة:":"Type any number, or add quickly:","مسح":"Clear","تفاصيل الحجز":"Booking details",
     "بينخصم أجرته من الربح":"Their fee is deducted from profit","سعر متفق عليه":"Agreed price","(اختياري)":"(optional)","إذا عملت خصم أو سعر خاص، اكتبه هون.":"If you gave a discount or special price, enter it here.",
@@ -1924,7 +1925,74 @@
     const phone = $('pbPhone').value.trim(), wn = phone ? waNumber(phone) : '';
     $('qWa').href = `https://wa.me/${wn}?text=${encodeURIComponent(quoteText())}`;
     if (typeof $('quoteDlg').showModal === 'function') $('quoteDlg').showModal(); else $('quoteDlg').setAttribute('open', '');
+    $('qPrint').hidden = isIOSApp() || /iPhone|iPad|iPod/.test(navigator.userAgent);
+    buildQuotePdf();
   }
+  /* ---------- quote → real PDF (works on iPhone home-screen app, where window.print() is blocked) ---------- */
+  const PDF_LIBS = ['https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'];
+  let pdfLibsP = null, quotePdf = null, quotePdfName = '', quoteGen = 0;
+  function loadScript(src){ return new Promise((ok, bad) => { const sc = document.createElement('script'); sc.src = src; sc.onload = ok; sc.onerror = () => bad(new Error('load ' + src)); document.head.appendChild(sc); }); }
+  function loadPdfLibs(){
+    if (window.html2canvas && window.jspdf) return Promise.resolve();
+    if (!pdfLibsP) pdfLibsP = Promise.all(PDF_LIBS.map(loadScript)).catch(e => { pdfLibsP = null; throw e; });
+    return pdfLibsP;
+  }
+  const isIOSApp = () => window.navigator.standalone === true || (window.matchMedia && matchMedia('(display-mode: standalone)').matches);
+  function setPdfBtn(state){
+    const en = LANG === 'en', b = $('qPdf');
+    b.disabled = state !== 'ready';
+    b.textContent = state === 'ready' ? (en ? 'Save / share PDF' : 'حفظ / مشاركة PDF') : state === 'error' ? (en ? 'PDF unavailable' : 'ما زبط تجهيز PDF') : (en ? 'Preparing PDF…' : 'جاري تجهيز PDF…');
+    if (state === 'error') b.disabled = false;
+  }
+  async function buildQuotePdf(){
+    const gen = ++quoteGen; quotePdf = null; setPdfBtn('busy');
+    try {
+      await loadPdfLibs();
+      if (document.fonts && document.fonts.ready) await document.fonts.ready;
+      // render an off-screen copy at a fixed A4-like width, so the PDF looks the same from any phone
+      const src = $('quotePaper'), holder = document.createElement('div');
+      holder.style.cssText = 'position:fixed;left:-10000px;top:0;width:720px;pointer-events:none;';
+      const paper = src.cloneNode(true); paper.removeAttribute('id'); paper.style.width = '720px'; paper.style.padding = '40px 44px';
+      holder.appendChild(paper); document.body.appendChild(holder);
+      let canvas;
+      try { canvas = await window.html2canvas(paper, { scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false, windowWidth: 800 }); }
+      finally { holder.remove(); }
+      if (gen !== quoteGen) return;
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+      const pw = 210, ph = 297, m = 12, w = pw - m * 2, h = canvas.height * w / canvas.width;
+      const img = canvas.toDataURL('image/jpeg', 0.92);
+      if (h <= ph - m * 2) pdf.addImage(img, 'JPEG', m, m, w, h);
+      else {                                      // long quote: split across pages
+        const pageHpx = Math.floor((ph - m * 2) * canvas.width / w);
+        for (let y = 0, first = true; y < canvas.height; y += pageHpx, first = false) {
+          const part = document.createElement('canvas'); part.width = canvas.width; part.height = Math.min(pageHpx, canvas.height - y);
+          part.getContext('2d').drawImage(canvas, 0, y, canvas.width, part.height, 0, 0, canvas.width, part.height);
+          if (!first) pdf.addPage();
+          pdf.addImage(part.toDataURL('image/jpeg', 0.92), 'JPEG', m, m, w, part.height * w / canvas.width);
+        }
+      }
+      const nm = ($('pbName').value.trim() || 'quote').replace(/[\\/:*?"<>|]+/g, '').slice(0, 40);
+      quotePdfName = `Ambere-${LANG === 'en' ? 'Quote' : 'عرض-سعر'}-${nm}-${todayStr()}.pdf`.replace(/\s+/g, '-');
+      quotePdf = pdf.output('blob');
+      setPdfBtn('ready');
+    } catch (e) { if (gen === quoteGen) setPdfBtn('error'); }
+  }
+  async function shareQuotePdf(){
+    const en = LANG === 'en';
+    if (!quotePdf) { buildQuotePdf(); return; }
+    const file = new File([quotePdf], quotePdfName, { type: 'application/pdf' });
+    try {
+      if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: en ? 'Price quote' : 'عرض سعر' }); return; }
+    } catch (e) { if (e && e.name === 'AbortError') return; }
+    // fallback (computer / older browsers): download the file
+    const url = URL.createObjectURL(quotePdf);
+    const a = Object.assign(document.createElement('a'), { href: url, download: quotePdfName });
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+    toast(en ? 'PDF downloaded ✓' : 'انحفظ ملف PDF ✓');
+  }
+
   // compact sticky bar: only when the summary card is off screen
   let pcObserver = null;
   function watchSummary(){
@@ -2246,6 +2314,7 @@
     $('pcQuote').addEventListener('click', openQuote);
     $('qClose').addEventListener('click', () => $('quoteDlg').close());
     $('qPrint').addEventListener('click', () => window.print());
+    $('qPdf').addEventListener('click', shareQuotePdf);
     $('qCopy').addEventListener('click', async () => { try { await navigator.clipboard.writeText(quoteText()); toast(LANG === 'en' ? 'Quote copied ✓' : 'انسخ عرض السعر ✓'); } catch (e) { prompt(LANG === 'en' ? 'Copy the quote:' : 'انسخ العرض:', quoteText()); } });
     $('quoteDlg').addEventListener('click', e => { if (e.target === $('quoteDlg')) $('quoteDlg').close(); });
     watchSummary();
