@@ -435,6 +435,67 @@
   .pc-acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0 8px}
   .pc-acts .btn{height:48px;font-size:15px}
   .pc-reset{width:100%;height:44px}
+  /* quick picks + saved */
+  .pc-pickrow{display:flex;flex-wrap:wrap;gap:6px}
+  .pc-pick{border:1px solid var(--line-2);background:var(--card);border-radius:999px;padding:7px 14px;font-size:14px;color:var(--ink);white-space:nowrap;transition:border-color .15s,background .15s}
+  .pc-pick:hover{border-color:var(--ink-2)}
+  .pc-pick.star::before{content:"★ ";color:var(--hue)}
+  .pc-pick[aria-pressed="true"]{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+  .pc-saved{margin-top:12px;border-top:1px solid var(--line)}
+  .pc-saved summary{list-style:none;cursor:pointer;padding:12px 0 2px;font-size:14px;font-weight:500;color:var(--ink-2);display:flex;align-items:center;gap:8px}
+  .pc-saved summary::-webkit-details-marker{display:none}
+  .pc-svrow{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .pc-svrow:last-child{border-bottom:0}
+  .pc-svrow .t{flex:1;min-width:0}
+  .pc-svrow .t b{display:block;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pc-svrow .t small{display:block;font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .pc-svrow .btn{height:36px;padding:0 12px;font-size:13.5px}
+  .pc-svrow .ic{width:36px;padding:0;color:var(--muted)}
+  .pc-svrow .ic[aria-pressed="true"]{color:var(--hue)}
+  .pc-svrow .on{border-color:var(--ink)}
+  /* favours: one row per size */
+  .pc-sizes{display:grid;gap:0}
+  .pc-srow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px 12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+  .pc-srow:last-child{border-bottom:0;padding-bottom:0}
+  .pc-srow.h{padding:0 0 6px;font-size:12px;color:var(--muted)}
+  .pc-srow.h span:not(:first-child){text-align:center}
+  .pc-sz b{display:block;font-weight:600}
+  .pc-sz small{display:block;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .pc-step2{display:flex;align-items:center;direction:ltr;border:1px solid var(--line-2);border-radius:var(--r-md);background:var(--input-bg)}
+  .pc-step2 button{width:34px;height:40px;border:0;background:none;font-size:18px;color:var(--ink-2);border-radius:var(--r-md)}
+  .pc-step2 button:hover{background:var(--sub)}
+  .pc-step2 input{width:52px;height:40px;border:0;background:none;text-align:center;font-size:16px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink);outline:none;padding:0}
+  .pc-step2:focus-within{border-color:var(--ink)}
+  .pc-step2.zero input{color:var(--muted);font-weight:400}
+  @media (max-width:560px){
+    .pc-srow{grid-template-columns:1fr 1fr;gap:8px}
+    .pc-srow .pc-sz{grid-column:1/-1;display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+    .pc-srow.h span:first-child{display:none}
+    .pc-srow > *{min-width:0}
+    .pc-step2{width:100%;min-width:0}
+    .pc-step2 input{flex:1 1 0;width:0;min-width:0}
+    .pc-step2 button{width:44px}
+  }
+  /* price guide */
+  .pc-guide{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:12px;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden}
+  .pc-guide > div{padding:10px 12px}
+  .pc-guide > div + div{border-inline-start:1px solid var(--line)}
+  .pc-guide span{display:block;font-size:12px;color:var(--muted)}
+  .pc-guide b{font-size:16px;font-weight:600;font-variant-numeric:tabular-nums}
+  .pc-guide .verdict{grid-column:1/-1;border-inline-start:0!important;border-top:1px solid var(--line);font-size:13.5px;color:var(--ink-2)}
+  .pc-guide .verdict.ok{background:var(--gain-soft);color:var(--gain)}
+  .pc-guide .verdict.low{background:var(--amber-soft);color:var(--amber)}
+  .pc-guide .verdict.loss{background:var(--loss-soft);color:var(--loss)}
+  /* compare */
+  .pc-cmp{display:grid}
+  .pc-crow{display:grid;grid-template-columns:minmax(0,1fr) repeat(3,minmax(0,.9fr));gap:8px;align-items:center;padding:10px 8px;border:0;border-bottom:1px solid var(--line);background:none;text-align:start;font-size:14px;width:100%;border-radius:0}
+  .pc-crow > :not(:first-child){text-align:end;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .pc-crow.h{font-size:12px;color:var(--muted);padding-top:0}
+  button.pc-crow:hover{background:var(--sub)}
+  .pc-crow.cur{background:var(--sub);font-weight:600}
+  .pc-crow .p{color:var(--hue);font-weight:600}
+  .pc-crow .p.neg{color:var(--loss)}
+  .pc-acts .pc-savecalc{grid-column:1/-1}
   /* quote (the printed receipt keeps its brand look) */
   .quote-dlg{max-width:620px}
   .quote-wrap{padding:14px 14px calc(14px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto}
@@ -738,6 +799,7 @@
         <div><label for="k_c30">كروت 30 مل (لكل 100)</label><input class="inp" id="k_c30" inputmode="decimal" dir="ltr"></div>
         <div><label for="k_del">توصيل الكروت (للحجز)</label><input class="inp" id="k_del" inputmode="decimal" dir="ltr"></div>
         <div><label for="k_ush">أجرة الـ usher</label><input class="inp" id="k_ush" inputmode="decimal" dir="ltr"></div>
+        <div class="full"><label for="k_minp">أقل ربح مقبول للحجز (د.أ)</label><input class="inp" id="k_minp" inputmode="decimal" dir="ltr"><div class="hint">منه بنحسب «أقل سعر تقبله».</div></div>
       </div>
       <div class="rq-acts">
         <button type="button" class="btn primary" id="pcSave">حفظ التكاليف</button>
@@ -747,39 +809,39 @@
     </section>
 
 
-    <section class="card pc-step">
-      <h2><span class="pc-n">1</span>الباقة الأساسية</h2>
-      <p class="pc-desc">البوث + <span id="pcIncl">100</span> توزيعة مع كروتها.</p>
-      <div class="pc-opts" id="pcBase" role="radiogroup" aria-label="الباقة الأساسية"></div>
+    <section class="card pc-step pc-picks">
+      <h2>اختيار سريع</h2>
+      <div class="pc-pickrow" id="pcPicks"></div>
+      <details class="pc-saved" id="pcSavedBox">
+        <summary>الحسابات المحفوظة <span class="pc-sumv" id="pcSavedCount"></span></summary>
+        <div id="pcSavedList"></div>
+      </details>
     </section>
 
     <section class="card pc-step">
-      <h2><span class="pc-n">2</span>توزيعات إضافية <small>اختياري، فوق الباقة</small></h2>
-      <div class="pc-opts small" id="pcExtra" role="radiogroup" aria-label="حجم التوزيعات الإضافية"></div>
-      <div class="pc-qrow">
-        <label for="pcQty">العدد الإضافي</label>
-        <div class="pc-qbox">
-          <button type="button" class="pc-round" id="pcMinus" aria-label="أقل">−</button>
-          <input id="pcQty" inputmode="numeric" autocomplete="off" value="0" aria-label="العدد الإضافي">
-          <button type="button" class="pc-round" id="pcPlus" aria-label="أكثر">+</button>
-        </div>
-      </div>
-      <div class="pc-chips" id="pcQuick" dir="ltr">
-        <button type="button" data-add="25">+25</button><button type="button" data-add="50">+50</button><button type="button" data-add="100">+100</button><button type="button" data-add="clear" class="clr">مسح</button>
-      </div>
+      <h2>التوزيعات</h2>
+      <p class="pc-desc" id="pcPkgNote"></p>
+      <div class="pc-sizes" id="pcSizes"></div>
     </section>
 
     <section class="card pc-step">
-      <h2><span class="pc-n">3</span>السعر النهائي</h2>
-      <button type="button" class="switch" id="pcUsherSw" role="switch" aria-checked="false">
-        <span><b>في usher بالمناسبة؟</b><small id="pcUsherSub">أجرته بتنخصم مرة وحدة من الربح</small></span><span class="sw"></span>
-      </button>
-      <div class="grid" style="margin-top:12px">
+      <h2>السعر</h2>
+      <div class="grid">
+        <div><label for="pcPrice">العميل عارض / سعر متفق عليه</label><input class="inp" id="pcPrice" inputmode="decimal" dir="ltr"></div>
         <div><label for="pcDisc">خصم (د.أ)</label><input class="inp" id="pcDisc" inputmode="decimal" dir="ltr" placeholder="0"></div>
-        <div><label for="pcPrice">سعر متفق عليه</label><input class="inp" id="pcPrice" inputmode="decimal" dir="ltr"></div>
       </div>
       <div class="hint" id="pcPriceHint">السعر المتفق عليه بيحل محل سعر الباقة والخصم.</div>
+      <div class="pc-guide" id="pcGuide"></div>
+      <button type="button" class="switch" id="pcUsherSw" role="switch" aria-checked="false" style="margin-top:12px">
+        <span><b>في usher بالمناسبة؟</b><small id="pcUsherSub">أجرته بتنخصم مرة وحدة من الربح</small></span><span class="sw"></span>
+      </button>
       <div class="pc-order" id="pcOrder"></div>
+    </section>
+
+    <section class="card pc-step">
+      <h2>مقارنة الأحجام</h2>
+      <p class="pc-desc" id="pcCmpNote"></p>
+      <div class="pc-cmp" id="pcCompare"></div>
     </section>
 
     <details class="card pc-details" id="pcCostsBox">
@@ -833,6 +895,7 @@
     <div class="pc-acts">
       <button type="button" class="btn primary" id="pcToBooking">تحويل لحجز</button>
       <button type="button" class="btn" id="pcQuote">إنشاء إيصال حجز</button>
+      <button type="button" class="btn pc-savecalc" id="pcSaveCalc">حفظ الحساب</button>
     </div>
     <button type="button" class="btn ghost pc-reset" id="pcReset">إعادة التعيين</button>
     </div>
@@ -1110,7 +1173,7 @@
   const $ = id => document.getElementById(id);
 
   /* ================= i18n: English layer for the admin (Arabic stays the source) ================= */
-  const EN = {"لوحة الحجوزات": "Bookings dashboard", "الرئيسية": "Home", "الحجوزات": "Bookings", "التقويم": "Calendar", "الطلبات": "Requests", "المزيد": "More", "التنقل": "Navigation", "تحديث": "Refresh", "رجوع": "Back", "حفظ": "Save", "إلغاء": "Cancel", "حذف": "Delete", "نسخ": "Copy", "عرض الكل": "View all", "الكل": "All", "الإيميل": "Email", "كلمة السر": "Password", "دخول": "Log in", "جاري الدخول…": "Logging in…", "اكتب الإيميل وكلمة السر.": "Enter your email and password.", "الإيميل أو كلمة السر غلط.": "Wrong email or password.", "هالحساب مش مسموح يدخل.": "This account isn’t allowed to log in.", "أحمد": "Ahmad", "راما": "Rama", "أ": "A", "ر": "R", "حجز جديد": "New booking", "عرس جاي": "Upcoming wedding", "حجز سابق": "Past booking", "عرس صار قبل": "Already happened", "+ مصروف": "+ Expense", "تعبئة عطور، بخور، مواصلات…": "Refills, incense, transport…", "الأعراس الجاية": "Upcoming weddings", "أعراس جاية": "Upcoming", "متبقي ع العملاء": "Owed by clients", "ما في أعراس جاية لسا.": "No upcoming weddings yet.", "خلص؟ سكّره": "Done? Close it", "المبلغ": "Amount", "الربح": "Profit", "متبقي": "Owed", "المتبقي": "Remaining", "التكلفة": "Cost", "مؤكد": "Confirmed", "منفّذ": "Done", "ملغي": "Cancelled", "بوث فقط": "Booth only", "توزيعات فقط": "Favors only", "بوث + توزيعات": "Booth + favors", "بوث": "Booth", "توزيعات": "Favors", "usher": "usher", "مجهول": "Unknown", "ابحث بالاسم، القاعة، أو الهاتف": "Search by name, venue or phone", "الجاية": "Upcoming", "لازم تتسكّر": "Needs closing", "عليهم فلوس": "Owe money", "منفّذة": "Done", "ملغية": "Cancelled", "ما في أعراس جاية.": "No upcoming weddings.", "كل الأعراس اللي صارت متسكّرة ✓": "All past weddings are closed ✓", "ما في حدا عليه فلوس ✓": "Nobody owes money ✓", "ما في حجوزات منفّذة لسا.": "No completed bookings yet.", "ما في حجوزات ملغية.": "No cancelled bookings.", "ما في حجوزات لسا.": "No bookings yet.", "ما في نتائج لهالبحث.": "No results for this search.", "طلبات العملاء": "Customer requests", "جديدة": "New", "صارت حجوزات": "Converted", "مرفوضة": "Rejected", "جديد": "New", "صار حجز": "Booked", "مرفوض": "Rejected", "تحويل لحجز": "Convert to booking", "واتساب": "WhatsApp", "رفض": "Reject", "إرجاع للجديدة": "Move back to new", "فتح الحجز": "Open booking", "التاريخ فات": "Date passed", "وصل هلأ": "Received just now", "رابط صفحة الحجز للعملاء:": "Customer booking page:", "ما في طلبات جديدة. شارك رابط صفحة الحجز على إنستغرام.": "No new requests. Share your booking page link on Instagram.", "ما في طلبات صارت حجوزات لسا.": "No converted requests yet.", "ما في طلبات مرفوضة.": "No rejected requests.", "ما وصل ولا طلب لسا.": "No requests yet.", "ترفض هالطلب؟": "Reject this request?", "انرفض الطلب": "Request rejected", "رجع للطلبات الجديدة": "Moved back to new requests", "الشهر السابق": "Previous month", "الشهر الجاي": "Next month", "هالشهر": "This month", "اليوم": "Today", "سبت": "Sat", "أحد": "Sun", "إثنين": "Mon", "ثلاثاء": "Tue", "أربعاء": "Wed", "خميس": "Thu", "جمعة": "Fri", "طلب جديد": "New request", "مقفل": "Blocked", "اكبس على أي يوم لتشوف تفاصيله": "Tap any day to see its details", "+ حجز بهاليوم": "+ Booking on this day", "قفل اليوم": "Block day", "فتح اليوم": "Unblock day", "فاضي": "Free", "اليوم مليان": "Day is full", "طلب جديد:": "New request:", "عرض ←": "View →", "انفتح اليوم ✓": "Day unblocked ✓", "انقفل اليوم، العملاء ما بيقدروا يحجزوه": "Day blocked, customers can’t request it", "سبب القفل (اختياري)، مثلاً: إجازة": "Reason for blocking (optional), e.g. holiday", "فتح صفحة الحجز للعملاء": "Open customer booking page", "تنزيل نسخة احتياطية (CSV)": "Download backup (CSV)", "تسجيل خروج": "Log out", "زيارات الموقع": "Website visits", "المالية والمصاريف": "Finance & expenses", "الإعدادات": "Settings", "عدد الأعراس المسموح باليوم": "Weddings allowed per day", "لما يوصل اليوم لهالعدد، صفحة العملاء بتقول «محجوز»": "When a day reaches this number, the customer page shows it as booked", "أقل": "Less", "أكثر": "More", "صار مسموح عرس واحد باليوم": "Now 1 wedding allowed per day", "اللغة": "Language", "العرس": "Wedding", "تاريخ العرس *": "Wedding date *", "اسم العميل *": "Client name *", "رقم الهاتف": "Phone number", "القاعة / المكان": "Venue", "مثلاً: ليندا سلمان": "e.g. Linda Salman", "الحالة والخدمة": "Status & service", "الحالة": "Status", "بوث تعطير وتبخير؟": "Perfume & incense booth?", "نعم": "Yes", "لا": "No", "في usher؟": "Usher?", "طريقة التسعير": "Pricing method", "مبلغ إجمالي": "Total amount", "حسب سعر الحبة": "Per piece", "بتكتب كم أخذت على الحجز كامل، وعدد الحبات وتكلفتها، والربح بينحسب لحاله.": "Enter the total you charged, plus quantities and costs, and the profit is calculated automatically.", "بتكتب سعر الحبة لكل حجم وسعر البوث، والمبلغ الإجمالي بينحسب لحاله.": "Enter the price per piece for each size and the booth price, and the total is calculated automatically.", "التوزيعات": "Favors", "اكبس لإضافة": "Tap to add", "العدد": "Quantity", "سعر بيع الحبة": "Selling price per piece", "تكلفة الحبة": "Cost per piece", "تكلفة الكرت": "Card cost", "التكلفة الكلية (شامل الكرت)": "Total cost (incl. card)", "الفلوس": "Money", "سعر البوث (د.أ)": "Booth price (JOD)", "المبلغ الإجمالي اللي أخذته (د.أ) *": "Total amount charged (JOD) *", "المبلغ الإجمالي (محسوب)": "Total amount (calculated)", "مثلاً 300": "e.g. 300", "انقبض المبلغ كامل": "Paid in full", "العميل دفع كل شي": "The client paid everything", "المدفوع لهلأ (عربون)": "Paid so far (deposit)", "ملاحظات": "Notes", "حذف هالحجز نهائياً": "Delete this booking permanently", "إضافة حجز سابق": "Add past booking", "سجّل عرس صار قبل. الحالة «منفّذ» والمبلغ مقبوض كامل، وبتقدر تغيّرهم.": "Record a wedding that already happened. Status is “Done” and it’s marked paid in full, and you can change both.", "عبّي التكاليف والمبلغ اللي اتفقتوا عليه، وبعدين احفظ. الطلب رح يصير «مقبول» لحاله.": "Fill in the costs and the agreed amount, then save. The request will be marked as booked automatically.", "التاريخ فات، رح ينحفظ «منفّذ»": "date has passed, it will be saved as “Done”", "(اليوم مليان)": "(day is full)", "متأكد؟": "sure?", "جاري…": "Saving…", "اختار تاريخ العرس.": "Choose the wedding date.", "اكتب اسم العميل (أو \"مجهول\").": "Enter the client name (or “Unknown”).", "الحجز لازم يكون فيه بوث أو توزيعات.": "A booking needs a booth or favors.", "اكتب سعر البوث أو أسعار الحبات.": "Enter the booth price or the piece prices.", "اكتب المبلغ اللي أخذته.": "Enter the amount you charged.", "المدفوع أكبر من المبلغ.": "Paid is more than the amount.", "انحفظ التعديل ✓": "Changes saved ✓", "انضاف الحجز السابق ✓": "Past booking added ✓", "انحفظ الحجز ✓": "Booking saved ✓", "انحفظ الحجز والطلب صار مقبول ✓": "Booking saved and request marked as booked ✓", "انحذف الحجز": "Booking deleted", "لازم تشغّل ملف supabase-v9-usher.sql أول.": "Run supabase-v9-usher.sql first.", "المالية": "Finance", "هالسنة": "This year", "من البداية": "Since start", "إيراد الحجوزات": "Bookings revenue", "تكلفة التوزيعات": "Favors cost", "أجور الـ usher": "Usher fees", "مصاريف تشغيلية": "Running expenses", "صافي الربح": "Net profit", "تكاليف تأسيسية": "Startup costs", "حصة كل شريك": "Each partner’s share", "من صافي الربح بعد التوزيعات والـ usher والمصاريف التشغيلية.": "From net profit after favors, usher fees and running expenses.", "ترجيع رأس المال": "Capital recovery", "✅ رجع رأس المال كامل": "✅ Capital fully recovered", "رأس المال": "Capital", "رجع": "Recovered", "من": "of", "ضايل": "Left", "د.أ": "JOD", "ربح فوق رأس المال:": "Profit above capital:", "ضيف التكاليف التأسيسية ←": "Add startup costs →", "ما في تكاليف تأسيسية مسجّلة": "No startup costs recorded", "ما في مصاريف تشغيلية بهالفترة.": "No running expenses in this period.", "ما في تكاليف تأسيسية.": "No startup costs.", "+ إضافة": "+ Add", "المجموع": "Total", "تأسيسي": "Startup", "مصروف جديد": "New expense", "تعديل مصروف": "Edit expense", "تشغيلي": "Running", "تأسيسي (مرة وحدة)": "Startup (one-time)", "الفئة": "Category", "البند *": "Item *", "مثلاً: تعبئة عطور التبخير": "e.g. incense perfume refill", "المبلغ (د.أ) *": "Amount (JOD) *", "التاريخ *": "Date *", "التاريخ (اختياري)": "Date (optional)", "تعبئة عطور": "Perfume refill", "بخور وفحم": "Incense & charcoal", "كروت وطباعة": "Cards & printing", "تغليف": "Packaging", "مواصلات": "Transport", "ترويج": "Promotion", "صيانة": "Maintenance", "أخرى": "Other", "اكتب شو البند.": "Enter the item.", "اكتب المبلغ.": "Enter the amount.", "اختار التاريخ.": "Choose the date.", "انضاف المصروف ✓": "Expense added ✓", "انحذف": "Deleted", "لازم تشغّل ملف supabase-v5-expenses.sql أول.": "Run supabase-v5-expenses.sql first.", "طاولة البوث": "Booth table", "العطور المستخدمة للتعطير": "Perfumes used for scenting", "وصلة كهرباء": "Extension cable", "أغراض تزيين البوث (شي إن)": "Booth decorations (Shein)", "كروت عمل": "Business cards", "سلات وشمع": "Baskets & candles", "فرد سيليكون": "Silicone gun", "آخر 7 أيام": "Last 7 days", "آخر 30 يوم": "Last 30 days", "آخر 90 يوم": "Last 90 days", "زوار": "Visitors", "مشاهدات": "Page views", "طلبات حجز": "Booking requests", "نسبة التحويل": "Conversion rate", "الزوار كل يوم": "Visitors per day", "من الزيارة للطلب": "From visit to request", "زاروا الموقع": "Visited the site", "بلّشوا يعبّوا الفورم": "Started the form", "بعثوا طلب حجز": "Sent a request", "كبسوا واتساب": "Tapped WhatsApp", "من وين إجوا": "Where they came from", "الأجهزة": "Devices", "إنستغرام": "Instagram", "تيك توك": "TikTok", "فيسبوك": "Facebook", "سناب": "Snapchat", "جوجل": "Google", "مباشر / رابط منسوخ": "Direct / copied link", "مواقع ثانية": "Other sites", "موبايل": "Mobile", "كمبيوتر": "Desktop", "تابلت": "Tablet", "نصيحة:": "Tip:", "استخدم هالروابط بدل الرابط العادي، عشان تعرف بالزبط كل زائر من وين إجا. واتساب ما بيبيّن حاله لحاله، فرابطه مهم.": "Use these links instead of the plain one, so you know exactly where each visitor came from. WhatsApp doesn’t identify itself, so its link matters.", "إنستغرام (البايو)": "Instagram (bio)", "واتساب (ستوري ورسائل)": "WhatsApp (status & messages)", "زياراتك إنت وشريكك على هالأجهزة ما بتنحسب.": "Your own and your partner’s visits on these devices aren’t counted.", "لسا ما في زيارات.": "No visits yet.", "تصفير الإحصائيات": "Reset statistics", "تصفير إحصائيات الزيارات": "Reset visit statistics", "جاري التصفير…": "Resetting…", "بيحذف كل الزيارات وبيبلّش العدّ من الصفر. الحجوزات وطلبات العملاء ما بتنحذف.": "Deletes all visits and starts counting from zero. Bookings and customer requests are not deleted.", "آخر تصفير:": "Last reset:", "ما انصفّر إشي — الكلمة مش مطابقة": "Nothing was reset — the word didn’t match", "لازم تشغّل ملف supabase-v8-reset-stats.sql أول.": "Run supabase-v8-reset-stats.sql first.", "لازم تشغّل ملف supabase-v7-analytics.sql أول.": "Run supabase-v7-analytics.sql first.", "هالخطوة بتحذف كل إحصائيات الزيارات ومش ممكن ترجع.\nالحجوزات والطلبات ما بتنلمس.\n\nللتأكيد اكتب: تصفير": "This deletes all visit statistics and can’t be undone.\nBookings and requests are not touched.\n\nTo confirm, type: RESET", "انسخ الرابط ✓": "Link copied ✓", "انسخ الرابط:": "Copy the link:", "تحدّثت ✓": "Refreshed ✓", "جاري التحميل…": "Loading…", "حسابك مش مسموح يعدّل على الحجوزات.": "Your account isn’t allowed to edit bookings.", "ما في اتصال بالإنترنت. جرّب كمان مرة.": "No internet connection. Please try again.", "انتهت الجلسة. اطلع وادخل من جديد.": "Session expired. Please log out and log in again.", "صار خطأ.": "Something went wrong.", "لازم تحط SUPABASE_URL و SUPABASE_KEY بملف config.js.": "SUPABASE_URL and SUPABASE_KEY must be set in config.js.", "بكرا": "Tomorrow", "مبارح": "Yesterday", "هلأ": "just now"};
+  const EN = {"اختيار سريع": "Quick picks", "الحسابات المحفوظة": "Saved calculations", "مقارنة الأحجام": "Compare sizes", "العميل عارض / سعر متفق عليه": "Client offer / agreed price", "حفظ الحساب": "Save calculation", "أقل ربح مقبول للحجز (د.أ)": "Minimum profit per booking (JOD)", "منه بنحسب «أقل سعر تقبله».": "Used for “lowest price to accept”.", "لوحة الحجوزات": "Bookings dashboard", "الرئيسية": "Home", "الحجوزات": "Bookings", "التقويم": "Calendar", "الطلبات": "Requests", "المزيد": "More", "التنقل": "Navigation", "تحديث": "Refresh", "رجوع": "Back", "حفظ": "Save", "إلغاء": "Cancel", "حذف": "Delete", "نسخ": "Copy", "عرض الكل": "View all", "الكل": "All", "الإيميل": "Email", "كلمة السر": "Password", "دخول": "Log in", "جاري الدخول…": "Logging in…", "اكتب الإيميل وكلمة السر.": "Enter your email and password.", "الإيميل أو كلمة السر غلط.": "Wrong email or password.", "هالحساب مش مسموح يدخل.": "This account isn’t allowed to log in.", "أحمد": "Ahmad", "راما": "Rama", "أ": "A", "ر": "R", "حجز جديد": "New booking", "عرس جاي": "Upcoming wedding", "حجز سابق": "Past booking", "عرس صار قبل": "Already happened", "+ مصروف": "+ Expense", "تعبئة عطور، بخور، مواصلات…": "Refills, incense, transport…", "الأعراس الجاية": "Upcoming weddings", "أعراس جاية": "Upcoming", "متبقي ع العملاء": "Owed by clients", "ما في أعراس جاية لسا.": "No upcoming weddings yet.", "خلص؟ سكّره": "Done? Close it", "المبلغ": "Amount", "الربح": "Profit", "متبقي": "Owed", "المتبقي": "Remaining", "التكلفة": "Cost", "مؤكد": "Confirmed", "منفّذ": "Done", "ملغي": "Cancelled", "بوث فقط": "Booth only", "توزيعات فقط": "Favors only", "بوث + توزيعات": "Booth + favors", "بوث": "Booth", "توزيعات": "Favors", "usher": "usher", "مجهول": "Unknown", "ابحث بالاسم، القاعة، أو الهاتف": "Search by name, venue or phone", "الجاية": "Upcoming", "لازم تتسكّر": "Needs closing", "عليهم فلوس": "Owe money", "منفّذة": "Done", "ملغية": "Cancelled", "ما في أعراس جاية.": "No upcoming weddings.", "كل الأعراس اللي صارت متسكّرة ✓": "All past weddings are closed ✓", "ما في حدا عليه فلوس ✓": "Nobody owes money ✓", "ما في حجوزات منفّذة لسا.": "No completed bookings yet.", "ما في حجوزات ملغية.": "No cancelled bookings.", "ما في حجوزات لسا.": "No bookings yet.", "ما في نتائج لهالبحث.": "No results for this search.", "طلبات العملاء": "Customer requests", "جديدة": "New", "صارت حجوزات": "Converted", "مرفوضة": "Rejected", "جديد": "New", "صار حجز": "Booked", "مرفوض": "Rejected", "تحويل لحجز": "Convert to booking", "واتساب": "WhatsApp", "رفض": "Reject", "إرجاع للجديدة": "Move back to new", "فتح الحجز": "Open booking", "التاريخ فات": "Date passed", "وصل هلأ": "Received just now", "رابط صفحة الحجز للعملاء:": "Customer booking page:", "ما في طلبات جديدة. شارك رابط صفحة الحجز على إنستغرام.": "No new requests. Share your booking page link on Instagram.", "ما في طلبات صارت حجوزات لسا.": "No converted requests yet.", "ما في طلبات مرفوضة.": "No rejected requests.", "ما وصل ولا طلب لسا.": "No requests yet.", "ترفض هالطلب؟": "Reject this request?", "انرفض الطلب": "Request rejected", "رجع للطلبات الجديدة": "Moved back to new requests", "الشهر السابق": "Previous month", "الشهر الجاي": "Next month", "هالشهر": "This month", "اليوم": "Today", "سبت": "Sat", "أحد": "Sun", "إثنين": "Mon", "ثلاثاء": "Tue", "أربعاء": "Wed", "خميس": "Thu", "جمعة": "Fri", "طلب جديد": "New request", "مقفل": "Blocked", "اكبس على أي يوم لتشوف تفاصيله": "Tap any day to see its details", "+ حجز بهاليوم": "+ Booking on this day", "قفل اليوم": "Block day", "فتح اليوم": "Unblock day", "فاضي": "Free", "اليوم مليان": "Day is full", "طلب جديد:": "New request:", "عرض ←": "View →", "انفتح اليوم ✓": "Day unblocked ✓", "انقفل اليوم، العملاء ما بيقدروا يحجزوه": "Day blocked, customers can’t request it", "سبب القفل (اختياري)، مثلاً: إجازة": "Reason for blocking (optional), e.g. holiday", "فتح صفحة الحجز للعملاء": "Open customer booking page", "تنزيل نسخة احتياطية (CSV)": "Download backup (CSV)", "تسجيل خروج": "Log out", "زيارات الموقع": "Website visits", "المالية والمصاريف": "Finance & expenses", "الإعدادات": "Settings", "عدد الأعراس المسموح باليوم": "Weddings allowed per day", "لما يوصل اليوم لهالعدد، صفحة العملاء بتقول «محجوز»": "When a day reaches this number, the customer page shows it as booked", "أقل": "Less", "أكثر": "More", "صار مسموح عرس واحد باليوم": "Now 1 wedding allowed per day", "اللغة": "Language", "العرس": "Wedding", "تاريخ العرس *": "Wedding date *", "اسم العميل *": "Client name *", "رقم الهاتف": "Phone number", "القاعة / المكان": "Venue", "مثلاً: ليندا سلمان": "e.g. Linda Salman", "الحالة والخدمة": "Status & service", "الحالة": "Status", "بوث تعطير وتبخير؟": "Perfume & incense booth?", "نعم": "Yes", "لا": "No", "في usher؟": "Usher?", "طريقة التسعير": "Pricing method", "مبلغ إجمالي": "Total amount", "حسب سعر الحبة": "Per piece", "بتكتب كم أخذت على الحجز كامل، وعدد الحبات وتكلفتها، والربح بينحسب لحاله.": "Enter the total you charged, plus quantities and costs, and the profit is calculated automatically.", "بتكتب سعر الحبة لكل حجم وسعر البوث، والمبلغ الإجمالي بينحسب لحاله.": "Enter the price per piece for each size and the booth price, and the total is calculated automatically.", "التوزيعات": "Favors", "اكبس لإضافة": "Tap to add", "العدد": "Quantity", "سعر بيع الحبة": "Selling price per piece", "تكلفة الحبة": "Cost per piece", "تكلفة الكرت": "Card cost", "التكلفة الكلية (شامل الكرت)": "Total cost (incl. card)", "الفلوس": "Money", "سعر البوث (د.أ)": "Booth price (JOD)", "المبلغ الإجمالي اللي أخذته (د.أ) *": "Total amount charged (JOD) *", "المبلغ الإجمالي (محسوب)": "Total amount (calculated)", "مثلاً 300": "e.g. 300", "انقبض المبلغ كامل": "Paid in full", "العميل دفع كل شي": "The client paid everything", "المدفوع لهلأ (عربون)": "Paid so far (deposit)", "ملاحظات": "Notes", "حذف هالحجز نهائياً": "Delete this booking permanently", "إضافة حجز سابق": "Add past booking", "سجّل عرس صار قبل. الحالة «منفّذ» والمبلغ مقبوض كامل، وبتقدر تغيّرهم.": "Record a wedding that already happened. Status is “Done” and it’s marked paid in full, and you can change both.", "عبّي التكاليف والمبلغ اللي اتفقتوا عليه، وبعدين احفظ. الطلب رح يصير «مقبول» لحاله.": "Fill in the costs and the agreed amount, then save. The request will be marked as booked automatically.", "التاريخ فات، رح ينحفظ «منفّذ»": "date has passed, it will be saved as “Done”", "(اليوم مليان)": "(day is full)", "متأكد؟": "sure?", "جاري…": "Saving…", "اختار تاريخ العرس.": "Choose the wedding date.", "اكتب اسم العميل (أو \"مجهول\").": "Enter the client name (or “Unknown”).", "الحجز لازم يكون فيه بوث أو توزيعات.": "A booking needs a booth or favors.", "اكتب سعر البوث أو أسعار الحبات.": "Enter the booth price or the piece prices.", "اكتب المبلغ اللي أخذته.": "Enter the amount you charged.", "المدفوع أكبر من المبلغ.": "Paid is more than the amount.", "انحفظ التعديل ✓": "Changes saved ✓", "انضاف الحجز السابق ✓": "Past booking added ✓", "انحفظ الحجز ✓": "Booking saved ✓", "انحفظ الحجز والطلب صار مقبول ✓": "Booking saved and request marked as booked ✓", "انحذف الحجز": "Booking deleted", "لازم تشغّل ملف supabase-v9-usher.sql أول.": "Run supabase-v9-usher.sql first.", "المالية": "Finance", "هالسنة": "This year", "من البداية": "Since start", "إيراد الحجوزات": "Bookings revenue", "تكلفة التوزيعات": "Favors cost", "أجور الـ usher": "Usher fees", "مصاريف تشغيلية": "Running expenses", "صافي الربح": "Net profit", "تكاليف تأسيسية": "Startup costs", "حصة كل شريك": "Each partner’s share", "من صافي الربح بعد التوزيعات والـ usher والمصاريف التشغيلية.": "From net profit after favors, usher fees and running expenses.", "ترجيع رأس المال": "Capital recovery", "✅ رجع رأس المال كامل": "✅ Capital fully recovered", "رأس المال": "Capital", "رجع": "Recovered", "من": "of", "ضايل": "Left", "د.أ": "JOD", "ربح فوق رأس المال:": "Profit above capital:", "ضيف التكاليف التأسيسية ←": "Add startup costs →", "ما في تكاليف تأسيسية مسجّلة": "No startup costs recorded", "ما في مصاريف تشغيلية بهالفترة.": "No running expenses in this period.", "ما في تكاليف تأسيسية.": "No startup costs.", "+ إضافة": "+ Add", "المجموع": "Total", "تأسيسي": "Startup", "مصروف جديد": "New expense", "تعديل مصروف": "Edit expense", "تشغيلي": "Running", "تأسيسي (مرة وحدة)": "Startup (one-time)", "الفئة": "Category", "البند *": "Item *", "مثلاً: تعبئة عطور التبخير": "e.g. incense perfume refill", "المبلغ (د.أ) *": "Amount (JOD) *", "التاريخ *": "Date *", "التاريخ (اختياري)": "Date (optional)", "تعبئة عطور": "Perfume refill", "بخور وفحم": "Incense & charcoal", "كروت وطباعة": "Cards & printing", "تغليف": "Packaging", "مواصلات": "Transport", "ترويج": "Promotion", "صيانة": "Maintenance", "أخرى": "Other", "اكتب شو البند.": "Enter the item.", "اكتب المبلغ.": "Enter the amount.", "اختار التاريخ.": "Choose the date.", "انضاف المصروف ✓": "Expense added ✓", "انحذف": "Deleted", "لازم تشغّل ملف supabase-v5-expenses.sql أول.": "Run supabase-v5-expenses.sql first.", "طاولة البوث": "Booth table", "العطور المستخدمة للتعطير": "Perfumes used for scenting", "وصلة كهرباء": "Extension cable", "أغراض تزيين البوث (شي إن)": "Booth decorations (Shein)", "كروت عمل": "Business cards", "سلات وشمع": "Baskets & candles", "فرد سيليكون": "Silicone gun", "آخر 7 أيام": "Last 7 days", "آخر 30 يوم": "Last 30 days", "آخر 90 يوم": "Last 90 days", "زوار": "Visitors", "مشاهدات": "Page views", "طلبات حجز": "Booking requests", "نسبة التحويل": "Conversion rate", "الزوار كل يوم": "Visitors per day", "من الزيارة للطلب": "From visit to request", "زاروا الموقع": "Visited the site", "بلّشوا يعبّوا الفورم": "Started the form", "بعثوا طلب حجز": "Sent a request", "كبسوا واتساب": "Tapped WhatsApp", "من وين إجوا": "Where they came from", "الأجهزة": "Devices", "إنستغرام": "Instagram", "تيك توك": "TikTok", "فيسبوك": "Facebook", "سناب": "Snapchat", "جوجل": "Google", "مباشر / رابط منسوخ": "Direct / copied link", "مواقع ثانية": "Other sites", "موبايل": "Mobile", "كمبيوتر": "Desktop", "تابلت": "Tablet", "نصيحة:": "Tip:", "استخدم هالروابط بدل الرابط العادي، عشان تعرف بالزبط كل زائر من وين إجا. واتساب ما بيبيّن حاله لحاله، فرابطه مهم.": "Use these links instead of the plain one, so you know exactly where each visitor came from. WhatsApp doesn’t identify itself, so its link matters.", "إنستغرام (البايو)": "Instagram (bio)", "واتساب (ستوري ورسائل)": "WhatsApp (status & messages)", "زياراتك إنت وشريكك على هالأجهزة ما بتنحسب.": "Your own and your partner’s visits on these devices aren’t counted.", "لسا ما في زيارات.": "No visits yet.", "تصفير الإحصائيات": "Reset statistics", "تصفير إحصائيات الزيارات": "Reset visit statistics", "جاري التصفير…": "Resetting…", "بيحذف كل الزيارات وبيبلّش العدّ من الصفر. الحجوزات وطلبات العملاء ما بتنحذف.": "Deletes all visits and starts counting from zero. Bookings and customer requests are not deleted.", "آخر تصفير:": "Last reset:", "ما انصفّر إشي — الكلمة مش مطابقة": "Nothing was reset — the word didn’t match", "لازم تشغّل ملف supabase-v8-reset-stats.sql أول.": "Run supabase-v8-reset-stats.sql first.", "لازم تشغّل ملف supabase-v7-analytics.sql أول.": "Run supabase-v7-analytics.sql first.", "هالخطوة بتحذف كل إحصائيات الزيارات ومش ممكن ترجع.\nالحجوزات والطلبات ما بتنلمس.\n\nللتأكيد اكتب: تصفير": "This deletes all visit statistics and can’t be undone.\nBookings and requests are not touched.\n\nTo confirm, type: RESET", "انسخ الرابط ✓": "Link copied ✓", "انسخ الرابط:": "Copy the link:", "تحدّثت ✓": "Refreshed ✓", "جاري التحميل…": "Loading…", "حسابك مش مسموح يعدّل على الحجوزات.": "Your account isn’t allowed to edit bookings.", "ما في اتصال بالإنترنت. جرّب كمان مرة.": "No internet connection. Please try again.", "انتهت الجلسة. اطلع وادخل من جديد.": "Session expired. Please log out and log in again.", "صار خطأ.": "Something went wrong.", "لازم تحط SUPABASE_URL و SUPABASE_KEY بملف config.js.": "SUPABASE_URL and SUPABASE_KEY must be set in config.js.", "بكرا": "Tomorrow", "مبارح": "Yesterday", "هلأ": "just now"};
   Object.assign(EN, {
     "حاسبة الربح":"Profit calculator","السعر":"Price","الهامش":"Margin","إجمالي سعر العميل":"Customer total","الربح قبل المصاريف غير المحتسبة":"Profit before unrecorded expenses",
     "إجمالي التكلفة":"Total cost","هامش الربح":"Profit margin","حصة أحمد":"Ahmad’s share","حصة راما":"Rama’s share","الباقة الأساسية":"Base package","البوث +":"Booth +","توزيعة مع كروتها.":"favors with their cards.",
@@ -1342,7 +1405,7 @@
     if (v === 'cal') renderCal();
     if (v === 'fin') renderFin();
     if (v === 'stats') loadStats(statDays);
-    if (v === 'pcalc') renderPcalc();
+    if (v === 'pcalc') { renderPcalc(); loadSaved(); }
     $('pcBar').hidden = true;
     window.scrollTo({ top: 0 });
   }
@@ -1836,12 +1899,13 @@
   /* ================= PROFIT CALCULATOR (single source of truth: pcCompute) ================= */
   const PRICING = Object.assign({ included: 100, base: { '5': 120, '10': 150, '30': 230 }, extra: { '5': 0.90, '10': 1.00, '30': 2.00 }, maxExtra: 10000 }, window.AMBERE_PRICING || {});
   // التكاليف الافتراضية (بتنحفظ بالداتا بيس بإعداد cost_model لما تعدّلها)
-  const COST_DEFAULTS = { oil: 0.06, alc: 3, conc: 25, b5: 0.075, b10: 0.0833, b30: 0.83, c510: 8, c30: 5, del: 2, ush: 20 };
+  const COST_DEFAULTS = { oil: 0.06, alc: 3, conc: 25, b5: 0.075, b10: 0.0833, b30: 0.83, c510: 8, c30: 5, del: 2, ush: 20, minp: 45 };
   let COSTS = Object.assign({}, COST_DEFAULTS);
 
-  const PC = { base: '5', extra: '5', qty: 0, usher: false, extras: [], depOn: false, booth: true };
+  const SIZES_PC = ['5', '10', '30'];
+  const PC = { pkg: { '5': PRICING.included, '10': 0, '30': 0 }, add: { '5': 0, '10': 0, '30': 0 }, usher: false, extras: [], depOn: false, booth: true };
   const DEFAULT_DEPOSIT = 20;   // العربون الافتراضي بالدينار
-  const COST_FIELDS = ['oil', 'alc', 'conc', 'b5', 'b10', 'b30', 'c510', 'c30', 'del', 'ush'];
+  const COST_FIELDS = ['oil', 'alc', 'conc', 'b5', 'b10', 'b30', 'c510', 'c30', 'del', 'ush', 'minp'];
   let pendingCalcSig = null; const savedCalcSigs = new Set();
   const f3 = x => (Math.round(x * 1000) / 1000).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 3 });
   const toF = x => Math.round(Number(x) * 1000);            // دينار ← فلس (رقم صحيح)
@@ -1852,10 +1916,9 @@
     return { liquid: ml * c * n(k.oil) + ml * (1 - c) * n(k.alc) / 1000, bottle: size === '5' ? n(k.b5) : n(k.b10), card: n(k.c510) / 100 };
   }
   function pcNum(id){ const v = $(id).value; return filled(v) ? n(v) : null; }
-  function pcCompute(){
+  // تكاليف أي توزيعة (كمية لكل حجم) — نفس الحساب للحاسبة وللمقارنة
+  function pcCostLines(qty){
     const en = LANG === 'en', k = COSTS, c = Math.min(100, Math.max(0, n(k.conc))) / 100;
-    const qty = { '5': 0, '10': 0, '30': 0 };
-    qty[PC.base] += PRICING.included; qty[PC.extra] += PC.qty;
     const pieces = qty['5'] + qty['10'] + qty['30'];
     const vol = qty['5'] * 5 + qty['10'] * 10;                 // مل خلطة (5 و10 بس، 30 جاهزة)
     const lines = [];                                          // [key, label, qty, unitLabel, unit(JOD), totalF]
@@ -1870,10 +1933,19 @@
     if (pieces > 0) add('del', en ? 'Card delivery' : 'توصيل الكروت', 1, en ? 'order' : 'طلب', n(k.del));
     if (PC.usher) add('ush', en ? 'Usher' : 'usher', 1, en ? 'event' : 'مناسبة', n(k.ush));
     PC.extras.forEach((x, i) => { const q = Math.max(0, n(x.qty)), u = Math.max(0, n(x.unit)); if (q > 0 && u > 0) lines.push({ key: 'x' + i, label: x.name || (en ? 'Other' : 'مصروف'), q, unitTxt: '', unit: u, f: Math.round(q * u * 1000), extra: true }); });
+    return lines;
+  }
+  function pcCompute(){
+    const en = LANG === 'en', inc = PRICING.included;
+    const qty = {}; SIZES_PC.forEach(s => qty[s] = PC.pkg[s] + PC.add[s]);
+    const pieces = qty['5'] + qty['10'] + qty['30'];
+    const lines = pcCostLines(qty);
     const costF = lines.reduce((t, l) => t + l.f, 0);
     const overheadF = lines.filter(l => l.key === 'del' || l.extra).reduce((t, l) => t + l.f, 0);
-    // revenue
-    const baseF = toF(PRICING.base[PC.base]), extraUnitF = toF(PRICING.extra[PC.extra]), extrasF = PC.qty * extraUnitF;
+    // revenue: الباقة بتنحسب حسب حصة كل حجم من الـ 100، والإضافي بسعر الحبة
+    const pkgParts = SIZES_PC.filter(s => PC.pkg[s] > 0).map(s => ({ s, q: PC.pkg[s], f: Math.round(toF(PRICING.base[s]) * PC.pkg[s] / inc) }));
+    const addParts = SIZES_PC.filter(s => PC.add[s] > 0).map(s => ({ s, q: PC.add[s], unitF: toF(PRICING.extra[s]), f: PC.add[s] * toF(PRICING.extra[s]) }));
+    const baseF = pkgParts.reduce((t, x) => t + x.f, 0), extrasF = addParts.reduce((t, x) => t + x.f, 0);
     const listF = baseF + extrasF;
     const agreed = pcNum('pcPrice'), disc = pcNum('pcDisc');
     const warns = [];
@@ -1888,17 +1960,95 @@
     const dep = PC.depOn ? (pcNum('pbDep') !== null ? pcNum('pbDep') : DEFAULT_DEPOSIT) : 0; let depF = toF(Math.max(0, dep));
     if (depF > finalF) warns.push(en ? 'The deposit is more than the final price.' : 'العربون أكبر من السعر النهائي.');
     if (profitF < 0) warns.push(en ? 'Costs are higher than the price, so this booking loses money.' : 'التكاليف أكبر من السعر، هالحجز خسران.');
-    return { qty, pieces, lines, costF, overheadF, baseF, extraUnitF, extrasF, listF, discF, agreed, finalF, profitF, margin, pctA, aF, bF, depF, remainF: finalF - depF, warns };
+    const minF = toF(Math.max(0, n(COSTS.minp)));
+    return { qty, pieces, lines, costF, overheadF, pkgParts, addParts, baseF, extrasF, listF, discF, agreed, finalF, profitF, margin, pctA, aF, bF, depF, remainF: finalF - depF, minF, floorF: costF + minF, warns };
+  }
+  // نفس العدد الكلي، كله من حجم واحد، بأسعار القائمة
+  function pcCompare(){
+    const inc = PRICING.included, total = SIZES_PC.reduce((t, s) => t + PC.pkg[s] + PC.add[s], 0);
+    return SIZES_PC.map(s => {
+      const qty = { '5': 0, '10': 0, '30': 0 }; qty[s] = total;
+      const priceF = toF(PRICING.base[s]) + Math.max(0, total - inc) * toF(PRICING.extra[s]);
+      const costF = pcCostLines(qty).reduce((t, l) => t + l.f, 0);
+      return { s, total, priceF, costF, profitF: priceF - costF };
+    });
   }
   const mt = f => `${JF(f)} ${LANG === 'en' ? 'JOD' : 'د.أ'}`;
   const pctTxt = m => m === null ? '—' : `${Math.round(m * 1000) / 10}%`;
-  function pcOptions(){
-    const en = LANG === 'en', ml = k => en ? `${k} ml` : `${k} مل`;
-    $('pcIncl').textContent = PRICING.included;
-    $('pcBase').innerHTML = Object.keys(PRICING.base).map(k => `<button type="button" class="pc-opt" role="radio" data-v="${k}" aria-checked="${PC.base === k}">
-      <span class="sz">${ml(k)}</span><span class="pr">${fmt(PRICING.base[k])}</span><span class="ds">${en ? 'JOD' : 'د.أ'}</span></button>`).join('');
-    $('pcExtra').innerHTML = Object.keys(PRICING.extra).map(k => `<button type="button" class="pc-opt" role="radio" data-v="${k}" aria-checked="${PC.extra === k}">
-      <span class="sz">${ml(k)}</span><span class="pr">${n(PRICING.extra[k]).toFixed(2)}</span><span class="ds">${en ? 'JOD each' : 'د.أ للحبة'}</span></button>`).join('');
+  function renderSizes(){
+    const en = LANG === 'en', box = $('pcSizes');
+    if (box.dataset.lang !== LANG) {
+      box.dataset.lang = LANG;
+      const stepper = (s, k, lbl) => `<div class="pc-step2" data-s="${s}" data-k="${k}"><button type="button" data-d="-10" aria-label="${lbl} −10">−</button><input inputmode="numeric" autocomplete="off" aria-label="${lbl}"><button type="button" data-d="10" aria-label="${lbl} +10">+</button></div>`;
+      box.innerHTML = `<div class="pc-srow h"><span>${en ? 'Size' : 'الحجم'}</span><span>${en ? 'In package' : 'بالباقة'}</span><span>${en ? 'Extra' : 'إضافي'}</span></div>` +
+        SIZES_PC.map(s => { const ml = en ? `${s} ml` : `${s} مل`; return `<div class="pc-srow"><div class="pc-sz"><b>${ml}</b><small>${en ? 'package' : 'باقة'} ${fmt(PRICING.base[s])} · ${en ? 'extra' : 'إضافي'} ${n(PRICING.extra[s]).toFixed(2)}</small></div>${stepper(s, 'pkg', (en ? 'In package ' : 'بالباقة ') + ml)}${stepper(s, 'add', (en ? 'Extra ' : 'إضافي ') + ml)}</div>`; }).join('');
+    }
+    box.querySelectorAll('.pc-step2').forEach(st => {
+      const v = PC[st.dataset.k][st.dataset.s], inp = st.querySelector('input');
+      if (document.activeElement !== inp) inp.value = String(v);
+      st.classList.toggle('zero', v === 0); st.querySelector('[data-d="-10"]').disabled = v <= 0;
+    });
+  }
+  // الباقة مجموعها دايماً = included: اللي بتزيده لحجم بينسحب من أكبر حجم ثاني، واللي بتنقصه بيروح له
+  function setPkg(s, v){
+    v = Math.max(0, Math.min(PRICING.included, Math.round(n(v))));
+    let diff = v - PC.pkg[s]; PC.pkg[s] = v;
+    const others = SIZES_PC.filter(x => x !== s).sort((a, b) => PC.pkg[b] - PC.pkg[a]);
+    if (diff > 0) { for (const o of others) { const t = Math.min(PC.pkg[o], diff); PC.pkg[o] -= t; diff -= t; if (!diff) break; } }
+    else if (diff < 0) PC.pkg[others[0]] -= diff;
+  }
+  function setAdd(s, v){ PC.add[s] = Math.max(0, Math.min(PRICING.maxExtra, Math.round(n(v)))); }
+  function setOnly(s, extra){ const z = { '5': 0, '10': 0, '30': 0 }; PC.pkg = { ...z, [s]: PRICING.included }; PC.add = { ...z, [s]: Math.max(0, extra) }; }
+
+  /* ---------- saved calculations (settings → saved_calcs, shared by both partners) ---------- */
+  let SAVED = [], savedId = null;
+  const PC_FIELDS = ['pcPrice', 'pcDisc', 'pbName', 'pbPhone', 'pbType', 'pbDate', 'pbVenue', 'pbDep', 'pbNotes'];
+  const savedItems = data => (data && data[0] && data[0].value && Array.isArray(data[0].value.items)) ? data[0].value.items : [];
+  async function loadSaved(){
+    try { const { data, error } = await sb.from('settings').select('*').eq('key', 'saved_calcs'); if (!error) SAVED = savedItems(data); } catch (e) {}
+    if (view === 'pcalc') renderPcalc();
+  }
+  async function writeSaved(mutate){
+    // نقرأ من جديد قبل الكتابة عشان ما نمسح حساب حفظه الشريك الثاني
+    const { data, error } = await sb.from('settings').select('*').eq('key', 'saved_calcs');
+    if (error) { toast(dbError(error), true); return false; }
+    const items = savedItems(data); mutate(items);
+    const { error: e2 } = await sb.from('settings').upsert({ key: 'saved_calcs', value: { items }, updated_at: new Date().toISOString() });
+    if (e2) { toast(dbError(e2), true); return false; }
+    SAVED = items; renderPcalc(); return true;
+  }
+  function pcSnapshot(){
+    return { pkg: { ...PC.pkg }, add: { ...PC.add }, usher: PC.usher, extras: PC.extras.map(x => ({ ...x })), booth: PC.booth, depOn: PC.depOn,
+             f: Object.fromEntries(PC_FIELDS.map(id => [id, $(id).value])) };
+  }
+  function pcRestore(st){
+    const z = { '5': 0, '10': 0, '30': 0 };
+    Object.assign(PC, { pkg: { ...z, ...st.pkg }, add: { ...z, ...st.add }, usher: !!st.usher, extras: Array.isArray(st.extras) ? st.extras.map(x => ({ ...x })) : [], booth: st.booth !== false, depOn: !!st.depOn });
+    PC_FIELDS.forEach(id => { $(id).value = st.f && st.f[id] !== undefined ? st.f[id] : (id === 'pbDep' ? DEFAULT_DEPOSIT : ''); });
+    if (!$('pbType').value) $('pbType').selectedIndex = 0;
+    renderExtras(); renderPcalc();
+  }
+  async function saveCalc(){
+    const en = LANG === 'en', r = pcCompute(), cur = savedId && SAVED.find(x => x.id === savedId);
+    let name = $('pbName').value.trim() || (cur && cur.name) || '';
+    if (!name) { name = (prompt(en ? 'Name this calculation (e.g. the client):' : 'سمّي هالحساب (مثلاً اسم العميل):') || '').trim(); if (!name) return; }
+    const item = { id: cur ? cur.id : 'c' + Date.now().toString(36), name: name.slice(0, 60), star: cur ? !!cur.star : false, at: todayStr(), price: JF(r.finalF), profit: JF(r.profitF), s: pcSnapshot() };
+    $('pcSaveCalc').disabled = true;
+    const ok = await writeSaved(items => { const i = items.findIndex(x => x.id === item.id); if (i >= 0) items[i] = item; else items.unshift(item); if (items.length > 80) items.length = 80; });
+    $('pcSaveCalc').disabled = false;
+    if (ok) { savedId = item.id; renderPcalc(); toast(cur ? (en ? 'Calculation updated ✓' : 'انحدّث الحساب ✓') : (en ? 'Calculation saved ✓' : 'انحفظ الحساب ✓')); }
+  }
+  function renderSaved(){
+    const en = LANG === 'en', inc = PRICING.included, ml = s => en ? `${s} ml` : `${s} مل`, noAdd = SIZES_PC.every(x => !PC.add[x]);
+    const builtin = SIZES_PC.map(s => `<button type="button" class="pc-pick" data-pick="pkg:${s}" aria-pressed="${!savedId && PC.pkg[s] === inc && noAdd}">${en ? 'Package' : 'باقة'} ${inc} × ${ml(s)}</button>`);
+    const stars = SAVED.filter(x => x.star).map(x => `<button type="button" class="pc-pick star" data-pick="${esc(x.id)}" aria-pressed="${x.id === savedId}">${esc(x.name)}</button>`);
+    $('pcPicks').innerHTML = builtin.concat(stars).join('');
+    $('pcSavedCount').textContent = SAVED.length ? String(SAVED.length) : '';
+    $('pcSavedList').innerHTML = SAVED.length ? SAVED.map(x => `<div class="pc-svrow"><div class="t"><b>${esc(x.name)}</b><small>${esc(x.price)} ${en ? 'JOD' : 'د.أ'} · ${en ? 'profit' : 'ربح'} ${esc(x.profit)} · ${showDate(String(x.at).slice(0, 10))}</small></div>
+      <button type="button" class="btn ic" data-svstar="${esc(x.id)}" aria-pressed="${!!x.star}" aria-label="${en ? 'Show in quick picks' : 'إظهار بالاختيار السريع'}">★</button>
+      <button type="button" class="btn${x.id === savedId ? ' on' : ''}" data-svopen="${esc(x.id)}">${en ? 'Open' : 'فتح'}</button>
+      <button type="button" class="btn ghost ic" data-svdel="${esc(x.id)}" aria-label="${en ? 'Delete' : 'حذف'}">×</button></div>`).join('')
+      : `<p class="help">${en ? 'Nothing saved yet. Use “Save calculation” at the bottom.' : 'ما في حسابات محفوظة لسا. استعمل «حفظ الحساب» تحت.'}</p>`;
   }
   function renderExtras(){
     const en = LANG === 'en';
@@ -1909,10 +2059,17 @@
       <button type="button" class="del" data-del="${i}" aria-label="${en ? 'Remove' : 'حذف'}">×</button></div>`).join('');
   }
   function renderPcalc(keepQty){
-    pcOptions();
-    const r = pcCompute(), en = LANG === 'en', ml = k => en ? `${k} ml` : `${k} مل`;
-    if (!keepQty) $('pcQty').value = String(PC.qty);
-    $('pcMinus').disabled = PC.qty <= 0;
+    renderSizes(); renderSaved();
+    const r = pcCompute(), en = LANG === 'en', ml = k => en ? `${k} ml` : `${k} مل`, inc = PRICING.included;
+    $('pcPkgNote').textContent = en ? `Package = station + ${inc} favors. Split them across sizes if you like; they always add up to ${inc}.` : `الباقة = البوث + ${inc} توزيعة. بتقدر تقسمها على الأحجام، ومجموعها دايماً ${inc}.`;
+    const verdict = !r.pieces ? null : r.profitF < 0 ? ['loss', en ? `At this price you lose ${JF(-r.profitF)} JOD.` : `بهالسعر خسران ${JF(-r.profitF)} د.أ.`]
+      : r.finalF < r.floorF ? ['low', en ? `Profit ${JF(r.profitF)} is ${JF(r.floorF - r.finalF)} below your minimum (${JF(r.minF)}).` : `الربح ${JF(r.profitF)}، أقل من حدك الأدنى (${JF(r.minF)}) بـ ${JF(r.floorF - r.finalF)} د.أ.`]
+      : ['ok', en ? `${JF(r.finalF - r.floorF)} JOD above your minimum profit.` : `فوق حدك الأدنى للربح بـ ${JF(r.finalF - r.floorF)} د.أ.`];
+    $('pcGuide').innerHTML = `<div><span>${en ? 'Break-even' : 'سعر التعادل'}</span><b>${mt(r.costF)}</b></div><div><span>${en ? 'Lowest to accept' : 'أقل سعر تقبله'}</span><b>${mt(r.floorF)}</b></div>${verdict ? `<div class="verdict ${verdict[0]}">${verdict[1]}</div>` : ''}`;
+    const cmp = pcCompare(), cur = SIZES_PC.find(s => PC.pkg[s] === inc && PC.add[s] === Math.max(0, cmp[0].total - inc));
+    $('pcCmpNote').textContent = en ? `The same ${cmp[0].total} favors, all in one size, at list prices. Tap a row to use it.` : `نفس العدد (${cmp[0].total} توزيعة) كله من حجم واحد، بأسعار القائمة. اكبس على سطر لتختاره.`;
+    $('pcCompare').innerHTML = `<div class="pc-crow h"><span>${en ? 'Size' : 'الحجم'}</span><span>${en ? 'Price' : 'السعر'}</span><span>${en ? 'Cost' : 'التكلفة'}</span><span>${en ? 'Profit' : 'الربح'}</span></div>` +
+      cmp.map(x => `<button type="button" class="pc-crow${x.s === cur ? ' cur' : ''}" data-cmp="${x.s}"><span>${ml(x.s)}</span><span>${JF(x.priceF)}</span><span>${JF(x.costF)}</span><span class="p${x.profitF < 0 ? ' neg' : ''}">${JF(x.profitF)}</span></button>`).join('');
     $('pcUsherSw').setAttribute('aria-checked', PC.usher);
     $('pcUsherSub').textContent = en ? `${fmt(n(COSTS.ush))} JOD deducted once from profit` : `بينخصم ${fmt(n(COSTS.ush))} د.أ مرة وحدة من الربح`;
     $('pcPrice').placeholder = (en ? 'List ' : 'حسب الأسعار ') + JF(r.listF);
@@ -1926,8 +2083,8 @@
     $('pcBarPrice').textContent = JF(r.finalF); $('pcBarProfit').textContent = JF(r.profitF); $('pcBarProfit').classList.toggle('neg', r.profitF < 0); $('pcBarMargin').textContent = pctTxt(r.margin);
     // order summary
     $('pcOrder').innerHTML = `
-      <div><span>${en ? 'Package' : 'الباقة'}: ${en ? `booth + ${PRICING.included} × ${ml(PC.base)}` : `البوث + ${PRICING.included} × ${ml(PC.base)}`}</span><b class="${r.agreed !== null ? 'strike' : ''}">${JF(r.baseF)}</b></div>
-      ${PC.qty ? `<div><span>${en ? 'Extra' : 'إضافي'}: ${PC.qty} × ${ml(PC.extra)} × ${JF(r.extraUnitF)}</span><b class="${r.agreed !== null ? 'strike' : ''}">${JF(r.extrasF)}</b></div>` : ''}
+      <div><span>${en ? 'Package' : 'الباقة'}: ${en ? 'station' : 'البوث'} + ${r.pkgParts.map(x => `${x.q} × ${ml(x.s)}`).join(' + ')}</span><b class="${r.agreed !== null ? 'strike' : ''}">${JF(r.baseF)}</b></div>
+      ${r.addParts.map(x => `<div><span>${en ? 'Extra' : 'إضافي'}: ${x.q} × ${ml(x.s)} × ${JF(x.unitF)}</span><b class="${r.agreed !== null ? 'strike' : ''}">${JF(x.f)}</b></div>`).join('')}
       ${r.discF ? `<div><span>${en ? 'Discount' : 'خصم'}</span><b>− ${JF(r.discF)}</b></div>` : ''}
       ${r.agreed !== null ? `<div><span>${en ? 'Agreed price' : 'السعر المتفق عليه'}</span><b>${JF(r.finalF)}</b></div>` : ''}
       <div class="fin"><span>${en ? 'Final price' : 'السعر النهائي'}</span><b>${mt(r.finalF)}</b></div>`;
@@ -1950,8 +2107,6 @@
     $('pbDepSw').setAttribute('aria-checked', PC.depOn); $('pbDepWrap').hidden = !PC.depOn;
     $('pbDepSub').textContent = PC.depOn ? (en ? `Deposit paid: ${mt(r.depF)}` : `انقبض عربون ${mt(r.depF)}`) : (en ? 'No deposit' : 'ما في عربون');
   }
-  function pcQty(v){ PC.qty = Math.max(0, Math.min(PRICING.maxExtra, Math.round(n(v)))); renderPcalc(); }
-  const pcSetQtyFromInput = () => { const d = clean($('pcQty').value).replace(/[^\d]/g, ''); PC.qty = Math.min(PRICING.maxExtra, d ? parseInt(d, 10) : 0); renderPcalc(true); };
   function setSplit(a){ a = Math.min(100, Math.max(0, Math.round(n(a) * 10) / 10)); PARTNERS[0].share = a / 100; PARTNERS[1].share = (100 - a) / 100; renderPcalc(); }
   function fillCostInputs(){ COST_FIELDS.forEach(k => $('k_' + k).value = COSTS[k]); }
   async function loadCosts(){
@@ -1979,7 +2134,7 @@
     if (error) return toast(dbError(error), true);
     toast(LANG === 'en' ? `Default split saved: ${a} / ${100 - a} ✓` : `انحفظ التقسيم الافتراضي: ${a} / ${100 - a} ✓`);
   }
-  function calcSig(){ return JSON.stringify([PC.base, PC.extra, PC.qty, PC.usher, PC.extras, PC.depOn, PC.booth, $('pcPrice').value, $('pcDisc').value, $('pbName').value, $('pbDate').value, $('pbDep').value]); }
+  function calcSig(){ return JSON.stringify([PC.pkg, PC.add, PC.usher, PC.extras, PC.depOn, PC.booth, $('pcPrice').value, $('pcDisc').value, $('pbName').value, $('pbDate').value, $('pbDep').value]); }
   function pcToBooking(){
     const r = pcCompute(), en = LANG === 'en', sig = calcSig();
     if (r.finalF <= 0) { toast(en ? 'The final price must be more than zero.' : 'السعر النهائي لازم يكون أكبر من صفر.', true); return; }
@@ -2008,7 +2163,7 @@
     setPaidFull(r.depF > 0 && r.depF >= r.finalF);
     const parts = [
       `${en ? 'Event' : 'المناسبة'}: ${$('pbType').value}`,
-      `${en ? 'Package' : 'الباقة'}: ${PRICING.included}×${PC.base}ml${PC.qty ? ` + ${PC.qty}×${PC.extra}ml` : ''}`,
+      `${en ? 'Package' : 'الباقة'}: ${r.pkgParts.map(x => `${x.q}×${x.s}ml`).join(' + ')}${r.addParts.length ? ` + ${en ? 'extra' : 'إضافي'} ${r.addParts.map(x => `${x.q}×${x.s}ml`).join(' + ')}` : ''}`,
       r.discF ? `${en ? 'Discount' : 'خصم'}: ${JF(r.discF)}` : '',
       r.agreed !== null ? `${en ? 'Agreed price (list' : 'سعر متفق عليه (حسب الأسعار'} ${JF(r.listF)})` : '',
       r.overheadF ? (en ? `Delivery/extra costs ${JF(r.overheadF)} spread over card cost` : `التوصيل والمصاريف الإضافية ${JF(r.overheadF)} موزعة على تكلفة الكروت`) : '',
@@ -2428,15 +2583,24 @@
     $('eDel').addEventListener('click', deleteExp);
     $('expDlg').addEventListener('click', e => { if (e.target === $('expDlg')) closeExp(); });
     $('expList').addEventListener('click', e => { const b = e.target.closest('[data-expedit]'); if (b) openExp(Number(b.dataset.expedit)); });
-    $('pcBase').addEventListener('click', e => { const b = e.target.closest('[data-v]'); if (b) { PC.base = b.dataset.v; renderPcalc(); } });
-    $('pcExtra').addEventListener('click', e => { const b = e.target.closest('[data-v]'); if (b) { PC.extra = b.dataset.v; renderPcalc(); } });
     $('pcUsherSw').addEventListener('click', () => { PC.usher = !PC.usher; renderPcalc(); });
-    $('pcMinus').addEventListener('click', () => pcQty(PC.qty - 1));
-    $('pcPlus').addEventListener('click', () => pcQty(PC.qty + 1));
-    $('pcQuick').addEventListener('click', e => { const b = e.target.closest('[data-add]'); if (!b) return; pcQty(b.dataset.add === 'clear' ? 0 : PC.qty + Number(b.dataset.add)); });
-    $('pcQty').addEventListener('input', pcSetQtyFromInput);
-    $('pcQty').addEventListener('focus', () => { if ($('pcQty').value === '0') $('pcQty').value = ''; });
-    $('pcQty').addEventListener('blur', () => { $('pcQty').value = String(PC.qty); });
+    $('pcSizes').addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (!b) return; const st = b.closest('.pc-step2'), k = st.dataset.k, sz = st.dataset.s; (k === 'pkg' ? setPkg : setAdd)(sz, PC[k][sz] + Number(b.dataset.d)); renderPcalc(); });
+    $('pcSizes').addEventListener('input', e => { const st = e.target.closest('.pc-step2'); if (!st) return; const d = clean(e.target.value).replace(/[^\d]/g, ''); (st.dataset.k === 'pkg' ? setPkg : setAdd)(st.dataset.s, d ? parseInt(d, 10) : 0); renderPcalc(); });
+    $('pcSizes').addEventListener('focusin', e => { if (e.target.matches('input') && e.target.value === '0') e.target.value = ''; });
+    $('pcSizes').addEventListener('focusout', e => { if (!e.target.matches('input')) return; const st = e.target.closest('.pc-step2'); e.target.value = String(PC[st.dataset.k][st.dataset.s]); });
+    $('pcPicks').addEventListener('click', e => {
+      const b = e.target.closest('[data-pick]'); if (!b) return; const id = b.dataset.pick;
+      if (id.startsWith('pkg:')) { setOnly(id.slice(4), 0); $('pcPrice').value = ''; $('pcDisc').value = ''; savedId = null; renderPcalc(); return; }
+      const it = SAVED.find(x => x.id === id); if (it) { savedId = it.id; pcRestore(it.s); }
+    });
+    $('pcSavedList').addEventListener('click', async e => {
+      const en = LANG === 'en', o = e.target.closest('[data-svopen]'), st = e.target.closest('[data-svstar]'), d = e.target.closest('[data-svdel]');
+      if (o) { const it = SAVED.find(x => x.id === o.dataset.svopen); if (it) { savedId = it.id; pcRestore(it.s); window.scrollTo({ top: 0, behavior: 'smooth' }); toast(en ? 'Calculation opened' : 'انفتح الحساب'); } return; }
+      if (st) { const id = st.dataset.svstar; await writeSaved(items => { const it = items.find(x => x.id === id); if (it) it.star = !it.star; }); return; }
+      if (d) { const id = d.dataset.svdel, it = SAVED.find(x => x.id === id); if (!it || !confirm(en ? `Delete “${it.name}”?` : `تحذف «${it.name}»؟`)) return; if (await writeSaved(items => { const i = items.findIndex(x => x.id === id); if (i >= 0) items.splice(i, 1); }) && savedId === id) { savedId = null; renderPcalc(); } }
+    });
+    $('pcCompare').addEventListener('click', e => { const b = e.target.closest('[data-cmp]'); if (!b) return; const total = SIZES_PC.reduce((t, x) => t + PC.pkg[x] + PC.add[x], 0); setOnly(b.dataset.cmp, total - PRICING.included); renderPcalc(); });
+    $('pcSaveCalc').addEventListener('click', saveCalc);
     ['pcPrice', 'pcDisc', 'pbDep'].forEach(id => $(id).addEventListener('input', () => renderPcalc()));
     COST_FIELDS.forEach(k => $('k_' + k).addEventListener('input', () => { const t = {}; COST_FIELDS.forEach(x => t[x] = filled($('k_' + x).value) ? n($('k_' + x).value) : COSTS[x]); Object.assign(COSTS, t); renderPcalc(); }));
     $('pcSetBtn').addEventListener('click', () => { const open = $('pcSet').hidden; $('pcSet').hidden = !open; $('pcSetBtn').setAttribute('aria-expanded', open); if (open) fillCostInputs(); });
@@ -2451,7 +2615,7 @@
     $('pcSplitSave').addEventListener('click', saveSplit);
     $('pcReset').addEventListener('click', () => {
       if (!confirm(LANG === 'en' ? 'Reset the calculator? Everything you entered here will be cleared.' : 'ترجّع الحاسبة للبداية؟ كل اللي كتبته هون رح ينمسح.')) return;
-      Object.assign(PC, { base: '5', extra: '5', qty: 0, usher: false, extras: [], depOn: false, booth: true });
+      setOnly('5', 0); Object.assign(PC, { usher: false, extras: [], depOn: false, booth: true }); savedId = null;
       ['pcPrice', 'pcDisc', 'pbName', 'pbPhone', 'pbDate', 'pbVenue', 'pbNotes'].forEach(id => $(id).value = ''); $('pbDep').value = DEFAULT_DEPOSIT; $('pbType').selectedIndex = 0;
       renderExtras(); renderPcalc(); window.scrollTo({ top: 0 });
     });
