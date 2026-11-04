@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="images/work/station-ambere-counter-960.webp" imagesrcset="images/work/station-ambere-counter-480.webp 480w, images/work/station-ambere-counter-960.webp 960w" imagesizes="(min-width: 900px) 46vw, 100vw">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="pricing.js"></script>
 <script>document.documentElement.classList.add('js');
@@ -423,6 +423,55 @@
     .js .rv{opacity:1;transform:none}
     .g:hover img{transform:none}
   }
+
+  /* ---------- 2026 refresh: airy, premium, fewer words (same ivory + gold family as the admin) ---------- */
+  :root{ --ivory:#FAF8F4; --cream:#F3EEE6; --champagne:#E8DFD1; --line:#ECE4D8; --gold:#B08A4F; --gold-d:#8A6630; }
+  .eyebrow,.num,.hero-note{display:none}
+  .sec{padding:96px 0}
+  .sec-head{margin-bottom:52px}
+  .h2{font-size:clamp(34px,5.4vw,56px);line-height:1.25}
+  .lead{font-size:clamp(16px,1.7vw,19px)}
+  .hero h1{font-size:clamp(40px,9.4vw,78px);line-height:1.22;margin-bottom:18px}
+  .hero-grid{padding-bottom:88px}
+  .hero-media .main,.svc-media .big,.svc-media .small,.g{border-radius:2px}
+  .svc-media .small,.hero-media .inset{box-shadow:none}
+  .svc + .svc{margin-top:112px}
+  .card{box-shadow:none;border-color:transparent;border-radius:4px}
+  .nav.scrolled{box-shadow:none}
+
+  /* packages */
+  .pkgs{display:grid;grid-template-columns:1fr;gap:44px;max-width:1080px;margin:0 auto}
+  .pkg{display:flex;flex-direction:column;align-items:center;text-align:center}
+  .pkg figure{margin:0 0 22px;width:100%;aspect-ratio:4/5;overflow:hidden;background:var(--champagne);border-radius:2px}
+  .pkg figure img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+  .pkg:hover figure img{transform:scale(1.03)}
+  .pkg h3{font-size:30px}
+  .pkg .what{margin:2px 0 14px;color:var(--ink-2);font-size:15px}
+  .pkg-price{margin:0;font-family:var(--latin);font-size:56px;font-weight:500;line-height:1;color:var(--espresso);font-variant-numeric:tabular-nums}
+  .pkg .cur{margin:6px 0 20px;color:var(--muted);font-size:14px}
+  .pkg .btn{min-height:46px;padding:0 24px}
+  .pkg-extra{max-width:640px;margin:48px auto 0;text-align:center;color:var(--ink-2);font-size:15px}
+  #prices{padding-bottom:40px}
+  #calc{padding-top:40px}
+  #calc .sec-head{margin-bottom:36px}
+
+  /* phone booking bar */
+  .mbar{position:fixed;inset:auto 16px calc(14px + env(safe-area-inset-bottom)) 16px;z-index:40;display:flex;align-items:center;justify-content:center;min-height:54px;border-radius:999px;background:var(--espresso);color:var(--ivory);text-decoration:none;font-weight:500;font-size:16px;box-shadow:0 14px 30px -14px rgba(53,37,31,.55);transform:translateY(160%);transition:transform .45s var(--ease)}
+  .mbar.show{transform:none}
+
+  @media (min-width:760px){
+    .pkgs{grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
+  }
+  @media (min-width:900px){
+    .sec{padding:140px 0}
+    #prices{padding-bottom:56px}
+    #calc{padding-top:56px}
+    .sec-head{margin-bottom:68px}
+    .gallery{gap:18px}
+    .mbar{display:none}
+  }
+  @media (max-width:899px){ footer{padding-bottom:calc(84px + env(safe-area-inset-bottom))} }
+  @media (prefers-reduced-motion:reduce){ .mbar{transition:none} }
 </style>
 </head>
 <body>
@@ -440,8 +489,8 @@
       <li><a href="#home">الرئيسية</a></li>
       <li><a href="#services">خدماتنا</a></li>
       <li><a href="#work">معرض أعمالنا</a></li>
-      <li><a href="#how">كيف بنشتغل</a></li>
       <li><a href="#prices">الأسعار</a></li>
+      <li><a href="#how">كيف بنشتغل</a></li>
     </ul>
     <div class="nav-tools">
       <button class="lang-btn" id="langBtn" type="button" lang="en" aria-label="English version">EN</button>
@@ -454,8 +503,8 @@
   <a href="#home">الرئيسية</a>
   <a href="#services">خدماتنا</a>
   <a href="#work">معرض أعمالنا</a>
-  <a href="#how">كيف بنشتغل</a>
   <a href="#prices">الأسعار</a>
+  <a href="#how">كيف بنشتغل</a>
   <a class="btn btn-dark" href="#book">احجز مناسبتك</a>
   <button class="lang-btn" id="langBtn2" type="button" lang="en" aria-label="English version">English</button>
 </nav>
@@ -465,16 +514,15 @@
 <section class="hero" id="home">
   <div class="container hero-grid">
     <div class="hero-text">
-      <p class="eyebrow rv"><span class="latin">Ambere — Perfume Station</span></p>
-      <h1 class="rv d1">خلّي ريحة فرحتك تضل بذاكرة المعازيم</h1>
-      <p class="lead rv d1">بوث تعطير وتبخير للأعراس، وتوزيعات عطور بتفاصيل على ذوقكم، لتكون كل فرحة إلها ذكرى حلوة.</p>
-      <div class="hero-ctas rv d2">
+      <h1>خلّي ريحة فرحتك تضل بذاكرة المعازيم</h1>
+      <p class="lead">بوث تعطير وتبخير للأعراس، وتوزيعات عطور بتفاصيل على ذوقكم، لتكون كل فرحة إلها ذكرى حلوة.</p>
+      <div class="hero-ctas">
         <a class="btn btn-dark" href="#book">احجز مناسبتك <span class="arr" aria-hidden="true">←</span></a>
         <a class="link" href="#work">شوف شغلنا</a>
       </div>
-      <p class="hero-note rv d2"><span>بوث تعطير وتبخير</span><span>توزيعات عطور 10 و30 مل</span></p>
+      <p class="hero-note"><span>بوث تعطير وتبخير</span><span>توزيعات عطور 10 و30 مل</span></p>
     </div>
-    <figure class="hero-media rv">
+    <figure class="hero-media">
       <picture>
         <img class="main" src="images/work/station-ambere-counter-960.webp"
              srcset="images/work/station-ambere-counter-480.webp 480w, images/work/station-ambere-counter-960.webp 960w"
@@ -491,7 +539,6 @@
 <section class="sec alt" id="services">
   <div class="container">
     <div class="sec-head rv">
-      <p class="eyebrow">خدماتنا</p>
       <h2 class="h2">شو منقدّم إلكم؟</h2>
       <p class="lead">من البوث للتوزيعات، منرتّب التفاصيل اللي بتخلّي مناسبتكم مميّزة.</p>
     </div>
@@ -506,7 +553,6 @@
              alt="عطور البوث معروضة على ستاندات سودا جنب الشموع">
       </figure>
       <div class="svc-text rv d1">
-        <p class="num latin">01</p>
         <h3>بوث التعطير والتبخير</h3>
         <p>منستقبل معازيمكم بتجربة عطرية مميّزة، بتضيف لمسة حلوة على أجواء الفرح.</p>
         <ul class="ticks">
@@ -527,7 +573,6 @@
              alt="سلة قش مليانة توزيعات عطور على كروت بيضا مكتوب عليها الاسم">
       </figure>
       <div class="svc-text rv d1">
-        <p class="num latin">02</p>
         <h3>توزيعات العطور</h3>
         <p>توزيعات عطر بتفاصيل على ذوقكم، مع أسماء وتاريخ مناسبتكم، لتضل ذكرى حلوة عند معازيمكم.</p>
         <div class="sizes" aria-label="الأحجام المتوفرة">
@@ -540,103 +585,10 @@
   </div>
 </section>
 
-<!-- ================= PRICES ================= -->
-<!-- لتغيير الأسعار: عدّل الرقم جوا <b> بكل بطاقة -->
-<section class="sec" id="prices">
-  <div class="container">
-    <div class="sec-head center rv">
-      <p class="eyebrow">التوزيعات والأسعار</p>
-      <h2 class="h2">توزيعات بتشبه فرحتكم</h2>
-      <p class="lead">عطور وتفاصيل على ذوقكم، بتخلّي لكل فرحة ذكرى حلوة.</p>
-    </div>
-    <div class="prices">
-      <article class="price rv">
-        <figure><img src="images/work/favors-card-hand-960.webp" srcset="images/work/favors-card-hand-480.webp 480w, images/work/favors-card-hand-960.webp 960w, images/work/favors-card-hand-1440.webp 1440w" sizes="(min-width: 640px) 440px, 100vw"
-             width="960" height="1280" loading="lazy" decoding="async" style="object-position:50% 38%"
-             alt="عطر توزيعات على كرت أبيض بشريطة مكتوب عليه الاسم وتاريخ المناسبة"></figure>
-        <div class="price-body">
-          <div class="price-top">
-            <h3>توزيعات عطر 10 مل</h3>
-            <div><span class="amount"><b>1</b><span>دينار</span></span><span class="per">للحبة</span></div>
-          </div>
-          <p>عطر مع كرت باسم العروسين وتاريخ المناسبة، بتفاصيل بسيطة ومرتبة.</p>
-          <a class="btn btn-dark" href="#book" data-pick="gifts">بدي أطلب توزيعات <span class="arr" aria-hidden="true">←</span></a>
-        </div>
-      </article>
-      <article class="price rv d1">
-        <figure><img src="images/work/station-candles-tags-960.webp" srcset="images/work/station-candles-tags-480.webp 480w, images/work/station-candles-tags-960.webp 960w" sizes="(min-width: 640px) 440px, 100vw"
-             width="960" height="1280" loading="lazy" decoding="async" style="object-position:30% 72%"
-             alt="قناني عطر توزيعات مربوط عليها تاغ معلّق مكتوب عليه أسماء العروسين وتاريخ العرس"></figure>
-        <div class="price-body">
-          <div class="price-top">
-            <h3>توزيعات عطر 30 مل</h3>
-            <div><span class="amount"><b>2</b><span>دينار</span></span><span class="per">للحبة</span></div>
-          </div>
-          <p>قنينة عطر مع تاغ مميّز عليه أسماء العروسين وتاريخ فرحتهم.</p>
-          <a class="btn btn-dark" href="#book" data-pick="gifts">بدي أطلب توزيعات <span class="arr" aria-hidden="true">←</span></a>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- ================= PRICE CALCULATOR ================= -->
-<section class="sec alt" id="calc" aria-labelledby="calcTitle">
-  <div class="container">
-    <div class="sec-head center rv">
-      <p class="eyebrow">حاسبة الأسعار</p>
-      <h2 class="h2" id="calcTitle">احسب سعر باقتك</h2>
-      <p class="lead">اختار حجم التوزيعات والعدد الإضافي، واعرف سعر باقتك مباشرة.</p>
-    </div>
-    <div class="calc rv">
-      <div class="calc-opts">
-        <fieldset>
-          <legend>حجم التوزيعات الأساسية</legend>
-          <p class="fdesc">كل باقة فيها البوث + 100 توزيعة مع كروتها.</p>
-          <div class="ropts" id="cBase"></div>
-        </fieldset>
-        <fieldset>
-          <legend>التوزيعات الإضافية</legend>
-          <p class="fdesc">الباقة تشمل 100 توزيعة. أضف العدد الذي تحتاجه حسب حجم العطر.</p>
-          <div class="ropts chips" id="cExtraSize"></div>
-          <div class="qline">
-            <label for="cQty">عدد التوزيعات الإضافية</label>
-            <div class="bigstep">
-              <button type="button" id="cMinus" aria-label="أقل">−</button>
-              <input id="cQty" inputmode="numeric" autocomplete="off" value="0" aria-describedby="cQtyErr">
-              <button type="button" id="cPlus" aria-label="أكثر">+</button>
-            </div>
-          </div>
-          <div class="quick" id="cQuick" dir="ltr"><button type="button" data-add="25">+25</button><button type="button" data-add="50">+50</button><button type="button" data-add="100">+100</button></div>
-          <p class="qerr" id="cQtyErr" role="alert"></p>
-        </fieldset>
-      </div>
-
-      <aside class="calc-sum" aria-label="ملخص الباقة">
-        <p class="lbl2">السعر الإجمالي</p>
-        <p class="calc-total" id="cTotal" aria-live="polite">120.00</p>
-        <p class="calc-cur">دينار أردني</p>
-        <dl class="brk" id="cBreak"></dl>
-        <div class="calc-acts">
-          <a class="btn btn-light" href="#book" id="cBook">احجز هالباقة <span class="arr" aria-hidden="true">←</span></a>
-          <a class="btn btn-wa" id="cWa" href="#" target="_blank" rel="noopener" hidden>استفسر عن الباقة عبر واتساب</a>
-          <div class="row">
-            <button type="button" class="btn btn-ghost-l" id="cCopy">نسخ تفاصيل الباقة</button>
-            <button type="button" class="btn btn-ghost-l" id="cReset">إعادة التعيين</button>
-          </div>
-        </div>
-        <p class="calc-msg" id="cMsg" role="status" aria-live="polite"></p>
-        <p class="calc-note">السعر تقديري، وبنأكّد التفاصيل معكم قبل الحجز.</p>
-      </aside>
-    </div>
-  </div>
-</section>
-
 <!-- ================= PORTFOLIO ================= -->
 <section class="sec" id="work">
   <div class="container">
     <div class="sec-head center rv">
-      <p class="eyebrow">معرض أعمالنا</p>
       <h2 class="h2">شوفوا شغلنا</h2>
       <p class="lead">كل مناسبة إلها تفاصيلها، وهي بعض الشغلات اللي جهّزناها بكل حب.</p>
     </div>
@@ -696,7 +648,6 @@
         <figcaption>تفاصيل البوث</figcaption>
       </button>
     </div>
-    <p class="gallery-note">اكبس على أي صورة لتشوفها أكبر</p>
   </div>
 </section>
 
@@ -710,11 +661,95 @@
   </div>
 </dialog>
 
-<!-- ================= HOW ================= -->
-<section class="sec alt" id="how">
+<!-- ================= PACKAGES (prices come from pricing.js) ================= -->
+<section class="sec alt" id="prices">
   <div class="container">
     <div class="sec-head center rv">
-      <p class="eyebrow">كيف بنشتغل</p>
+      <h2 class="h2">الباقات والأسعار</h2>
+      <p class="lead">كل باقة فيها البوث + 100 توزيعة مع كروتها.</p>
+    </div>
+    <div class="pkgs" id="pkgs">
+      <article class="pkg rv">
+        <figure><img src="images/work/station-tiered-favors-960.webp" srcset="images/work/station-tiered-favors-480.webp 480w, images/work/station-tiered-favors-960.webp 960w" sizes="(min-width: 760px) 340px, 100vw" width="960" height="1280" loading="lazy" decoding="async" style="object-position:50% 50%" alt=""></figure>
+        <h3>5 مل</h3>
+        <p class="what">البوث + 100 توزيعة</p>
+        <p class="pkg-price">120</p><p class="cur">دينار</p>
+        <a class="btn btn-line" href="#calc" data-base="5">احسب هالباقة</a>
+      </article>
+      <article class="pkg rv">
+        <figure><img src="images/work/favors-card-hand-960.webp" srcset="images/work/favors-card-hand-480.webp 480w, images/work/favors-card-hand-960.webp 960w" sizes="(min-width: 760px) 340px, 100vw" width="960" height="1280" loading="lazy" decoding="async" style="object-position:50% 38%" alt=""></figure>
+        <h3>10 مل</h3>
+        <p class="what">البوث + 100 توزيعة</p>
+        <p class="pkg-price">150</p><p class="cur">دينار</p>
+        <a class="btn btn-line" href="#calc" data-base="10">احسب هالباقة</a>
+      </article>
+      <article class="pkg rv">
+        <figure><img src="images/work/station-candles-tags-960.webp" srcset="images/work/station-candles-tags-480.webp 480w, images/work/station-candles-tags-960.webp 960w" sizes="(min-width: 760px) 340px, 100vw" width="960" height="1280" loading="lazy" decoding="async" style="object-position:30% 72%" alt=""></figure>
+        <h3>30 مل</h3>
+        <p class="what">البوث + 100 توزيعة</p>
+        <p class="pkg-price">230</p><p class="cur">دينار</p>
+        <a class="btn btn-line" href="#calc" data-base="30">احسب هالباقة</a>
+      </article>
+    </div>
+    <p class="pkg-extra" id="pkgExtra">توزيعات إضافية فوق الباقة: 5 مل 0.90 · 10 مل 1.00 · 30 مل 2.00 دينار للحبة</p>
+  </div>
+</section>
+
+<!-- ================= PRICE CALCULATOR ================= -->
+<section class="sec alt" id="calc" aria-labelledby="calcTitle">
+  <div class="container">
+    <div class="sec-head center rv">
+      <h2 class="h2" id="calcTitle">احسب سعر باقتك</h2>
+      <p class="lead">اختار حجم التوزيعات والعدد الإضافي، واعرف سعر باقتك مباشرة.</p>
+    </div>
+    <div class="calc rv">
+      <div class="calc-opts">
+        <fieldset>
+          <legend>حجم التوزيعات الأساسية</legend>
+          <p class="fdesc">كل باقة فيها البوث + 100 توزيعة مع كروتها.</p>
+          <div class="ropts" id="cBase"></div>
+        </fieldset>
+        <fieldset>
+          <legend>التوزيعات الإضافية</legend>
+          <p class="fdesc">الباقة تشمل 100 توزيعة. أضف العدد الذي تحتاجه حسب حجم العطر.</p>
+          <div class="ropts chips" id="cExtraSize"></div>
+          <div class="qline">
+            <label for="cQty">عدد التوزيعات الإضافية</label>
+            <div class="bigstep">
+              <button type="button" id="cMinus" aria-label="أقل">−</button>
+              <input id="cQty" inputmode="numeric" autocomplete="off" value="0" aria-describedby="cQtyErr">
+              <button type="button" id="cPlus" aria-label="أكثر">+</button>
+            </div>
+          </div>
+          <div class="quick" id="cQuick" dir="ltr"><button type="button" data-add="25">+25</button><button type="button" data-add="50">+50</button><button type="button" data-add="100">+100</button></div>
+          <p class="qerr" id="cQtyErr" role="alert"></p>
+        </fieldset>
+      </div>
+
+      <aside class="calc-sum" aria-label="ملخص الباقة">
+        <p class="lbl2">السعر الإجمالي</p>
+        <p class="calc-total" id="cTotal" aria-live="polite">120.00</p>
+        <p class="calc-cur">دينار أردني</p>
+        <dl class="brk" id="cBreak"></dl>
+        <div class="calc-acts">
+          <a class="btn btn-light" href="#book" id="cBook">احجز هالباقة <span class="arr" aria-hidden="true">←</span></a>
+          <a class="btn btn-wa" id="cWa" href="#" target="_blank" rel="noopener" hidden>استفسر عن الباقة عبر واتساب</a>
+          <div class="row">
+            <button type="button" class="btn btn-ghost-l" id="cCopy">نسخ تفاصيل الباقة</button>
+            <button type="button" class="btn btn-ghost-l" id="cReset">إعادة التعيين</button>
+          </div>
+        </div>
+        <p class="calc-msg" id="cMsg" role="status" aria-live="polite"></p>
+        <p class="calc-note">السعر تقديري، وبنأكّد التفاصيل معكم قبل الحجز.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOW ================= -->
+<section class="sec" id="how">
+  <div class="container">
+    <div class="sec-head center rv">
       <h2 class="h2">كيف بنشتغل؟</h2>
     </div>
     <ol class="steps">
@@ -726,10 +761,9 @@
 </section>
 
 <!-- ================= BOOKING ================= -->
-<section class="sec" id="book">
+<section class="sec alt" id="book">
   <div class="container book-grid">
     <aside class="book-aside rv">
-      <p class="eyebrow">احجز مناسبتك</p>
       <h2 class="h2">خلّينا نرتّب فرحتكم</h2>
       <p class="lead">احكيلنا عن مناسبتكم، ومنتواصل معكم عشان نرتّب التفاصيل.</p>
       <img src="images/work/station-tray-counter-960.webp" srcset="images/work/station-tray-counter-480.webp 480w, images/work/station-tray-counter-960.webp 960w, images/work/station-tray-counter-1440.webp 1440w"
@@ -814,15 +848,7 @@
   </div>
 </section>
 
-<!-- ================= FINAL CTA ================= -->
-<section class="final">
-  <img src="images/work/station-candles-tags-960.webp" srcset="images/work/station-candles-tags-480.webp 480w, images/work/station-candles-tags-960.webp 960w" sizes="100vw" width="960" height="1280" loading="lazy" decoding="async" alt="">
-  <div class="container rv">
-    <h2>عندك مناسبة قريبة؟</h2>
-    <p>احكيلنا شو ببالك، ومنساعدك تختار اللي بناسب فرحتك.</p>
-    <a class="btn btn-light" href="#book">يلا نحجز <span class="arr" aria-hidden="true">←</span></a>
-  </div>
-</section>
+<a class="mbar" id="mbar" href="#book">احجز مناسبتك</a>
 </main>
 
 <!-- ================= FOOTER ================= -->
@@ -858,7 +884,7 @@
   const $ = id => document.getElementById(id);
 
   /* ================= i18n (Arabic default, English optional) ================= */
-  const EN = { "Ambere | بوث عطور وتوزيعات أعراس في الأردن": "Ambere | Wedding Perfume Station & Favors in Jordan", "مع Ambere، خلّوا فرحتكم مميّزة مع بوث التعطير والتبخير وتوزيعات العطور للأعراس والمناسبات، بتفاصيل على ذوقكم.": "Make your wedding unforgettable with Ambere: a perfume and incense station for your guests, and personalized perfume favors made your way.", "بوث تعطير وتبخير للأعراس، وتوزيعات عطور بتفاصيل على ذوقكم.": "A perfume and incense station for weddings, plus personalized perfume favors.", "بوث Ambere المضاء بمدخل القاعة": "The illuminated Ambere station at a venue entrance", "انتقل لفورم الحجز": "Skip to booking form", "Ambere — الرئيسية": "Ambere — Home", "القائمة": "Menu", "القائمة الرئيسية": "Main menu", "الرئيسية": "Home", "خدماتنا": "Services", "معرض أعمالنا": "Our Work", "كيف بنشتغل": "How It Works", "الأسعار": "Prices", "احجز مناسبتك": "Book Your Event", "خلّي ريحة فرحتك تضل بذاكرة المعازيم": "Let your celebration linger in every guest’s memory", "بوث تعطير وتبخير للأعراس، وتوزيعات عطور بتفاصيل على ذوقكم، لتكون كل فرحة إلها ذكرى حلوة.": "A perfume and incense station for weddings, and perfume favors styled your way, so every celebration leaves a beautiful memory.", "شوف شغلنا": "See Our Work", "بوث تعطير وتبخير": "Perfume & incense station", "توزيعات عطور 10 و30 مل": "10 & 30 ml perfume favors", "بوث Ambere المضاء بمدخل القاعة، وعليه عطور وتوزيعات وشموع وورد": "The illuminated Ambere station at a venue entrance, with perfumes, favors, candles and flowers", "يد بقفاز دانتيل ماسكة عطر توزيعات على كرت مكتوب عليه الاسم وتاريخ المناسبة": "A lace-gloved hand holding a perfume favor on a card printed with the name and event date", "شو منقدّم إلكم؟": "What We Offer", "من البوث للتوزيعات، منرتّب التفاصيل اللي بتخلّي مناسبتكم مميّزة.": "From the station to the favors, we take care of the details that make your event special.", "بوث التعطير والتبخير": "Perfume & Incense Station", "منستقبل معازيمكم بتجربة عطرية مميّزة، بتضيف لمسة حلوة على أجواء الفرح.": "We welcome your guests with a refined fragrance experience that adds a beautiful touch to the celebration.", "تعطير وتبخير المعازيم على المدخل": "Perfume and incense for guests at the entrance", "بتقدر تجمعه مع توزيعات العطور بنفس الحجز": "Can be combined with perfume favors in the same booking", "احجز بوث العطور": "Book the Station", "توزيعات العطور": "Perfume Favors", "توزيعات عطر بتفاصيل على ذوقكم، مع أسماء وتاريخ مناسبتكم، لتضل ذكرى حلوة عند معازيمكم.": "Perfume favors styled your way, with your names and event date, a lovely keepsake for your guests.", "مل": "ml", "شوف التوزيعات": "See the Favors", "الأحجام المتوفرة": "Available sizes", "يد بقفاز دانتيل بتقدّم عطر قدام بوث Ambere، وعلى البوث شموع وعطور ومبخرة": "A lace-gloved hand presenting a perfume at the Ambere station, with candles, perfumes and an incense burner", "عطور البوث معروضة على ستاندات سودا جنب الشموع": "Station perfumes displayed on black stands beside candles", "عطر توزيعات على كرت أبيض بشريطة، مكتوب عليه الاسم وتاريخ المناسبة، وخلفه سلة توزيعات": "A perfume favor on a white card with a ribbon, printed with the name and event date, with a basket of favors behind", "سلة قش مليانة توزيعات عطور على كروت بيضا مكتوب عليها الاسم": "A woven basket full of perfume favors on white name cards", "التوزيعات والأسعار": "Favors & Prices", "توزيعات بتشبه فرحتكم": "Favors That Feel Like You", "عطور وتفاصيل على ذوقكم، بتخلّي لكل فرحة ذكرى حلوة.": "Perfumes and details made to your taste, so every celebration leaves a sweet memory.", "توزيعات عطر 10 مل": "10 ml Perfume Favors", "توزيعات عطر 30 مل": "30 ml Perfume Favors", "دينار": "JOD", "للحبة": "per piece", "عطر مع كرت باسم العروسين وتاريخ المناسبة، بتفاصيل بسيطة ومرتبة.": "A perfume with a card bearing the couple’s names and event date, simple and elegant.", "قنينة عطر مع تاغ مميّز عليه أسماء العروسين وتاريخ فرحتهم.": "A perfume bottle with a special tag bearing the couple’s names and their wedding date.", "بدي أطلب توزيعات": "Order Favors", "عطر توزيعات على كرت أبيض بشريطة مكتوب عليه الاسم وتاريخ المناسبة": "A perfume favor on a white card with a ribbon, printed with the name and event date", "قناني عطر توزيعات مربوط عليها تاغ معلّق مكتوب عليه أسماء العروسين وتاريخ العرس": "Perfume favor bottles with hanging tags bearing the couple’s names and wedding date", "شوفوا شغلنا": "Our Work", "كل مناسبة إلها تفاصيلها، وهي بعض الشغلات اللي جهّزناها بكل حب.": "Every event has its own details. Here are some of the setups we prepared with love.", "تصنيف الصور": "Filter photos", "كل الأعمال": "All Work", "بوث العطور": "Perfume Station", "توزيعات 10 مل": "10 ml Favors", "توزيعات 30 مل": "30 ml Favors", "توزيعات مرتّبة على البوث بكروت أسماء العروسين": "Favors arranged on the station with the couple’s name tags", "عطور البوث على الستاندات": "Station perfumes on their stands", "التوزيعات جاهزة للمعازيم على مدخل القاعة": "Favors ready for guests at the venue entrance", "توزيعات مخصصة بالاسم": "Personalized name favors", "شموع وبخور وتفاصيل الكروت": "Candles, incense and card details", "كرت مخصص بالاسم وتاريخ المناسبة": "A card personalized with the name and event date", "تقديم التوزيعات للمعازيم": "Presenting favors to guests", "تفاصيل البوث": "Station details", "اكبس على أي صورة لتشوفها أكبر": "Tap any photo to view it larger", "مدرّج توزيعات عطور بكروت أسماء العروسين، وخلفه شموع وعطور على البوث": "Tiered perfume favors with the couple’s name tags, with candles and perfumes on the station behind", "عطور معروضة على ستاندات سودا على البوث": "Perfumes displayed on black stands on the station", "ضيفة ماسكة صينية توزيعات عطور جنب بوث Ambere المضاء بالقاعة": "A guest holding a tray of perfume favors beside the illuminated Ambere station", "سلة قش مليانة توزيعات عطور على كروت بيضا بشرايط": "A woven basket full of perfume favors on white cards with ribbons", "شموع مضاءة ومبخرة سوداء جنب مدرّج عطور التوزيعات": "Lit candles and a black incense burner beside the tiered perfume favors", "يد بقفاز دانتيل ماسكة عطر توزيعات على كرت بالاسم والتاريخ": "A lace-gloved hand holding a perfume favor on a name-and-date card", "تقديم عطر توزيعات للمعازيم قدام البوث": "Presenting a perfume favor to guests in front of the station", "تشكيلة عطور البوث على ستاندات بين النباتات والشموع": "The station’s perfume selection on stands among plants and candles", "عرض الصورة": "Photo viewer", "سكّر": "Close", "الصورة السابقة": "Previous photo", "الصورة التالية": "Next photo", "كيف بنشتغل؟": "How It Works", "احكيلنا عن مناسبتك": "Tell us about your event", "ابعثولنا التاريخ والمكان والخدمة اللي بتفكروا فيها.": "Send us the date, the venue and the service you have in mind.", "بنتفق على التفاصيل": "We agree on the details", "منراجع طلبكم وبنتواصل معكم عشان نرتّب التفاصيل المناسبة.": "We review your request and get in touch to arrange the right details.", "منجهّز كل شي": "We prepare everything", "بعد تأكيد التفاصيل، منرتّب التجهيزات حسب الاتفاق.": "Once the details are confirmed, we prepare everything as agreed.", "خلّينا نرتّب فرحتكم": "Let’s Plan Your Celebration", "احكيلنا عن مناسبتكم، ومنتواصل معكم عشان نرتّب التفاصيل.": "Tell us about your event and we’ll get in touch to arrange the details.", "الاسم": "Name", "رقم الواتساب": "WhatsApp number", "تاريخ المناسبة": "Event date", "القاعة أو المدينة": "Venue or city", "(اختياري)": "(optional)", "شو الخدمات اللي بدك ياها؟": "Which services would you like?", "على مدخل القاعة": "At the venue entrance", "5 · 10 · 30 مل": "5 · 10 · 30 ml", "اكتب العدد التقريبي لكل حجم بدك ياه:": "Enter the approximate quantity for each size you need:", "1 د.أ للحبة": "1 JOD each", "2 د.أ للحبة": "2 JOD each", "حسب الطلب": "on request", "العدد تقريبي، منقدر نعدّله لما نحكي.": "Quantities are approximate. We can adjust them when we talk.", "ملاحظات": "Notes", "أي تفاصيل بتحب نعرفها": "Anything you’d like us to know", "لا تعبّي هالخانة": "Leave this field empty", "ابعث طلب الحجز": "Send Booking Request", "معلوماتك بتوصل لـ Ambere بس، وما بنشاركها مع حدا.": "Your details go only to Ambere and are never shared.", "وصلنا طلبك": "We received your request", "شكراً إلكم! هاد طلب حجز، ورح نتواصل معكم على واتساب بأقرب وقت لنأكّد التفاصيل.": "Thank you! This is a booking request. We’ll contact you on WhatsApp soon to confirm the details.", "تابع معنا على واتساب": "Continue on WhatsApp", "ابعث طلب ثاني": "Send another request", "أقل 10 مل": "Fewer 10 ml", "عدد 10 مل": "10 ml quantity", "أكثر 10 مل": "More 10 ml", "أقل 30 مل": "Fewer 30 ml", "عدد 30 مل": "30 ml quantity", "أكثر 30 مل": "More 30 ml", "أقل 5 مل": "Fewer 5 ml", "عدد 5 مل": "5 ml quantity", "أكثر 5 مل": "More 5 ml", "عندك مناسبة قريبة؟": "Have an Event Coming Up?", "احكيلنا شو ببالك، ومنساعدك تختار اللي بناسب فرحتك.": "Tell us what you have in mind, and we’ll help you choose what suits your celebration.", "يلا نحجز": "Let’s Book", "Ambere — تفاصيل عطرية بتضيف لمسة مميّزة على أفراحكم.": "Ambere — fragrant details that add a special touch to your celebrations.", "روابط": "Links", "تواصل معنا": "Contact", "إنستغرام": "Instagram", "واتساب": "WhatsApp", "جاري التأكد من التاريخ…": "Checking the date…", "هالتاريخ محجوز عنا. اختار تاريخ ثاني، أو تواصل معنا مباشرة.": "This date is already booked. Please choose another date or contact us directly.", "✓ التاريخ متاح": "✓ This date is available", "اكتب اسمك لو سمحت.": "Please enter your name.", "اكتب رقم واتساب صحيح، مثلاً 0791234567.": "Please enter a valid WhatsApp number, e.g. 0791234567.", "اختار تاريخ المناسبة.": "Please choose the event date.", "التاريخ لازم يكون اليوم أو بعده.": "The date must be today or later.", "اختار خدمة وحدة على الأقل.": "Please choose at least one service.", "اكتب العدد التقريبي لحجم واحد على الأقل.": "Please enter an approximate quantity for at least one size.", "العدد كبير كثير، تواصل معنا مباشرة.": "That’s a very large quantity. Please contact us directly.", "الحجز أونلاين مش متاح هلأ، تواصل معنا مباشرة.": "Online booking isn’t available right now. Please contact us directly.", "جاري الإرسال…": "Sending…", "في مشكلة بالإنترنت، جرّب كمان مرة.": "There’s a connection problem. Please try again.", "صار خطأ، جرّب كمان مرة أو تواصل معنا مباشرة.": "Something went wrong. Please try again or contact us directly.", "المكان": "Venue", "التاريخ": "Date", "الخدمات": "Services", "التوزيعات": "Favors", "بعثت طلب حجز": "I sent a booking request" };
+  const EN = { "الباقات والأسعار": "Packages & prices", "كل باقة فيها البوث + 100 توزيعة مع كروتها.": "Every package includes the station + 100 favors with their cards.", "Ambere | بوث عطور وتوزيعات أعراس في الأردن": "Ambere | Wedding Perfume Station & Favors in Jordan", "مع Ambere، خلّوا فرحتكم مميّزة مع بوث التعطير والتبخير وتوزيعات العطور للأعراس والمناسبات، بتفاصيل على ذوقكم.": "Make your wedding unforgettable with Ambere: a perfume and incense station for your guests, and personalized perfume favors made your way.", "بوث تعطير وتبخير للأعراس، وتوزيعات عطور بتفاصيل على ذوقكم.": "A perfume and incense station for weddings, plus personalized perfume favors.", "بوث Ambere المضاء بمدخل القاعة": "The illuminated Ambere station at a venue entrance", "انتقل لفورم الحجز": "Skip to booking form", "Ambere — الرئيسية": "Ambere — Home", "القائمة": "Menu", "القائمة الرئيسية": "Main menu", "الرئيسية": "Home", "خدماتنا": "Services", "معرض أعمالنا": "Our Work", "كيف بنشتغل": "How It Works", "الأسعار": "Prices", "احجز مناسبتك": "Book Your Event", "خلّي ريحة فرحتك تضل بذاكرة المعازيم": "Let your celebration linger in every guest’s memory", "بوث تعطير وتبخير للأعراس، وتوزيعات عطور بتفاصيل على ذوقكم، لتكون كل فرحة إلها ذكرى حلوة.": "A perfume and incense station for weddings, and perfume favors styled your way, so every celebration leaves a beautiful memory.", "شوف شغلنا": "See Our Work", "بوث تعطير وتبخير": "Perfume & incense station", "توزيعات عطور 10 و30 مل": "10 & 30 ml perfume favors", "بوث Ambere المضاء بمدخل القاعة، وعليه عطور وتوزيعات وشموع وورد": "The illuminated Ambere station at a venue entrance, with perfumes, favors, candles and flowers", "يد بقفاز دانتيل ماسكة عطر توزيعات على كرت مكتوب عليه الاسم وتاريخ المناسبة": "A lace-gloved hand holding a perfume favor on a card printed with the name and event date", "شو منقدّم إلكم؟": "What We Offer", "من البوث للتوزيعات، منرتّب التفاصيل اللي بتخلّي مناسبتكم مميّزة.": "From the station to the favors, we take care of the details that make your event special.", "بوث التعطير والتبخير": "Perfume & Incense Station", "منستقبل معازيمكم بتجربة عطرية مميّزة، بتضيف لمسة حلوة على أجواء الفرح.": "We welcome your guests with a refined fragrance experience that adds a beautiful touch to the celebration.", "تعطير وتبخير المعازيم على المدخل": "Perfume and incense for guests at the entrance", "بتقدر تجمعه مع توزيعات العطور بنفس الحجز": "Can be combined with perfume favors in the same booking", "احجز بوث العطور": "Book the Station", "توزيعات العطور": "Perfume Favors", "توزيعات عطر بتفاصيل على ذوقكم، مع أسماء وتاريخ مناسبتكم، لتضل ذكرى حلوة عند معازيمكم.": "Perfume favors styled your way, with your names and event date, a lovely keepsake for your guests.", "مل": "ml", "شوف التوزيعات": "See the Favors", "الأحجام المتوفرة": "Available sizes", "يد بقفاز دانتيل بتقدّم عطر قدام بوث Ambere، وعلى البوث شموع وعطور ومبخرة": "A lace-gloved hand presenting a perfume at the Ambere station, with candles, perfumes and an incense burner", "عطور البوث معروضة على ستاندات سودا جنب الشموع": "Station perfumes displayed on black stands beside candles", "عطر توزيعات على كرت أبيض بشريطة، مكتوب عليه الاسم وتاريخ المناسبة، وخلفه سلة توزيعات": "A perfume favor on a white card with a ribbon, printed with the name and event date, with a basket of favors behind", "سلة قش مليانة توزيعات عطور على كروت بيضا مكتوب عليها الاسم": "A woven basket full of perfume favors on white name cards", "التوزيعات والأسعار": "Favors & Prices", "توزيعات بتشبه فرحتكم": "Favors That Feel Like You", "عطور وتفاصيل على ذوقكم، بتخلّي لكل فرحة ذكرى حلوة.": "Perfumes and details made to your taste, so every celebration leaves a sweet memory.", "توزيعات عطر 10 مل": "10 ml Perfume Favors", "توزيعات عطر 30 مل": "30 ml Perfume Favors", "دينار": "JOD", "للحبة": "per piece", "عطر مع كرت باسم العروسين وتاريخ المناسبة، بتفاصيل بسيطة ومرتبة.": "A perfume with a card bearing the couple’s names and event date, simple and elegant.", "قنينة عطر مع تاغ مميّز عليه أسماء العروسين وتاريخ فرحتهم.": "A perfume bottle with a special tag bearing the couple’s names and their wedding date.", "بدي أطلب توزيعات": "Order Favors", "عطر توزيعات على كرت أبيض بشريطة مكتوب عليه الاسم وتاريخ المناسبة": "A perfume favor on a white card with a ribbon, printed with the name and event date", "قناني عطر توزيعات مربوط عليها تاغ معلّق مكتوب عليه أسماء العروسين وتاريخ العرس": "Perfume favor bottles with hanging tags bearing the couple’s names and wedding date", "شوفوا شغلنا": "Our Work", "كل مناسبة إلها تفاصيلها، وهي بعض الشغلات اللي جهّزناها بكل حب.": "Every event has its own details. Here are some of the setups we prepared with love.", "تصنيف الصور": "Filter photos", "كل الأعمال": "All Work", "بوث العطور": "Perfume Station", "توزيعات 10 مل": "10 ml Favors", "توزيعات 30 مل": "30 ml Favors", "توزيعات مرتّبة على البوث بكروت أسماء العروسين": "Favors arranged on the station with the couple’s name tags", "عطور البوث على الستاندات": "Station perfumes on their stands", "التوزيعات جاهزة للمعازيم على مدخل القاعة": "Favors ready for guests at the venue entrance", "توزيعات مخصصة بالاسم": "Personalized name favors", "شموع وبخور وتفاصيل الكروت": "Candles, incense and card details", "كرت مخصص بالاسم وتاريخ المناسبة": "A card personalized with the name and event date", "تقديم التوزيعات للمعازيم": "Presenting favors to guests", "تفاصيل البوث": "Station details", "اكبس على أي صورة لتشوفها أكبر": "Tap any photo to view it larger", "مدرّج توزيعات عطور بكروت أسماء العروسين، وخلفه شموع وعطور على البوث": "Tiered perfume favors with the couple’s name tags, with candles and perfumes on the station behind", "عطور معروضة على ستاندات سودا على البوث": "Perfumes displayed on black stands on the station", "ضيفة ماسكة صينية توزيعات عطور جنب بوث Ambere المضاء بالقاعة": "A guest holding a tray of perfume favors beside the illuminated Ambere station", "سلة قش مليانة توزيعات عطور على كروت بيضا بشرايط": "A woven basket full of perfume favors on white cards with ribbons", "شموع مضاءة ومبخرة سوداء جنب مدرّج عطور التوزيعات": "Lit candles and a black incense burner beside the tiered perfume favors", "يد بقفاز دانتيل ماسكة عطر توزيعات على كرت بالاسم والتاريخ": "A lace-gloved hand holding a perfume favor on a name-and-date card", "تقديم عطر توزيعات للمعازيم قدام البوث": "Presenting a perfume favor to guests in front of the station", "تشكيلة عطور البوث على ستاندات بين النباتات والشموع": "The station’s perfume selection on stands among plants and candles", "عرض الصورة": "Photo viewer", "سكّر": "Close", "الصورة السابقة": "Previous photo", "الصورة التالية": "Next photo", "كيف بنشتغل؟": "How It Works", "احكيلنا عن مناسبتك": "Tell us about your event", "ابعثولنا التاريخ والمكان والخدمة اللي بتفكروا فيها.": "Send us the date, the venue and the service you have in mind.", "بنتفق على التفاصيل": "We agree on the details", "منراجع طلبكم وبنتواصل معكم عشان نرتّب التفاصيل المناسبة.": "We review your request and get in touch to arrange the right details.", "منجهّز كل شي": "We prepare everything", "بعد تأكيد التفاصيل، منرتّب التجهيزات حسب الاتفاق.": "Once the details are confirmed, we prepare everything as agreed.", "خلّينا نرتّب فرحتكم": "Let’s Plan Your Celebration", "احكيلنا عن مناسبتكم، ومنتواصل معكم عشان نرتّب التفاصيل.": "Tell us about your event and we’ll get in touch to arrange the details.", "الاسم": "Name", "رقم الواتساب": "WhatsApp number", "تاريخ المناسبة": "Event date", "القاعة أو المدينة": "Venue or city", "(اختياري)": "(optional)", "شو الخدمات اللي بدك ياها؟": "Which services would you like?", "على مدخل القاعة": "At the venue entrance", "5 · 10 · 30 مل": "5 · 10 · 30 ml", "اكتب العدد التقريبي لكل حجم بدك ياه:": "Enter the approximate quantity for each size you need:", "1 د.أ للحبة": "1 JOD each", "2 د.أ للحبة": "2 JOD each", "حسب الطلب": "on request", "العدد تقريبي، منقدر نعدّله لما نحكي.": "Quantities are approximate. We can adjust them when we talk.", "ملاحظات": "Notes", "أي تفاصيل بتحب نعرفها": "Anything you’d like us to know", "لا تعبّي هالخانة": "Leave this field empty", "ابعث طلب الحجز": "Send Booking Request", "معلوماتك بتوصل لـ Ambere بس، وما بنشاركها مع حدا.": "Your details go only to Ambere and are never shared.", "وصلنا طلبك": "We received your request", "شكراً إلكم! هاد طلب حجز، ورح نتواصل معكم على واتساب بأقرب وقت لنأكّد التفاصيل.": "Thank you! This is a booking request. We’ll contact you on WhatsApp soon to confirm the details.", "تابع معنا على واتساب": "Continue on WhatsApp", "ابعث طلب ثاني": "Send another request", "أقل 10 مل": "Fewer 10 ml", "عدد 10 مل": "10 ml quantity", "أكثر 10 مل": "More 10 ml", "أقل 30 مل": "Fewer 30 ml", "عدد 30 مل": "30 ml quantity", "أكثر 30 مل": "More 30 ml", "أقل 5 مل": "Fewer 5 ml", "عدد 5 مل": "5 ml quantity", "أكثر 5 مل": "More 5 ml", "عندك مناسبة قريبة؟": "Have an Event Coming Up?", "احكيلنا شو ببالك، ومنساعدك تختار اللي بناسب فرحتك.": "Tell us what you have in mind, and we’ll help you choose what suits your celebration.", "يلا نحجز": "Let’s Book", "Ambere — تفاصيل عطرية بتضيف لمسة مميّزة على أفراحكم.": "Ambere — fragrant details that add a special touch to your celebrations.", "روابط": "Links", "تواصل معنا": "Contact", "إنستغرام": "Instagram", "واتساب": "WhatsApp", "جاري التأكد من التاريخ…": "Checking the date…", "هالتاريخ محجوز عنا. اختار تاريخ ثاني، أو تواصل معنا مباشرة.": "This date is already booked. Please choose another date or contact us directly.", "✓ التاريخ متاح": "✓ This date is available", "اكتب اسمك لو سمحت.": "Please enter your name.", "اكتب رقم واتساب صحيح، مثلاً 0791234567.": "Please enter a valid WhatsApp number, e.g. 0791234567.", "اختار تاريخ المناسبة.": "Please choose the event date.", "التاريخ لازم يكون اليوم أو بعده.": "The date must be today or later.", "اختار خدمة وحدة على الأقل.": "Please choose at least one service.", "اكتب العدد التقريبي لحجم واحد على الأقل.": "Please enter an approximate quantity for at least one size.", "العدد كبير كثير، تواصل معنا مباشرة.": "That’s a very large quantity. Please contact us directly.", "الحجز أونلاين مش متاح هلأ، تواصل معنا مباشرة.": "Online booking isn’t available right now. Please contact us directly.", "جاري الإرسال…": "Sending…", "في مشكلة بالإنترنت، جرّب كمان مرة.": "There’s a connection problem. Please try again.", "صار خطأ، جرّب كمان مرة أو تواصل معنا مباشرة.": "Something went wrong. Please try again or contact us directly.", "المكان": "Venue", "التاريخ": "Date", "الخدمات": "Services", "التوزيعات": "Favors", "بعثت طلب حجز": "I sent a booking request" };
   let LANG = document.documentElement.lang === 'en' ? 'en' : 'ar';
   const L = s => (LANG === 'en' && EN[s]) || s;
   const SERVER_EN = [[/محجوز/, EN['هالتاريخ محجوز عنا. اختار تاريخ ثاني، أو تواصل معنا مباشرة.']], [/طلبات كثير/, 'Too many requests. Please try again shortly.'],
@@ -937,6 +963,13 @@
     ['home','services','prices','work','how','book'].forEach(id => $(id) && io.observe($(id)));
   }
 
+  /* ---------- phone booking bar ---------- */
+  if ('IntersectionObserver' in window) {
+    const mbar = $('mbar'), seen = { home: true, book: false };
+    const mo = new IntersectionObserver(es => { es.forEach(en => seen[en.target.id] = en.isIntersecting); mbar.classList.toggle('show', !seen.home && !seen.book); });
+    ['home', 'book'].forEach(id => mo.observe($(id)));
+  }
+
   /* ---------- reveal ---------- */
   const rvs = document.querySelectorAll('.rv');
   if (reduced || !('IntersectionObserver' in window)) rvs.forEach(el => el.classList.add('in'));
@@ -1012,10 +1045,10 @@
   async function checkDate(){
     const d = $('date').value; $('ok-date').textContent = ''; $('ok-date').className = 'fok';
     dateState = { day: d, full: false, checked: false };
-    if (!d || d < todayStr() || !sb) return dateState;
+    if (!d || d < todayStr() || !getSb()) return dateState;
     $('ok-date').textContent = L('جاري التأكد من التاريخ…'); $('ok-date').className = 'fok checking';
     try {
-      const { data, error } = await sb.rpc('day_is_full', { p: d });
+      const { data, error } = await getSb().rpc('day_is_full', { p: d });
       if ($('date').value !== d) return dateState;          // user changed it meanwhile
       if (error) { $('ok-date').textContent = ''; return dateState; }   // don't block if the check itself fails
       dateState = { day: d, full: !!data, checked: true };
@@ -1033,14 +1066,18 @@
   ['name','phone'].forEach(k => $(k).addEventListener('input', () => setErr(k, '')));
   $('date').addEventListener('change', () => { setErr('date', ''); checkDate(); });
 
-  let sb = null;
-  try {
-    if (window.supabase && cfg.SUPABASE_URL && cfg.SUPABASE_KEY && !String(cfg.SUPABASE_KEY).includes('PASTE')) {
-      sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_KEY, {
-        auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, storageKey: 'ambere-public' }
-      });
-    }
-  } catch (e) {}
+  let sbc = null;
+  function getSb(){
+    if (sbc) return sbc;
+    try {
+      if (window.supabase && cfg.SUPABASE_URL && cfg.SUPABASE_KEY && !String(cfg.SUPABASE_KEY).includes('PASTE')) {
+        sbc = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_KEY, {
+          auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, storageKey: 'ambere-public' }
+        });
+      }
+    } catch (e) {}
+    return sbc;
+  }
 
   function collect(){
     const items = on(cGifts) ? ['q10','q30','q5']
@@ -1079,14 +1116,14 @@
       return;
     }
     if ($('website').value) return showDone(r);           // bot trap: pretend success
-    if (sb && !(dateState.day === r.wedding_date && dateState.checked)) {
+    if (getSb() && !(dateState.day === r.wedding_date && dateState.checked)) {
       const st = await checkDate();
       if (st.full) { $('date').focus(); return; }
     }
-    if (!sb) { $('msg').textContent = L('الحجز أونلاين مش متاح هلأ، تواصل معنا مباشرة.'); return; }
+    if (!getSb()) { $('msg').textContent = L('الحجز أونلاين مش متاح هلأ، تواصل معنا مباشرة.'); return; }
 
     const btn = $('send'); btn.disabled = true; sending = true; $('sendTxt').textContent = L('جاري الإرسال…');
-    const { error } = await sb.from('booking_requests').insert({
+    const { error } = await getSb().from('booking_requests').insert({
       name: r.name, phone: r.phone, wedding_date: r.wedding_date, venue: r.venue,
       booth: r.booth, items: r.items, notes: r.notes
     });
@@ -1152,7 +1189,7 @@
       if (!vid) { vid = (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 12)).toLowerCase(); localStorage.setItem('ambere-vid', vid); }
     } catch (e) { vid = 'tmp-' + Math.random().toString(36).slice(2, 12); }
     const ua = navigator.userAgent || '';
-    if (!sb || navigator.webdriver || /bot|crawl|spider|slurp|preview|facebookexternalhit|whatsapp\/|headless|lighthouse/i.test(ua)) return () => {};
+    if (navigator.webdriver || /bot|crawl|spider|slurp|preview|facebookexternalhit|whatsapp\/|headless|lighthouse/i.test(ua)) return () => {};
     const qs = new URLSearchParams(location.search);
     let source = (qs.get('utm_source') || qs.get('src') || '').toLowerCase();
     if (!source) {
@@ -1167,7 +1204,8 @@
       else source = 'direct';
     }
     const device = /iPad|Tablet/i.test(ua) ? 'tablet' : /Mobi|Android|iPhone/i.test(ua) ? 'mobile' : 'desktop';
-    return ev => { try { sb.rpc('track_event', { p_event: ev, p_visitor: vid, p_source: source, p_device: device, p_path: location.pathname.slice(-100) }).then(() => {}, () => {}); } catch (e) {} };
+    const send = ev => { const c = getSb(); if (!c) return; try { c.rpc('track_event', { p_event: ev, p_visitor: vid, p_source: source, p_device: device, p_path: location.pathname.slice(-100) }).then(() => {}, () => {}); } catch (e) {} };
+    return ev => { if (window.supabase) send(ev); else window.addEventListener('load', () => send(ev), { once: true }); };
   })();
   track('view');
   let formStarted = false;
@@ -1306,6 +1344,21 @@
     saveDraft();
   });
   buildCalcOptions(); renderCalc();
+  function renderPkgs(){
+    const en = LANG === 'en';
+    document.querySelectorAll('#pkgs .pkg').forEach(card => {
+      const k = card.querySelector('[data-base]').dataset.base;
+      card.querySelector('h3').textContent = ml(k);
+      card.querySelector('.what').textContent = en ? `Station + ${PRICING.included} favors` : `البوث + ${PRICING.included} توزيعة`;
+      card.querySelector('.pkg-price').textContent = short(PRICING.base[k]);
+      card.querySelector('.cur').textContent = en ? 'JOD' : 'دينار';
+      card.querySelector('[data-base]').textContent = en ? 'Calculate this package' : 'احسب هالباقة';
+    });
+    $('pkgExtra').textContent = (en ? 'Extra favors on top of the package: ' : 'توزيعات إضافية فوق الباقة: ') +
+      Object.keys(PRICING.extra).map(k => `${ml(k)} ${PRICING.extra[k].toFixed(2)}`).join(' · ') + (en ? ' JOD each' : ' دينار للحبة');
+  }
+  document.querySelectorAll('#pkgs [data-base]').forEach(a => a.addEventListener('click', () => { C.base = a.dataset.base; buildCalcOptions(); renderCalc(); }));
+  renderPkgs(); langHooks.push(renderPkgs);
   langHooks.push(() => { buildCalcOptions(); renderCalc(); $('cQtyErr').textContent = ''; $('cMsg').textContent = ''; });
 
   /* ---------- language switch ---------- */
