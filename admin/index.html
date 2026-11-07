@@ -1606,23 +1606,23 @@
     $('reqList').innerHTML = rows.map(r => {
       const dd = daysUntil(r.wedding_date);
       const services = [r.booth ? 'بوث' : null, (r.items || []).length ? 'توزيعات' : null].filter(Boolean).join(' + ');
-      const gifts = (r.items || []).map(i => `${SIZE_NAME[i.size] || i.size} × ${fmt(i.qty)}`).join('، ');
+      const gifts = (Array.isArray(r.items) ? r.items : []).map(i => `${SIZE_NAME[i.size] || esc(i.size)} × ${fmt(i.qty)}`).join('، ');
       const label = { new:'جديد', accepted:'صار حجز', rejected:'مرفوض' }[r.status];
       const waText = encodeURIComponent(`مرحبا ${r.name}، معك Ambere بخصوص طلب حجز البوث لعرس بتاريخ ${showDate(r.wedding_date)} 🌸`);
       return `
       <article class="card rq" style="${r.status === 'rejected' ? 'opacity:.6' : ''}">
-        <div class="bk-row"><span class="bk-name">${esc(r.name)}</span><span class="pill ${r.status}">${label}</span></div>
-        <div class="bk-meta" style="margin-top:4px">${showDate(r.wedding_date)} · <span style="${dd >= 0 && dd <= 7 ? 'color:var(--loss);font-weight:500' : ''}">${dd < 0 ? 'التاريخ فات' : whenTxt(dd)}</span></div>
+        <div class="bk-row"><span class="bk-name">${esc(r.name)}</span><span class="pill ${esc(r.status)}">${label || ''}</span></div>
+        <div class="bk-meta" style="margin-top:4px">${esc(showDate(r.wedding_date))} · <span style="${dd >= 0 && dd <= 7 ? 'color:var(--loss);font-weight:500' : ''}">${dd < 0 ? 'التاريخ فات' : whenTxt(dd)}</span></div>
         <div class="bk-meta"><a href="tel:${esc(r.phone)}" dir="ltr">${esc(r.phone)}</a>${r.venue ? ' · ' + esc(r.venue) : ''}</div>
         <div class="bk-meta">${services}${gifts ? ' · ' + gifts : ''}</div>
         <div class="bk-meta" style="font-size:12px">وصل ${ago(r.created_at)}</div>
         ${r.notes ? `<div class="rq-note">${esc(r.notes)}</div>` : ''}
         <div class="rq-acts">
-          ${r.status === 'new' ? `<button type="button" class="btn primary" data-act="convert" data-id="${r.id}">تحويل لحجز</button>` : ''}
+          ${r.status === 'new' ? `<button type="button" class="btn primary" data-act="convert" data-id="${esc(r.id)}">تحويل لحجز</button>` : ''}
           <a class="btn wa" href="https://wa.me/${waNumber(r.phone)}?text=${waText}" target="_blank" rel="noopener">واتساب</a>
-          ${r.status === 'new' ? `<button type="button" class="btn ghost" data-act="reject" data-id="${r.id}">رفض</button>` : ''}
-          ${r.status === 'rejected' ? `<button type="button" class="btn" data-act="renew" data-id="${r.id}">إرجاع للجديدة</button>` : ''}
-          ${r.status === 'accepted' && r.booking_id ? `<button type="button" class="btn" data-act="open" data-bid="${r.booking_id}">فتح الحجز</button>` : ''}
+          ${r.status === 'new' ? `<button type="button" class="btn ghost" data-act="reject" data-id="${esc(r.id)}">رفض</button>` : ''}
+          ${r.status === 'rejected' ? `<button type="button" class="btn" data-act="renew" data-id="${esc(r.id)}">إرجاع للجديدة</button>` : ''}
+          ${r.status === 'accepted' && r.booking_id ? `<button type="button" class="btn" data-act="open" data-bid="${esc(r.booking_id)}">فتح الحجز</button>` : ''}
         </div>
       </article>`;
     }).join('');
@@ -1938,7 +1938,7 @@
       </div>
       <div class="card box">
         <h3>الأجهزة</h3>
-        ${d.devices.length ? d.devices.map(x => `<div class="hrow"><div class="l"><span>${DEV[x.device] || x.device}</span><b>${pct(x.visitors, devTotal)}%</b></div><div class="hbar"><i style="width:${x.visitors / devTotal * 100}%"></i></div></div>`).join('') : '<p class="help">لسا ما في زيارات.</p>'}
+        ${d.devices.length ? d.devices.map(x => `<div class="hrow"><div class="l"><span>${DEV[x.device] || esc(x.device)}</span><b>${pct(x.visitors, devTotal)}%</b></div><div class="hbar"><i style="width:${x.visitors / devTotal * 100}%"></i></div></div>`).join('') : '<p class="help">لسا ما في زيارات.</p>'}
       </div>
       <div class="card tipbox">
         <p><b>نصيحة:</b> استخدم هالروابط بدل الرابط العادي، عشان تعرف بالزبط كل زائر من وين إجا. واتساب ما بيبيّن حاله لحاله، فرابطه مهم.</p>
