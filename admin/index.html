@@ -8,50 +8,52 @@
 <link rel="icon" type="image/png" href="../icons/favicon-32.png">
 <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#FAF8F4" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#141210" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F3EEE3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Ambere">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Readex+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&family=Cormorant+Garamond:wght@500&family=Readex+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../config.js"></script>
 <script src="../pricing.js"></script>
 <script>try{if(localStorage.getItem('ambere-admin-lang')==='en'){document.documentElement.lang='en';document.documentElement.dir='ltr';}var t=localStorage.getItem('ambere-admin-theme')||'auto';var d=t==='dark'||(t==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.dataset.theme=d?'dark':'light';}catch(e){}</script>
 <style>
-  /* «Ivory, airy» — light. Warm ink on ivory, no boxes; colour only on money (gold) and status. */
+  /* light theme */
   :root{
-    --bg:#FAF8F4; --card:#FAF8F4; --cream:#F1EDE6; --champagne:#E4DED4; --line:#ECE6DC; --line-2:#DCD5C9;
-    --ink:#1F1B16; --ink-2:#4A443C; --muted:#6F685E; --gold:#1F1B16; --gold-soft:#F1EDE6;
-    --hue:#946A2A;                                   /* Ambere gold: the one data hue (profit figures, today) */
-    --gain:#2E7D32; --gain-soft:#E3F4E5; --loss:#B8322F; --loss-soft:#FBEAE6;
-    --blue:#1F1B16; --blue-soft:#F1EDE6; --amber:#8A4B10; --amber-soft:#FBF3E1;
-    --s5:#1F1B16; --s10:#7E776C; --s30:#C2BBAF;
-    --primary:#1F1B16; --on-primary:#FAF8F4; --primary-soft:rgba(250,248,244,.14);
-    --hero-bg:transparent; --hero-fg:#1F1B16; --hero-muted:#6F685E; --hero-gain:#2E7D32; --hero-loss:#B8322F; --hero-line:#ECE6DC;
-    --input-bg:#FFFFFF; --seg-on:#FFFFFF; --sub:#F4F0EA; --bar-bg:#FAF8F4; --top-bg:#FAF8F4;
-    --warn-line:#EFD9A8; --loss-line:#EEC4BE; --stripe-a:#E4DED4; --stripe-b:#F6F3EE;
+    /* «The Attar Label» — cream shop shelf, ink lettering, burnt-orange wax seal */
+    --bg:#F3EEE3; --card:#FBF8F1; --cream:#EAE3D5; --champagne:#DDD4C3; --line:rgba(17,17,17,.18); --line-2:rgba(17,17,17,.42);
+    --ink:#111111; --ink-2:#3A3631; --muted:#675F54; --gold:#111111; --gold-soft:#EAE3D5;
+    --hue:#111111; --seal:#D9541E; --on-seal:#FBF8F1;
+    --gain:#2F6B3A; --gain-soft:#E1EBDA; --loss:#A63F17; --loss-soft:#F6E1D4;
+    --blue:#111111; --blue-soft:#EAE3D5; --amber:#A63F17; --amber-soft:#F6E6D6;
+    --s5:#111111; --s10:#675F54; --s30:#B8AE9E;
+    --primary:#111111; --on-primary:#F3EEE3; --primary-soft:rgba(243,238,227,.14);
+    --hero-bg:transparent; --hero-fg:#111111; --hero-muted:#675F54; --hero-gain:#2F6B3A; --hero-loss:#A63F17; --hero-line:rgba(17,17,17,.18);
+    --input-bg:#FBF8F1; --seg-on:#FBF8F1; --sub:#EDE7DA; --bar-bg:#F3EEE3; --top-bg:#F3EEE3;
+    --warn-line:#E3C3A8; --loss-line:#E3B9A4; --stripe-a:rgba(17,17,17,.22); --stripe-b:#F3EEE3;
     --sh:31,27,22;
     --r-xl:10px; --r-lg:10px; --r-md:8px; --r-sm:6px;
-    --display:"Readex Pro",Tahoma,Arial,sans-serif; --latin:"Cormorant Garamond",Georgia,serif; --sans:"Readex Pro",Tahoma,Arial,sans-serif;
+    --display:"Aref Ruqaa","Readex Pro",Tahoma,serif; --latin:"Cormorant Garamond",Georgia,serif; --sans:"Readex Pro",Tahoma,Arial,sans-serif;
     --shadow:none;
     --tabbar:64px; --topnav:60px;
     color-scheme:light;
   }
   /* true neutral dark */
   html[data-theme="dark"]{
-    --bg:#141210; --card:#141210; --cream:#211E1A; --champagne:#2E2A25; --line:#26231F; --line-2:#3A3530;
-    --ink:#F3EEE6; --ink-2:#D3CCC1; --muted:#A39B90; --gold:#F3EEE6; --gold-soft:#211E1A;
-    --hue:#DDB36E;
-    --gain:#6CC48C; --gain-soft:#17251B; --loss:#EE7B72; --loss-soft:#2B1B18; --blue:#F3EEE6; --blue-soft:#2A2622; --amber:#E9C27A; --amber-soft:#2A2214;
-    --s5:#F3EEE6; --s10:#A39B90; --s30:#5F5950;
-    --primary:#F3EEE6; --on-primary:#141210; --primary-soft:rgba(20,18,16,.12);
-    --hero-bg:transparent; --hero-fg:#F3EEE6; --hero-muted:#A39B90; --hero-gain:#6CC48C; --hero-loss:#EE7B72; --hero-line:#26231F;
-    --input-bg:#1A1815; --seg-on:#2A2622; --sub:#1A1815; --bar-bg:#141210; --top-bg:#141210;
-    --warn-line:#4A3A1C; --loss-line:#5A2D28; --stripe-a:#2E2A25; --stripe-b:#141210;
+    --bg:#141311; --card:#1C1A17; --cream:#26231F; --champagne:#33302A; --line:rgba(243,238,227,.16); --line-2:rgba(243,238,227,.4);
+    --ink:#F3EEE3; --ink-2:#D6CEC0; --muted:#A79E90; --gold:#F3EEE3; --gold-soft:#26231F;
+    --hue:#F3EEE3; --seal:#D9541E; --on-seal:#FBF8F1;
+    --gain:#7FB98A; --gain-soft:#1B2A1E; --loss:#EE8A5C; --loss-soft:#2E1C14;
+    --blue:#F3EEE3; --blue-soft:#2A2722; --amber:#EE8A5C; --amber-soft:#2E2014;
+    --s5:#F3EEE3; --s10:#A79E90; --s30:#5F584E;
+    --primary:#F3EEE3; --on-primary:#141311; --primary-soft:rgba(20,19,17,.12);
+    --hero-bg:transparent; --hero-fg:#F3EEE3; --hero-muted:#A79E90; --hero-gain:#7FB98A; --hero-loss:#EE8A5C; --hero-line:rgba(243,238,227,.16);
+    --input-bg:#1C1A17; --seg-on:#33302A; --sub:#1C1A17; --bar-bg:#141311; --top-bg:#141311;
+    --warn-line:#5A3A22; --loss-line:#5A3324; --stripe-a:rgba(243,238,227,.22); --stripe-b:#141311;
     --sh:0,0,0;
     color-scheme:dark;
   }
@@ -717,6 +719,83 @@
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
   .pc-main{grid-column:1;grid-row:1} .pc-aside{grid-column:2;grid-row:1}
+
+  /* ---------- The Attar Label: titles in Ruqaa, labels framed in a double ink rule, the price pressed into a wax seal ---------- */
+  :root{ --r-xl:3px; --r-lg:3px; --r-md:3px; --r-sm:2px; }
+  html[lang="en"]{ --display:"Readex Pro",Tahoma,Arial,sans-serif; }
+  html{ accent-color:var(--seal); scrollbar-color:var(--line-2) var(--bg); }
+  ::selection{ background:var(--seal); color:var(--on-seal); }
+  input,textarea{ caret-color:var(--seal); }
+  :focus-visible{ outline:2px solid var(--ink); outline-offset:3px; border-radius:2px; }
+  .page-title,.form-top h1,.sheet h2,.cal-head h2,.pc-step h2,.sec-h h2,.fs h2{ font-family:var(--display); font-weight:700; letter-spacing:0; }
+  html[lang="en"] .page-title,html[lang="en"] .form-top h1,html[lang="en"] .sheet h2,html[lang="en"] .cal-head h2,html[lang="en"] .pc-step h2,html[lang="en"] .sec-h h2,html[lang="en"] .fs h2{ font-weight:600; }
+  .page-title{ font-size:32px; line-height:1.35; }
+  .pc-step h2,.sec-h h2{ font-size:21px; color:var(--ink); }
+  .fs h2{ font-size:19px; color:var(--ink); }
+  html[lang="en"] .pc-step h2,html[lang="en"] .sec-h h2,html[lang="en"] .fs h2{ font-size:16px; }
+
+  /* rules: ink hairlines inside lists, a full ink rule where a section ends */
+  .pc-step,.fs,.pc-details,.setting{ border-bottom:1.5px solid var(--ink)!important; }
+  .bk,.exp,.rq,.list-menu button,.list-menu a,.pc-svrow,.pc-srow,.fin-row,.split .who-row{ border-color:var(--line)!important; }
+  .stats,.kpis,.pc-sum{ border-color:var(--ink)!important; }
+
+  /* controls: printed, rectangular; chips stay round */
+  .btn,.save,.primary-lg,.inp,.search input,.seg,.pc-step2,.pc-bot button,.pc-opt,.icon-btn,.pc-round,.pc-chips button{ border-radius:3px; }
+  .seg{ background:transparent; border:1.5px solid var(--ink); padding:2px; }
+  .seg button{ border-radius:2px; color:var(--ink-2); }
+  .seg button[aria-pressed="true"]{ background:var(--ink); color:var(--bg); box-shadow:none; }
+  .inp,.search input{ border-color:var(--line-2); }
+  .btn{ border-color:var(--ink); }
+  .btn.ghost{ border-color:transparent; }
+  .chip{ border-color:var(--ink); color:var(--ink); }
+  .pill{ background:transparent!important; border:1px solid currentColor; }
+  .pill.confirmed,.pill.cancelled,.pill.rejected{ color:var(--ink-2)!important; }
+  .tab[aria-current="page"]{ color:var(--ink); }
+  .tab[aria-current="page"]::before{ background:var(--seal); height:3px; width:28px; }
+  .tab .dot{ background:var(--seal); color:var(--on-seal); }
+  .date{ background:transparent; border:1.5px solid var(--ink); }
+  .date.today{ background:var(--seal); border-color:var(--seal); color:var(--on-seal); }
+  .day.today{ border-color:var(--seal); color:var(--ink); box-shadow:inset 0 0 0 1px var(--seal); }
+  .bars span.today,.funnel .hbar i,.bar i{ background:var(--seal); }
+  .action.dark{ border-radius:3px; }
+
+  /* the label: paper panel, outer ink rule, inner hairline set in */
+  .label-frame,.pc-sum,.hero-stat{ position:relative; background:var(--card); border:2px solid var(--ink)!important; outline:1px solid var(--ink); outline-offset:-8px; border-radius:2px; }
+  .hero-stat{ padding:22px 22px 20px; }
+  .hero-stat b{ color:var(--ink); font-weight:600; }
+  .pc-sum{ padding:26px 20px 18px; margin-top:34px; overflow:visible; }
+  .pc-sum-main{ display:block; border-bottom:1px dashed var(--ink); padding-bottom:14px; padding-inline-end:120px; min-height:96px; }
+  .pc-sum-main > div{ padding:0!important; border:0!important; }
+  .pc-sum-main .pr b{ color:var(--ink); font-size:clamp(30px,8vw,40px); font-weight:600; }
+  .pc-sum-main .pr b.neg{ color:var(--loss); }
+  .pc-sum-grid{ padding-top:6px; }
+  .pc-sum-grid > div{ padding:10px 0!important; border:0!important; }
+  .pc-sum-grid > :nth-child(even){ padding-inline-start:14px!important; }
+  .pc-warn{ margin:10px -12px -10px; border:0; }
+  /* the wax seal: the client's price, pressed over the label's corner */
+  .pc-sum-main > div:first-child{ position:absolute; top:-30px; inset-inline-end:-2px; width:118px; height:118px; border-radius:50%;
+    background:var(--seal); color:var(--on-seal); display:grid; place-items:center; text-align:center; transform:rotate(-8deg);
+    box-shadow:0 10px 18px -10px rgba(17,17,17,.55), inset 0 0 0 5px rgba(0,0,0,.08), inset 0 0 0 7px rgba(251,248,241,.25); }
+  .pc-sum-main > div:first-child span{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+  .pc-sum-main > div:first-child b{ margin:0; color:var(--on-seal); font-size:27px; font-weight:600; line-height:1.05; white-space:normal; max-width:96px; }
+  .pc-bar b#pcBarPrice{ color:var(--seal); }
+  #pcBarProfit{ color:var(--ink); }
+
+  /* the price guide reads like the label's small print */
+  .pc-guide{ border:1px solid var(--ink); border-radius:2px; }
+  .pc-guide .verdict.ok{ background:transparent; color:var(--gain); border-top-style:dashed; }
+  .pc-guide .verdict.low{ background:transparent; color:var(--loss); border-top-style:dashed; }
+  .pc-guide .verdict.loss{ background:var(--loss); color:var(--on-seal); }
+  .pc-opt[aria-checked="true"],.pc-bot button[aria-pressed="true"]{ border-color:var(--ink); box-shadow:0 0 0 1px var(--ink); background:var(--card); }
+  .pc-pick[aria-pressed="true"]{ background:var(--ink); color:var(--bg); }
+  .pc-pick.star::before{ color:var(--seal); }
+  .sumbar{ border-top:2px solid var(--ink); background:var(--bg); }   /* --hero-bg is transparent; the bar must stay opaque over the form */
+  #pProfit.pos{ color:var(--ink); }
+  @media (min-width:960px){
+    .pc-aside{ padding-top:20px; }
+    .pc-sum{ margin-top:0; }
+  }
+  @media (prefers-reduced-motion:reduce){ .pc-sum-main > div:first-child{ transform:none; } }
 </style>
 </head>
 <body>
