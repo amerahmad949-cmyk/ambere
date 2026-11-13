@@ -149,49 +149,70 @@ export function mount(stage, { reduced = false } = {}) {
   const cap = new THREE.Mesh(capGeo, mat.cap); cap.position.y = collarTop + GAP; bottle.add(cap);
   const capTopY = collarTop + GAP + hiH;
 
-  // Gold monogram, traced from the official product photo. Every piece is a smooth strip that follows
-  // its centre line with its real width; coordinates are read off a 3x crop of that photo (X right, Y down,
-  // glass face 780 px wide) and mapped onto this bottle's face by P().
+  // Gold monogram. Front: traced from the official product photo (3x crop, glass face 780 px wide).
+  // Left side: traced from the owner's side photo (side face 263 px deep, 537 px per unit).
+  // Every piece is a smooth strip that follows its centre line with its real width, raised well off the glass.
   const polished = new THREE.MeshPhysicalMaterial({ color: 0xf0c468, metalness: 1, roughness: 0.4, emissive: 0x8a5f18, emissiveIntensity: 0.5 });
-  const mono = new THREE.Group(), z0 = D / 2 + 0.003, TH = 0.016, PX = 780;
-  const P = (X, Y) => [(X - 515) / PX, 0.155 + (655 - Y) / PX];
-  const plate = (shape, z) => {
-    const m = new THREE.Mesh(new THREE.ExtrudeGeometry(shape, { depth: TH - 0.006, bevelEnabled: true, bevelThickness: 0.003, bevelSize: 0.003, bevelSegments: 2, curveSegments: 12 }), polished);
-    m.position.z = z + 0.003; mono.add(m); return m;
+  const mono = new THREE.Group(), sideG = new THREE.Group(), z0 = D / 2 + 0.003, TH = 0.022, BV = 0.0048;
+  sideG.rotation.y = -Math.PI / 2; sideG.position.set(-W / 2 - 0.003, 0, D / 2); mono.add(sideG);   // its local x runs back along the side, local z points out of the side
+  const front = { map: (X, Y) => { const x = (X - 605) / 620 - 0.01; return [x, 1.075 - 0.001398 * Y - 0.16 * (0.47 - x)]; }, px: 715, grp: mono };
+  const side = { map: (X, Y) => [(X - 435) / 263 * D, (830 - Y) / 510 * H], px: 537, grp: sideG };
+  const plate = (shape, z, grp) => {
+    const m = new THREE.Mesh(new THREE.ExtrudeGeometry(shape, { depth: TH - 2 * BV, bevelEnabled: true, bevelThickness: BV, bevelSize: BV * 0.8, bevelSegments: 3, curveSegments: 12 }), polished);
+    m.position.z = z + BV; grp.add(m); return m;
   };
   // strip along a centre line: pts in photo pixels, widths (px) spread evenly along its length
-  const stroke = (pts, wpx, z, n = 56) => {
-    const curve = new THREE.CatmullRomCurve3(pts.map(([X, Y]) => { const [x, y] = P(X, Y); return V(x, y, 0); }), false, 'centripetal');
+  const stroke = (f, pts, wpx, z, n = 56) => {
+    const curve = new THREE.CatmullRomCurve3(pts.map(([X, Y]) => { const [x, y] = f.map(X, Y); return V(x, y, 0); }), false, 'centripetal');
     const ws = Array.isArray(wpx) ? wpx : [wpx, wpx], left = [], right = [];
     for (let i = 0; i <= n; i++) {
       const u = i / n, p = curve.getPoint(u), tg = curve.getTangent(u);
-      const k = u * (ws.length - 1), a = Math.min(Math.floor(k), ws.length - 2), w = (ws[a] + (ws[a + 1] - ws[a]) * (k - a)) / PX / 2;
+      const k = u * (ws.length - 1), a = Math.min(Math.floor(k), ws.length - 2), w = (ws[a] + (ws[a + 1] - ws[a]) * (k - a)) / f.px / 2 - BV * 0.8;
       left.push(new THREE.Vector2(p.x - tg.y * w, p.y + tg.x * w)); right.push(new THREE.Vector2(p.x + tg.y * w, p.y - tg.x * w));
     }
-    return plate(new THREE.Shape(left.concat(right.reverse())), z);
+    return plate(new THREE.Shape(left.concat(right.reverse())), z, f.grp);
   };
-  const rivet = (X, Y, z) => {
-    const [x, y] = P(X, Y), r = new THREE.Mesh(new THREE.CylinderGeometry(0.013, 0.013, 0.008, 18), polished);
-    r.rotation.x = Math.PI / 2; r.position.set(x, y, z + TH + 0.004); mono.add(r);
+  const rivet = (f, X, Y, z) => {
+    const [x, y] = f.map(X, Y), r = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.017, 0.011, 20), polished);
+    r.rotation.x = Math.PI / 2; r.position.set(x, y, z + TH + 0.0045); f.grp.add(r);
   };
-  const L1 = z0, L2 = z0 + 0.011, L3 = z0 + 0.022;       // stacked layers: the pieces weave over each other
-  // lower-left: two strands that cross, and the C-shaped arc near the left edge
-  stroke([[100, 308], [255, 308], [330, 312], [400, 332], [470, 375], [540, 415], [598, 440]], [42, 44, 46, 46], L1);
-  stroke([[258, 412], [330, 405], [400, 378], [450, 340], [485, 312]], 44, L1 + 0.005);
-  stroke([[200, 128], [178, 180], [165, 250], [170, 330], [195, 395], [258, 424]], [22, 30, 36, 40], L1);
-  rivet(197, 140, L1);
+  const L1 = z0, L2 = z0 + 0.015, L3 = z0 + 0.03;          // stacked layers: the pieces weave over each other
+
+  // ---- front face ----
+  // two strands that leave the left corner and cross: one runs right and down, one rises to the main bar
+  stroke(front, [[300, 308], [330, 312], [400, 332], [470, 375], [540, 415], [598, 440]], [44, 46, 46], L1);
+  stroke(front, [[300, 412], [330, 405], [400, 378], [450, 340], [485, 312]], 44, L1 + 0.006);
   // the "S" loop: up and over, down the right side, ending in a small hook
-  stroke([[478, 268], [520, 232], [580, 208], [650, 212], [710, 250], [745, 320], [752, 400], [745, 470], [722, 525], [690, 548], [668, 548]], [44, 46, 46, 44, 40, 34, 30, 26], L2, 90);
+  stroke(front, [[478, 268], [520, 232], [580, 208], [650, 212], [710, 250], [745, 320], [752, 400], [745, 470], [722, 525], [690, 548], [668, 548]], [44, 46, 46, 44, 40, 34, 30, 26], L2, 90);
   // main bar: upper-left, through the junction, bending into the long diagonal to the bottom-right rivet
-  stroke([[318, 232], [430, 268], [540, 312], [640, 352], [700, 420], [780, 510], [850, 592], [905, 662]], [46, 48, 46, 42, 38, 34, 30], L3, 80);
-  rivet(893, 648, L3);
+  stroke(front, [[300, 226], [430, 268], [540, 312], [640, 352], [700, 420], [780, 510], [850, 592], [905, 662]], [46, 48, 46, 42, 38, 34, 30], L3, 80);
+  rivet(front, 893, 648, L3);
   // right arm: from the junction almost level to the top-right rivet
-  stroke([[625, 348], [760, 318], [918, 288]], [40, 42, 40], L3);
-  rivet(906, 291, L3);
-  // clip: the top prong wraps over the left edge and a spine runs down the side face
-  const SX = -W / 2 - 0.012, [, yTop] = P(0, 308), [, yBot] = P(0, 640);
-  const wrap = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.056, 0.075), polished); wrap.position.set(SX + 0.014, yTop, D / 2 - 0.016); mono.add(wrap);
-  const spine = new THREE.Mesh(new THREE.BoxGeometry(0.014, yTop - yBot + 0.056, 0.052), polished); spine.position.set(SX, (yTop + yBot) / 2, D / 2 - 0.04); mono.add(spine);
+  stroke(front, [[625, 348], [760, 318], [918, 288]], [40, 42, 40], L3);
+  rivet(front, 906, 291, L3);
+
+  // ---- left side face: the same bars carry on round the corner to the back edge ----
+  const S1 = 0.002, S2 = 0.017;
+  const sideY = y => 830 - y * 510 / H;                       // bottle height -> side-photo pixel row
+  const [, yMain] = front.map(300, 226), [, yUp] = front.map(300, 308), [, yLow] = front.map(300, 412);
+  // long bar: from the corner (continuing the front's upper strand) to the back edge
+  stroke(side, [[470, sideY(yUp)], [400, sideY(yUp) - 6], [300, 540], [186, 512]], [40, 40, 38], S2);
+  // leg dropping from the back end of the bar to the rivet near the base
+  stroke(side, [[204, 528], [212, 640], [234, 778]], [38, 36, 32], S1);
+  rivet(side, 220, 750, S1);
+  // C-shaped arc: from its rivet above the bar, round and down to the corner (continuing the front's lower strand)
+  stroke(side, [[388, 410], [334, 438], [306, 480], [296, 545], [318, 600], [380, sideY(yLow) + 4], [470, sideY(yLow)]], [30, 34, 36, 36, 36], S1, 80);
+  rivet(side, 352, 428, S1);
+  // the front's main bar wraps the corner and ends in a short stub
+  stroke(side, [[470, sideY(yMain)], [425, sideY(yMain) - 2]], 42, S1);
+  // rounded bends that carry each bar round the corner: a quarter ring hugging the glass edge
+  const bend = (yc, h, lift) => {
+    const ri = R + 0.004, ro = ri + TH + lift, q = new THREE.Shape();
+    q.absarc(0, 0, ro, Math.PI, 1.5 * Math.PI, false); q.lineTo(0, -ri); q.absarc(0, 0, ri, 1.5 * Math.PI, Math.PI, true); q.lineTo(-ro, 0);
+    const g = new THREE.ExtrudeGeometry(q, { depth: h, bevelEnabled: false, curveSegments: 16 }); g.rotateX(-Math.PI / 2);
+    const m = new THREE.Mesh(g, polished); m.position.set(-W / 2 + R, yc - h / 2, D / 2 - R); mono.add(m);
+  };
+  bend(yMain, 0.058, 0.03); bend(yUp, 0.06, 0.012); bend(yLow, 0.06, 0.004);
   bottle.add(mono);
 
   const lift = -capTopY / 2;
